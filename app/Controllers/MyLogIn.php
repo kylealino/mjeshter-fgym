@@ -34,7 +34,7 @@ class MyLogIn extends BaseController
                 );
 
                 $this->session->set($ses_data);
-                return redirect()->to('/mydashboard');
+                return redirect()->to('/myadmindashboard');
 
             } else {
                 $this->session->setFlashdata('mesyszicas_memsg_login', 'Wrong Password');

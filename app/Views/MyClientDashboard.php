@@ -364,7 +364,7 @@ $recentCheckins = [
                 <i class="bi bi-person-fill"></i>
             </div>
             <span class="text-muted small d-none d-sm-block"><?= $member['full_name']; ?></span>
-            <a href="<?= site_url('mylogout'); ?>" class="logout-btn">
+            <a href="<?= site_url('myclientlogout'); ?>" class="logout-btn">
                 <i class="bi bi-box-arrow-right"></i> Logout
             </a>
         </div>

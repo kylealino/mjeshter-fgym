@@ -7,11 +7,12 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 $routes->get('/', 'Home::index');
+$routes->get('myclientlogin', 'ClientHome::index');
 $routes->add('mylogin-auth', 'MyLogIn::auth');
 $routes->add('mylogout', 'MyLogIn::logout');
-$routes->get('mydashboard', 'MyDashboard::index',['filter' => 'myauthuser']);
-$routes->get('dashboard/saob-session-data', 'MyDashboard::getSaobSessionData');
-$routes->get('mydashboarddev', 'MyDashboardDev::index',['filter' => 'myauthuser']);
+$routes->get('myadmindashboard', 'MyAdminDashboard::index',['filter' => 'myauthuser']);
+$routes->add('myclientdashboard', 'MyClientDashboard::index');
+$routes->add('myclientlogout', 'MyClientDashboard::logout');
 
 //Members Management - Members module
 $routes->get('mymembers', 'MembersManagementController::index',['filter' => 'myauthuser']);

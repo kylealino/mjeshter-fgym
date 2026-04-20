@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 use CodeIgniter\HTTP\Response;
-class Home extends BaseController
+class ClientHome extends BaseController
 {
     public function __construct(){
 		$this->request = \Config\Services::request();
@@ -12,7 +12,8 @@ class Home extends BaseController
 	}
     public function index(): string
     {
-        return view('MyLogin-admin'); 
+    
+        return view('MyLogin-client'); 
     }
     
 }

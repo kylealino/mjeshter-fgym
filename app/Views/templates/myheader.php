@@ -161,11 +161,9 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
       width: 24px;
     }
 
-    /* Scrollbar */
     .left-sidebar.with-vertical {
-      height: 100vh;
-      overflow-y: auto;
-      overflow-x: hidden;
+
+      scrollbar-color: var(--gym-red) var(--gym-black-light);
     }
 
     .left-sidebar.with-vertical::-webkit-scrollbar {
