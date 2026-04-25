@@ -428,6 +428,43 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
         padding: 1rem;
       }
     }
+
+    .body-wrapper {
+  background: #f8f9fa;
+  min-height: calc(100vh - 60px);
+  padding: 1.5rem;
+}
+
+/* ADD THIS BREADCRUMB CSS */
+.breadcrumb-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "/";
+  color: #6c757d;
+}
+
+.breadcrumb-item a {
+  color: #6c757d;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+  color: #dc2626;
+}
+
+.breadcrumb-item.active {
+  color: #dc2626;
+  font-weight: 500;
+}
   </style>
 </head>
 <body>
@@ -452,7 +489,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
               <span>MAIN</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>mydashboard">
+              <a class="sidebar-link" href="<?=site_url();?>myadmindashboard">
                 <span><i class="ti ti-dashboard"></i></span>
                 <span>Dashboard</span>
               </a>
@@ -464,15 +501,9 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
               <span>MEMBERS</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>members">
+              <a class="sidebar-link" href="<?=site_url();?>membersmanagement?meaction=MAIN">
                 <span><i class="ti ti-users"></i></span>
-                <span>All Members</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>membership">
-                <span><i class="ti ti-id"></i></span>
-                <span>Membership Types</span>
+                <span>Membership</span>
               </a>
             </li>
             <li class="sidebar-item">

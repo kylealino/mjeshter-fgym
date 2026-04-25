@@ -7,76 +7,96 @@ use CodeIgniter\Controller;
 class MembersManagementController extends BaseController
 {
     public function __construct()
-	{
-		$this->request = \Config\Services::request();
-        $this->mymembers = model('App\Models\MembersManagementModel');
+    {
+        $this->request = \Config\Services::request();
+        $this->memberModel = model('App\Models\MembersManagementModel');
         $this->db = \Config\Database::connect();
         $this->session = session();
-        $this->db = \Config\Database::connect();
         $this->cuser = $this->session->get('__xsys_myuserzicas__');
-	}
+    }
 
+    // Add this method to your existing MembersManagementController
+    private function loadMembersListView() {
+        $membersdataquery = $this->db->query("
+            SELECT
+                member_id,
+                member_no,
+                first_name,
+                last_name,
+                middle_name,
+                contact_number,
+                email
+            FROM tbl_members
+            ORDER BY member_id DESC
+        ");
+        $membersdata = $membersdataquery->getResultArray();
+
+        return view('members-management/members-main', [
+            'membersdata' => $membersdata
+        ]);
+    }
+
+    // Update your index method to include the new routes
     public function index() {
         
         $meaction = $this->request->getPostGet('meaction');
-    
+
         switch ($meaction) {
             case 'MAIN': 
-                return $this->loadMembersView();
+                return $this->loadMembersListView();
                 break;
 
-            case 'MEMBERS-SAVE': 
-                $this->mymembers->members_save();
-                return redirect()->to('mymembers?meaction=MAIN');
+            case 'MEMBER-SAVE': 
+                $this->memberModel->saveMember();
+                return redirect()->to('membersmanagement?meaction=MAIN');
+                break;
+
+            case 'CHECK-RFID':
+                return $this->checkRFID();
+                break;
+            
+            case 'MEMBERS-UPDATE': 
+                $this->memberModel->saveMember();
+                return redirect()->to('membersmanagement?meaction=MAIN');
                 break;
 
             case 'MEMBERS-PRINT':
-				return view('members-management/members-profile-pdf');
-				break;
-            
+                return view('members-management/members-profile-pdf');
+                break;
+                
+            case 'MEMBERS-main':
+                return $this->loadMembersListView();
+                break;
+                
+            case 'GET-CHECKIN-HISTORY':
+                echo $this->getCheckinHistory();
+                exit;
+                break;
         }
     }
 
-    private function loadMembersView() {
-        
-        $member_id = $this->request->getPostGet('member_id');
-        
-        $membersdataquery = $this->db->query("
-        SELECT
-            a.member_id,
-            a.member_no,
-            a.first_name,
-            a.last_name,
-            a.middle_name,
-            a.address,
-            a.contact_number,
-            a.email,
+    private function checkRFID()
+    {
+        $rfid_uid = $this->request->getPost('rfid_uid');
 
-            COUNT(l.loan_id) AS loan_count,
-            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        $query = $this->db->query("
+            SELECT member_id, CONCAT(first_name, ' ', last_name) as member_name
+            FROM tbl_members
+            WHERE rfid_uid = ?
+            LIMIT 1
+        ", [$rfid_uid]);
 
-        FROM tbl_members a
-        LEFT JOIN tbl_loans l 
-            ON l.member_id = a.member_id
+        $result = $query->getRowArray();
 
-        GROUP BY 
-            a.member_id,
-            a.member_no,
-            a.first_name,
-            a.last_name,
-            a.middle_name,
-            a.address,
-            a.contact_number,
-            a.email
+        if($result){
+            return $this->response->setJSON([
+                'exists' => true,
+                'member_name' => $result['member_name']
+            ]);
+        }
 
-        ORDER BY a.member_id DESC;
-        ");
-        $membersdata = $membersdataquery->getResultArray();
-        
-        return view('members-management/members-main', [
-            'membersdata' => $membersdata,
+        return $this->response->setJSON([
+            'exists' => false
         ]);
     }
-    
-    
 }
