@@ -21,4 +21,8 @@ $routes->post('myclientdashboard', 'MyClientDashboard::index');
 $routes->get('membersmanagement', 'MembersManagementController::index',['filter' => 'myauthuser']);
 $routes->post('membersmanagement', 'MembersManagementController::index',['filter' => 'myauthuser']);
 
+//MEMBERS MANAGEMENT
+$routes->get('attendance', 'AttendanceController::index',['filter' => 'myauthuser']);
+$routes->post('attendance', 'AttendanceController::index',['filter' => 'myauthuser']);
+
 

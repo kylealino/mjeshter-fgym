@@ -483,11 +483,6 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
         <nav class="sidebar-nav scroll-sidebar" style="height: 100vh !important;">
           <ul id="sidebarnav" style="list-style: none; padding-left: 0;">
-            <!-- DASHBOARD -->
-            <li class="nav-small-cap">
-              <i class="ti ti-dots"></i>
-              <span>MAIN</span>
-            </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="<?=site_url();?>myadmindashboard">
                 <span><i class="ti ti-dashboard"></i></span>
@@ -495,129 +490,103 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
               </a>
             </li>
 
-            <!-- MEMBERS MANAGEMENT -->
+            <!-- POS & CASHIERING -->
             <li class="nav-small-cap">
               <i class="ti ti-dots"></i>
-              <span>MEMBERS</span>
+              <span>POS & CASHIERING</span>
             </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="<?=site_url();?>membership-pos">
+                <span><i class="ti ti-id-badge"></i></span>
+                <span>Membership POS</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="<?=site_url();?>walkin-pos">
+                <span><i class="ti ti-user-plus"></i></span>
+                <span>Walk-In POS</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="<?=site_url();?>sales-transactions">
+                <span><i class="ti ti-receipt-2"></i></span>
+                <span>Sales Transactions</span>
+              </a>
+            </li>
+
+            <!-- MEMBERSHIP -->
+            <li class="nav-small-cap">
+              <i class="ti ti-dots"></i>
+              <span>MEMBERSHIP</span>
+            </li>
+
             <li class="sidebar-item">
               <a class="sidebar-link" href="<?=site_url();?>membersmanagement?meaction=MAIN">
                 <span><i class="ti ti-users"></i></span>
-                <span>Membership</span>
+                <span>Members Management</span>
               </a>
             </li>
+
+            <!-- ATTENDANCE -->
+            <li class="nav-small-cap">
+              <i class="ti ti-dots"></i>
+              <span>ATTENDANCE</span>
+            </li>
+
             <li class="sidebar-item">
               <a class="sidebar-link" href="<?=site_url();?>attendance">
-                <span><i class="ti ti-calendar-check"></i></span>
-                <span>Attendance</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>expirations">
-                <span><i class="ti ti-alert-triangle"></i></span>
-                <span>Expirations</span>
+                <span><i class="ti ti-scan"></i></span>
+                <span>Attendance Logs</span>
               </a>
             </li>
 
-            <!-- PAYMENTS & BILLING -->
-            <li class="nav-small-cap">
-              <i class="ti ti-dots"></i>
-              <span>FINANCE</span>
-            </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>payments">
-                <span><i class="ti ti-cash"></i></span>
-                <span>Payments</span>
+              <a class="sidebar-link" href="<?=site_url();?>walkin-history">
+                <span><i class="ti ti-history"></i></span>
+                <span>Walk-In History</span>
               </a>
             </li>
+
+            <!-- ASSETS -->
+            <li class="nav-small-cap">
+              <i class="ti ti-dots"></i>
+              <span>ASSETS</span>
+            </li>
+
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>invoices">
+              <a class="sidebar-link" href="<?=site_url();?>gym-assets">
+                <span><i class="ti ti-barbell"></i></span>
+                <span>Gym Assets</span>
+              </a>
+            </li>
+
+            <!-- ACCOUNTING -->
+            <li class="nav-small-cap">
+              <i class="ti ti-dots"></i>
+              <span>ACCOUNTING</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="<?=site_url();?>cash-receipts-journal">
                 <span><i class="ti ti-receipt"></i></span>
-                <span>Invoices</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>financial-reports">
-                <span><i class="ti ti-chart-bar"></i></span>
-                <span>Financial Reports</span>
+                <span>Cash Receipts Journal</span>
               </a>
             </li>
 
-            <!-- CLASSES & TRAINERS -->
-            <li class="nav-small-cap">
-              <i class="ti ti-dots"></i>
-              <span>CLASSES</span>
-            </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>classes">
-                <span><i class="ti ti-dumbbell"></i></span>
-                <span>Classes</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>trainers">
-                <span><i class="ti ti-users"></i></span>
-                <span>Trainers</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>schedule">
-                <span><i class="ti ti-calendar"></i></span>
-                <span>Class Schedule</span>
+              <a class="sidebar-link" href="<?=site_url();?>cash-disbursement-journal">
+                <span><i class="ti ti-cash-banknote"></i></span>
+                <span>Cash Disbursement Journal</span>
               </a>
             </li>
 
-            <!-- EQUIPMENT -->
-            <li class="nav-small-cap">
-              <i class="ti ti-dots"></i>
-              <span>EQUIPMENT</span>
-            </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>equipment">
-                <span><i class="ti ti-tools"></i></span>
-                <span>Equipment List</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>maintenance">
-                <span><i class="ti ti-wrench"></i></span>
-                <span>Maintenance</span>
-              </a>
-            </li>
-
-            <!-- REPORTS -->
-            <li class="nav-small-cap">
-              <i class="ti ti-dots"></i>
-              <span>REPORTS</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>member-reports">
-                <span><i class="ti ti-file-report"></i></span>
-                <span>Member Reports</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>attendance-reports">
-                <span><i class="ti ti-calendar-stats"></i></span>
-                <span>Attendance Reports</span>
-              </a>
-            </li>
-
-            <!-- SYSTEM -->
-            <li class="nav-small-cap">
-              <i class="ti ti-dots"></i>
-              <span>SYSTEM</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>users">
-                <span><i class="ti ti-user"></i></span>
-                <span>User Management</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>settings">
-                <span><i class="ti ti-settings"></i></span>
-                <span>Settings</span>
+              <a class="sidebar-link" href="<?=site_url();?>general-journal">
+                <span><i class="ti ti-book"></i></span>
+                <span>General Journal</span>
               </a>
             </li>
           </ul>
