@@ -28,24 +28,20 @@ function __POS() {
                     var cartdata = [];
                     var cartrow = '';
 
-                    for (var aa = 0; aa < rowcount; aa++) {  // Start from 0 since no header in tbody
+                    for (var aa = 0; aa < rowcount; aa++) {
                         var clonedRow = jQuery('#cartBody tr:eq(' + aa + ')');
                         
-                        // Get values using your budget code pattern
-                        var itemName = clonedRow.find('td:eq(0)').clone().children().remove().end().text().trim();
-                        var itemPrice = clonedRow.find('.item-price').val();
-                        var itemType = clonedRow.find('.item-type').val();
-                        var qty = clonedRow.find('.qty-input').val();
-                        var amount = clonedRow.find('#amount_' + clonedRow.attr('id').replace('row_', '')).text();
+                        // USE THE HIDDEN FIELDS - No \n issues!
+                        var itemName = clonedRow.find('.item-name').val();  // "Protein Shake"
+                        var itemPrice = clonedRow.find('.item-price').val(); // "120"
+                        var itemType = clonedRow.find('.item-type').val();   // "PRODUCT"
+                        var qty = clonedRow.find('.qty-input').val();        // "1"
+                        var amount = clonedRow.find('.item-amount').val();   // "120.00"
                         
-                        // Create delimited string like your budget code
                         cartrow = itemName + 'x|x' + itemPrice + 'x|x' + itemType + 'x|x' + qty + 'x|x' + amount;
-                        console.log(itemName);
-                        console.log(itemType);
-                        console.log(qty);
-                        console.log(amount);
                         cartdata.push(cartrow);
                     }
+                    console.log(cartdata);
 
                     // Get other form values
                     var transaction_type = $('#transaction_type').val();

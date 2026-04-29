@@ -436,6 +436,7 @@ function addCartRow(itemName, itemType, amount){
 
             <td>
                 ${itemName}
+                <input type="hidden" class="item-name" value="${itemName}">
                 <input type="hidden" class="item-price" value="${amount}">
             </td>
 
