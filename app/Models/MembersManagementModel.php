@@ -98,7 +98,7 @@ class MembersManagementModel extends Model
                     emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
                     address, city, health_conditions, allergies, fitness_goals,
                     experience_level, membership_plan, membership_start_date, membership_end_date,
-                    membership_status waiver_signed, terms_accepted, created_by
+                    membership_status, waiver_signed, terms_accepted, created_by
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ", [
                 $member_no, $rfid_uid, $last_name, $first_name, $middle_name,

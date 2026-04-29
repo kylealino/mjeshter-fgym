@@ -82,7 +82,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     /* ===================== */
     .left-sidebar {
       background: var(--gym-black);
-      box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+      box-shadow: 4px 0 10px rgba(0,0,0,0.3);
       border-right: 1px solid var(--gym-border);
     }
 
@@ -158,7 +158,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     .sidebar-link i, .sidebar-link .ti {
       font-size: 1.1rem;
-      width: 24px;
+      width: 10px;
     }
 
     .left-sidebar.with-vertical {
@@ -167,7 +167,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .left-sidebar.with-vertical::-webkit-scrollbar {
-      width: 4px;
+      width: 2px;
     }
 
     .left-sidebar.with-vertical::-webkit-scrollbar-track {
@@ -176,7 +176,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     .left-sidebar.with-vertical::-webkit-scrollbar-thumb {
       background-color: var(--gym-red);
-      border-radius: 4px;
+      border-radius: 2px;
     }
 
     /* ===================== */
@@ -497,23 +497,16 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             </li>
 
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>membership-pos">
-                <span><i class="ti ti-id-badge"></i></span>
-                <span>Membership POS</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>walkin-pos">
+              <a class="sidebar-link" href="<?=site_url();?>pos?meaction=MAIN">
                 <span><i class="ti ti-user-plus"></i></span>
-                <span>Walk-In POS</span>
+                <span>POS</span>
               </a>
             </li>
 
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>sales-transactions">
+              <a class="sidebar-link" href="<?=site_url();?>sales?meaction=MAIN">
                 <span><i class="ti ti-receipt-2"></i></span>
-                <span>Sales Transactions</span>
+                <span>Sales Transacion</span>
               </a>
             </li>
 
