@@ -29,4 +29,8 @@ $routes->post('attendance', 'AttendanceController::index',['filter' => 'myauthus
 $routes->get('pos', 'POSController::index',['filter' => 'myauthuser']);
 $routes->post('pos', 'POSController::index',['filter' => 'myauthuser']);
 
+//POS SALES
+$routes->get('possales', 'POSSalesController::index',['filter' => 'myauthuser']);
+$routes->post('possales', 'POSSalesController::index',['filter' => 'myauthuser']);
+
 

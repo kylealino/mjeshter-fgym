@@ -50,15 +50,23 @@ function __POS() {
                     var change_amount = $('#changeAmount').val();
                     var grand_total = $('#grandtotalText').text().replace('₱', '');
 
-                    console.log(transaction_type);
-                    console.log(payment_method);
-                    console.log(amount_tendered);
-                    console.log(change_amount);
-                    console.log(grand_total);
+                    if (cartdata.length === 0) {
+                        toastr.error('Cart is empty!');
+                        return;
+                    }
+
+                    if (!amount_tendered) {
+                        toastr.error('Amount tendered is required!');
+                        return;
+                    }
+
+                    if (amount_tendered + 1 < grand_total) {
+                        toastr.error('Luge ka diyan idol!');
+                        return;
+                    }
  
                     var mparam = {
                         cartdata: cartdata,
-                        transaction_type: transaction_type,
                         payment_method: payment_method,
                         amount_tendered: amount_tendered,
                         change_amount: change_amount,

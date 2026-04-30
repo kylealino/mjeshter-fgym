@@ -16,7 +16,11 @@ class POSModel extends Model
 
     public function savePOS() { 
         $cartdata = $this->request->getPost('cartdata');
-        
+        $payment_method = $this->request->getPost('payment_method');
+        $amount_tendered = $this->request->getPost('amount_tendered');
+        $change_amount = $this->request->getPost('change_amount');
+        $grand_total = $this->request->getPost('grand_total');
+
         $cseqn =  $this->get_ctr_pos('POS','CTRL_NO01');//TRANSACTION NO
 
         if (!empty($cartdata)) {
@@ -49,6 +53,26 @@ class POSModel extends Model
                 
             }
         }
+
+        $query = $this->db->query("
+            INSERT INTO `tbl_pos_payment`(
+                `postrxno`,
+                `payment_method`,
+                `amount_tendered`,
+                `change_amount`,
+                `grand_total`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?)", 
+            [
+                $cseqn,
+                $payment_method,
+                $amount_tendered,
+                $change_amount,
+                $grand_total,
+                $this->cuser
+            ]
+        );
 
         if ($query) {
             // Echo JavaScript to show the toast and then redirect - EXACTLY like your budget code

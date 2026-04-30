@@ -108,11 +108,8 @@ echo view('templates/myheader.php');
 
             <!-- TRANSACTION TYPE -->
             <div class="form-section">
-
                 <h6><i class="ti ti-cash me-2"></i> Transaction Type</h6>
-
                 <div class="row">
-
                     <div class="col-md-4 mb-3">
                         <div class="pos-card pos-selected" onclick="selectPOSType('MEMBERSHIP', this)">
                             <h5 class="mb-2">Membership</h5>
@@ -154,27 +151,17 @@ echo view('templates/myheader.php');
                             <small>Supplements / Drinks / Apparel</small>
                         </div>
                     </div>
-
                 </div>
-
-                <input type="hidden" id="transaction_type" value="MEMBERSHIP">
-
             </div>
 
             <!-- MEMBERSHIP -->
             <div class="form-section" id="membershipSection">
                 <h6><i class="ti ti-user me-2"></i> Membership Payment</h6>
-
                 <div class="row">
-
                     <div class="col-md-5 mb-3">
-
                         <label class="form-label">Select Member</label>
-
                         <select class="form-control" id="member_id">
-
                             <option value="">-- Select Member --</option>
-
                             <?php
                             $query = $this->db->query("
                                 SELECT member_id, first_name, last_name
@@ -190,77 +177,111 @@ echo view('templates/myheader.php');
                             </option>
 
                             <?php endforeach; ?>
-
                         </select>
-
                     </div>
-
                     <div class="col-md-4 mb-3">
-
                         <label class="form-label">Membership Plan</label>
-
                         <select class="form-control" id="membership_plan">
                             <option value="1000">1 Month - ₱1,000</option>
                             <option value="3000">3 Months - ₱3,000</option>
                             <option value="6000">6 Months - ₱6,000</option>
                             <option value="12000">12 Months - ₱12,000</option>
                         </select>
-
                     </div>
-
                     <div class="col-md-3 mb-3 d-flex align-items-end">
-
                         <button type="button" class="btn btn-danger w-100" onclick="addMembershipCart()">
                             Add To Cart
                         </button>
-
                     </div>
-
                 </div>
-
             </div>
 
             <!-- WALKIN -->
             <div class="form-section d-none" id="walkinSection">
-
                 <h6><i class="ti ti-walk me-2"></i> Walk-In Customer</h6>
-
                 <div class="row">
-
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Customer Name</label>
                         <input type="text" class="form-control" id="walkin_name">
                     </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" id="walkin_email">
-                    </div>
-
                     <div class="col-md-2 mb-3">
                         <label class="form-label">Amount</label>
                         <input type="number" class="form-control" id="walkin_amount" value="100">
                     </div>
-
                     <div class="col-md-2 mb-3 d-flex align-items-end">
-
                         <button type="button" class="btn btn-danger w-100" onclick="addWalkinCart()">
                             Add
                         </button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- ZUMBA -->
+            <div class="form-section d-none" id="zumbaSection">
+                <h6><i class="ti ti-walk me-2"></i> Zumba Customer</h6>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="zumba_name">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="zumba_amount" value="70">
+                    </div>
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger w-100" onclick="addZumbaCart()">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CROSSFIT -->
+            <div class="form-section d-none" id="crossfitSection">
+                <h6><i class="ti ti-walk me-2"></i> Crossfit Customer</h6>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="crossfit_name">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="crossfit_amount" value="500">
                     </div>
 
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger w-100" onclick="addCrossfitCart()">
+                            Add
+                        </button>
+                    </div>
                 </div>
+            </div>
 
+            
+            <!-- YOGA -->
+            <div class="form-section d-none" id="yogaSection">
+                <h6><i class="ti ti-walk me-2"></i> Yoga Customer</h6>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="yoga_name">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="yoga_amount" value="100">
+                    </div>
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger w-100" onclick="addYogaCart()">
+                            Add
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- ITEMS -->
             <div class="form-section d-none" id="itemsSection">
-
                 <h6><i class="ti ti-shopping-cart me-2"></i> Items POS</h6>
-
                 <div class="row">
-
                     <div class="col-md-3 mb-3">
                         <div class="product-box" onclick="addItem('Protein Shake','PRODUCT',120)">
                             <i class="ti ti-bottle fs-8"></i>
@@ -268,7 +289,6 @@ echo view('templates/myheader.php');
                             <div>₱120</div>
                         </div>
                     </div>
-
                     <div class="col-md-3 mb-3">
                         <div class="product-box" onclick="addItem('Energy Drink','PRODUCT',90)">
                             <i class="ti ti-bottle fs-8"></i>
@@ -276,7 +296,6 @@ echo view('templates/myheader.php');
                             <div>₱90</div>
                         </div>
                     </div>
-
                     <div class="col-md-3 mb-3">
                         <div class="product-box" onclick="addItem('Gym Towel','PRODUCT',250)">
                             <i class="ti ti-shirt fs-8"></i>
@@ -284,7 +303,6 @@ echo view('templates/myheader.php');
                             <div>₱250</div>
                         </div>
                     </div>
-
                     <div class="col-md-3 mb-3">
                         <div class="product-box" onclick="addItem('Whey Protein','PRODUCT',2500)">
                             <i class="ti ti-barbell fs-8"></i>
@@ -292,24 +310,16 @@ echo view('templates/myheader.php');
                             <div>₱2,500</div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
 
         <!-- RIGHT SIDE -->
         <div class="col-md-5">
-
             <div class="form-section">
-
                 <h6><i class="ti ti-receipt me-2"></i> POS Cart</h6>
-
                 <div class="table-responsive">
-
                     <table class="table table-bordered cart-table">
-
                         <thead>
                             <tr>
                                 <th>Item</th>
@@ -319,62 +329,42 @@ echo view('templates/myheader.php');
                                 <th width="50"></th>
                             </tr>
                         </thead>
-
                         <tbody id="cartBody">
-
                         </tbody>
-
                     </table>
-
                 </div>
-
                 <hr>
-
                 <div class="d-flex justify-content-between mb-2">
                     <strong>Subtotal</strong>
                     <strong id="subtotalText">₱0.00</strong>
                 </div>
-
                 <div class="d-flex justify-content-between mb-3">
                     <strong>Total</strong>
                     <strong class="text-danger fs-5" id="grandtotalText">₱0.00</strong>
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Payment Method</label>
-
                     <select class="form-control" id="paymentMethod">
                         <option>Cash</option>
                         <option>GCash</option>
+                        <option>Maya</option>
                         <option>Card</option>
                     </select>
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Amount Tendered</label>
                     <input type="number" class="form-control" id="amountTendered">
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Change</label>
                     <input type="text" class="form-control" id="changeAmount" readonly>
-
                 </div>
-
                 <button type="submit" class="btn btn-danger w-100">
                     <i class="ti ti-cash-banknote me-1"></i>
                     Complete Payment
                 </button>
-
             </div>
-
         </div>
-
     </div>
 </form>
 
@@ -393,6 +383,9 @@ function selectPOSType(type, element){
     $('#membershipSection').addClass('d-none');
     $('#walkinSection').addClass('d-none');
     $('#itemsSection').addClass('d-none');
+    $('#zumbaSection').addClass('d-none');
+    $('#crossfitSection').addClass('d-none');
+    $('#yogaSection').addClass('d-none');
 
     if(type == 'MEMBERSHIP'){
         $('#membershipSection').removeClass('d-none');
@@ -404,6 +397,18 @@ function selectPOSType(type, element){
 
     if(type == 'ITEMS'){
         $('#itemsSection').removeClass('d-none');
+    }
+
+    if(type == 'ZUMBA'){
+        $('#zumbaSection').removeClass('d-none');
+    }
+
+    if(type == 'CROSSFIT'){
+        $('#crossfitSection').removeClass('d-none');
+    }
+
+    if(type == 'YOGA'){
+        $('#yogaSection').removeClass('d-none');
     }
 }
 
@@ -443,7 +448,66 @@ function addWalkinCart(){
     );
 
     $('#walkin_name').val('');
-    $('#walkin_email').val('');
+}
+
+function addCrossfitCart(){
+
+    let name = $('#crossfit_name').val();
+    let amount = parseFloat($('#crossfit_amount').val());
+
+    if(name == ''){
+        toastr.error('Please enter customer name');
+        return;
+    }
+
+    name = name.replace(/\s+/g, ' ').trim();
+
+    addCartRow(
+        'Crossfit - ' + name, 'CROSSFIT',
+        amount
+    );
+
+    $('#crossfit_name').val('');
+}
+
+function addZumbaCart(){
+
+    let name = $('#zumba_name').val();
+    let amount = parseFloat($('#zumba_amount').val());
+
+    if(name == ''){
+        toastr.error('Please enter customer name');
+        return;
+    }
+
+    name = name.replace(/\s+/g, ' ').trim();
+
+    addCartRow(
+        'Zumba - ' + name, 'ZUMBA',
+        amount
+    );
+
+    $('#zumba_name').val('');
+}
+
+function addYogaCart(){
+
+    let name = $('#yoga_name').val();
+    let amount = parseFloat($('#yoga_amount').val());
+
+    if(name == ''){
+        toastr.error('Please enter customer name');
+        return;
+    }
+
+    name = name.replace(/\s+/g, ' ').trim();
+
+    addCartRow(
+        'Yoga - ' + name, 'YOGA',
+        amount
+    );
+
+    $('#yoga_name').val('');
 }
 
 function addItem(itemName, itemType, amount){

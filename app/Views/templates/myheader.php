@@ -504,7 +504,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             </li>
 
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>sales?meaction=MAIN">
+              <a class="sidebar-link" href="<?=site_url();?>possales?meaction=MAIN">
                 <span><i class="ti ti-receipt-2"></i></span>
                 <span>Sales Transacion</span>
               </a>
