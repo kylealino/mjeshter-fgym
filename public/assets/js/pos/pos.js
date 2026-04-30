@@ -29,30 +29,33 @@ function __POS() {
                     var cartrow = '';
 
                     for (var aa = 0; aa < rowcount; aa++) {
+
                         var clonedRow = jQuery('#cartBody tr:eq(' + aa + ')');
+
+                        var itemName  = clonedRow.find('.item-name').val();
+                        var itemType  = clonedRow.find('.item-type').val();
+                        var itemQty = clonedRow.find('.item-qty').val();
+                        var itemPrice = clonedRow.find('.item-price').val();
                         
-                        // USE THE HIDDEN FIELDS - No \n issues!
-                        var itemName = clonedRow.find('.item-name').val();  // "Protein Shake"
-                        var itemPrice = clonedRow.find('.item-price').val(); // "120"
-                        var itemType = clonedRow.find('.item-type').val();   // "PRODUCT"
-                        var qty = clonedRow.find('.qty-input').val();        // "1"
-                        var amount = clonedRow.find('.item-amount').val();   // "120.00"
-                        
-                        cartrow = itemName + 'x|x' + itemPrice + 'x|x' + itemType + 'x|x' + qty + 'x|x' + amount;
+                        var cartrow = itemName + 'x|x' + itemType + 'x|x' + itemQty + 'x|x' + itemPrice;
                         cartdata.push(cartrow);
                     }
+
                     console.log(cartdata);
 
                     // Get other form values
                     var transaction_type = $('#transaction_type').val();
-                    var payment_method = $('select:contains("Payment Method")').val(); // Adjust selector as needed
+                    var payment_method = $('#paymentMethod').val();
                     var amount_tendered = $('#amountTendered').val();
                     var change_amount = $('#changeAmount').val();
                     var grand_total = $('#grandtotalText').text().replace('₱', '');
 
-                    // =========================
-                    // PARAMS - LIKE YOUR BUDGET CODE
-                    // =========================
+                    console.log(transaction_type);
+                    console.log(payment_method);
+                    console.log(amount_tendered);
+                    console.log(change_amount);
+                    console.log(grand_total);
+ 
                     var mparam = {
                         cartdata: cartdata,
                         transaction_type: transaction_type,
@@ -77,6 +80,7 @@ function __POS() {
                         success: function(data) {
                             jQuery('.me-pos-msg').html(data);
                             toastr.success('POS saved successfully');
+                            return;
                         },
                         error: function(xhr, status, error) {
                             alert('Error: ' + error);

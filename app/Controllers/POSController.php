@@ -27,7 +27,6 @@ class POSController extends BaseController
 
             case 'POS-SAVE': 
                 $this->posModel->savePOS();
-                return redirect()->to('pos?meaction=MAIN');
                 break;
 
         }

@@ -1,9 +1,4 @@
-<!----Footer--->
-<footer class="footer">
-  <div class="container-fluid">
-    <span>© <?= date('Y') ?> MJESHTER FITNESS GYM. All Rights Reserved. | Enterprise Management System v2.0</span>
-  </div>
-</footer>
+
 <!-- End footer -->
 
 </div> <!-- Close body-wrapper -->

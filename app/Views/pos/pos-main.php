@@ -69,7 +69,7 @@ echo view('templates/myheader.php');
     background:#f1f1f1;
 }
 
-.qty-input{
+.item-qty{
     width:55px;
     text-align:center;
 }
@@ -128,6 +128,27 @@ echo view('templates/myheader.php');
                     </div>
 
                     <div class="col-md-4 mb-3">
+                        <div class="pos-card" onclick="selectPOSType('ZUMBA', this)">
+                            <h5 class="mb-2">Zumba</h5>
+                            <small>Per Class Fee</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="pos-card" onclick="selectPOSType('CROSSFIT', this)">
+                            <h5 class="mb-2">Crossfit</h5>
+                            <small>Per Training Session</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="pos-card" onclick="selectPOSType('YOGA', this)">
+                            <h5 class="mb-2">Yoga</h5>
+                            <small>Per Class Fee</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
                         <div class="pos-card" onclick="selectPOSType('ITEMS', this)">
                             <h5 class="mb-2">Items POS</h5>
                             <small>Supplements / Drinks / Apparel</small>
@@ -142,7 +163,6 @@ echo view('templates/myheader.php');
 
             <!-- MEMBERSHIP -->
             <div class="form-section" id="membershipSection">
-
                 <h6><i class="ti ti-user me-2"></i> Membership Payment</h6>
 
                 <div class="row">
@@ -324,7 +344,7 @@ echo view('templates/myheader.php');
 
                     <label class="form-label">Payment Method</label>
 
-                    <select class="form-control">
+                    <select class="form-control" id="paymentMethod">
                         <option>Cash</option>
                         <option>GCash</option>
                         <option>Card</option>
@@ -397,6 +417,8 @@ function addMembershipCart(){
         return;
     }
 
+    member = member.replace(/\s+/g, ' ').trim();
+
     addCartRow(
         'Membership - ' + member, 'MEMBERSHIP',
         amount
@@ -412,6 +434,8 @@ function addWalkinCart(){
         toastr.error('Please enter customer name');
         return;
     }
+
+    name = name.replace(/\s+/g, ' ').trim();
 
     addCartRow(
         'Walk-In - ' + name, 'WALK-IN',
@@ -435,7 +459,7 @@ function addCartRow(itemName, itemType, amount){
         <tr id="row_${cartCounter}">
 
             <td>
-                ${itemName}
+                <p>${itemName}</p>
                 <input type="hidden" class="item-name" value="${itemName}">
                 <input type="hidden" class="item-price" value="${amount}">
             </td>
@@ -457,7 +481,7 @@ function addCartRow(itemName, itemType, amount){
                     <input type="number"
                         min="1"
                         value="1"
-                        class="form-control qty-input"
+                        class="form-control item-qty"
                         id="qty_${cartCounter}"
                         onchange="computeRow(${cartCounter})">
 
