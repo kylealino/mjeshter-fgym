@@ -122,7 +122,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .nav-small-cap {
-      padding: 12px 20px 8px;
+      padding: 6px 5px 4px;
     }
 
     .nav-small-cap span {
@@ -490,6 +490,26 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
               </a>
             </li>
 
+            <!-- MEMBERSHIP -->
+            <li class="nav-small-cap">
+              <i class="ti ti-dots"></i>
+              <span>MEMBERSHIP</span>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="<?=site_url();?>membersmanagement?meaction=MAIN">
+                <span><i class="ti ti-users"></i></span>
+                <span>Members Management</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="<?=site_url();?>attendance">
+                <span><i class="ti ti-scan"></i></span>
+                <span>Attendance Logs</span>
+              </a>
+            </li>
+
             <!-- POS & CASHIERING -->
             <li class="nav-small-cap">
               <i class="ti ti-dots"></i>
@@ -506,40 +526,20 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <li class="sidebar-item">
               <a class="sidebar-link" href="<?=site_url();?>possales?meaction=MAIN">
                 <span><i class="ti ti-receipt-2"></i></span>
-                <span>Sales Transacion</span>
+                <span>POS Transaction</span>
               </a>
             </li>
 
-            <!-- MEMBERSHIP -->
+            <!-- ASSETS -->
             <li class="nav-small-cap">
               <i class="ti ti-dots"></i>
-              <span>MEMBERSHIP</span>
+              <span>INVENTORY</span>
             </li>
 
             <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>membersmanagement?meaction=MAIN">
-                <span><i class="ti ti-users"></i></span>
-                <span>Members Management</span>
-              </a>
-            </li>
-
-            <!-- ATTENDANCE -->
-            <li class="nav-small-cap">
-              <i class="ti ti-dots"></i>
-              <span>ATTENDANCE</span>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>attendance">
-                <span><i class="ti ti-scan"></i></span>
-                <span>Attendance Logs</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="<?=site_url();?>walkin-history">
-                <span><i class="ti ti-history"></i></span>
-                <span>Walk-In History</span>
+              <a class="sidebar-link" href="<?=site_url();?>inventory?meaction=MAIN">
+                <span><i class="ti ti-graph"></i></span>
+                <span>Stock-in/Movement</span>
               </a>
             </li>
 

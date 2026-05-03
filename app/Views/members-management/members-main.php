@@ -101,175 +101,175 @@ echo view('templates/myheader.php');
         </nav>
     </div>
 </div>
+<form action="<?=site_url();?>membersmanagement" method="post" class="member-reg-form" id="memberRegForm">
+    <input type="hidden" name="member_id" value="<?=$member_id;?>"/>
+    <input type="hidden" name="meaction" value="MEMBER-SAVE"/>
 
-<div class="card mb-3">
-    <div class="card-body">
-        <form action="<?=site_url();?>membersmanagement" method="post" class="member-reg-form" id="memberRegForm">
-            <input type="hidden" name="member_id" value="<?=$member_id;?>"/>
-            <input type="hidden" name="meaction" value="MEMBER-SAVE"/>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6><i class="ti ti-user me-2"></i> Personal Information</h6>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">RFID Card UID</label>
+                    <input type="text" name="rfid_uid" id="rfid_uid" class="form-control" value="<?=$rfid_uid;?>" placeholder="Tap RFID card">
+                    <small class="text-muted">Optional - Can be assigned later</small>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label required">Member No.</label>
+                    <input type="text" name="member_no" class="form-control" value="<?=$member_no;?>" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label required">Last Name</label>
+                    <input type="text" name="last_name" class="form-control" value="<?=$last_name;?>" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label required">First Name</label>
+                    <input type="text" name="first_name" class="form-control" value="<?=$first_name;?>" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Middle Name</label>
+                    <input type="text" name="middle_name" class="form-control" value="<?=$middle_name;?>">
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Gender</label>
+                    <select name="gender" class="form-control">
+                        <option value="">Select</option>
+                        <option value="Male" <?= $gender == 'Male' ? 'selected' : '' ?>>Male</option>
+                        <option value="Female" <?= $gender == 'Female' ? 'selected' : '' ?>>Female</option>
+                        <option value="Other" <?= $gender == 'Other' ? 'selected' : '' ?>>Other</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" name="date_of_birth" id="date_of_birth" class="form-control" value="<?=$date_of_birth;?>">
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Age</label>
+                    <input type="number" name="age" id="age" class="form-control" value="<?=$age;?>" readonly>
+                </div>
+            </div>
             
-            <!-- Section 1: Personal Information -->
-            <div class="form-section">
-                <h6><i class="ti ti-user me-2"></i> Personal Information</h6>
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">RFID Card UID</label>
-                        <input type="text" name="rfid_uid" id="rfid_uid" class="form-control" value="<?=$rfid_uid;?>" placeholder="Tap RFID card">
-                        <small class="text-muted">Optional - Can be assigned later</small>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6><i class="ti ti-phone me-2"></i> Contact Information</h6>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label required">Email Address</label>
+                    <input type="email" name="email" class="form-control" value="<?=$email;?>" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label required">Mobile Number</label>
+                    <input type="text" name="mobile_number" class="form-control" value="<?=$mobile_number;?>" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Emergency Contact Name</label>
+                    <input type="text" name="emergency_contact_name" class="form-control" value="<?=$emergency_contact_name;?>">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Emergency Contact No.</label>
+                    <input type="text" name="emergency_contact_number" class="form-control" value="<?=$emergency_contact_number;?>">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Relationship</label>
+                    <input type="text" name="emergency_contact_relationship" class="form-control" value="<?=$emergency_contact_relationship;?>">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Address</label>
+                    <textarea name="address" class="form-control" rows="2"><?=$address;?></textarea>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">City</label>
+                    <input type="text" name="city" class="form-control" value="<?=$city;?>">
+                </div>
+            </div> 
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">   
+            <h6><i class="ti ti-heart me-2"></i> Health & Fitness Information</h6>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Health Conditions</label>
+                    <textarea name="health_conditions" class="form-control" rows="2" placeholder="e.g., Diabetes, High Blood Pressure, Asthma"><?=$health_conditions;?></textarea>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Allergies</label>
+                    <textarea name="allergies" class="form-control" rows="2" placeholder="e.g., Dust, Pollen, Food allergies"><?=$allergies;?></textarea>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Fitness Goals</label>
+                    <textarea name="fitness_goals" class="form-control" rows="2" placeholder="e.g., Lose weight, Build muscle, Improve endurance"><?=$fitness_goals;?></textarea>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Experience Level</label>
+                    <select name="experience_level" class="form-control">
+                        <option value="Beginner" <?= $experience_level == 'Beginner' ? 'selected' : '' ?>>Beginner</option>
+                        <option value="Intermediate" <?= $experience_level == 'Intermediate' ? 'selected' : '' ?>>Intermediate</option>
+                        <option value="Advanced" <?= $experience_level == 'Advanced' ? 'selected' : '' ?>>Advanced</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6><i class="ti ti-id me-2"></i> Membership Details</h6>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Membership Plan</label>
+                    <select name="membership_plan" id="membership_plan" class="form-control">
+                        <option value="Basic" <?= $membership_plan == 'Basic' ? 'selected' : '' ?>>Basic - ₱1,500/month</option>
+                        <option value="Premium" <?= $membership_plan == 'Premium' ? 'selected' : '' ?>>Premium - ₱2,500/month</option>
+                        <option value="VIP" <?= $membership_plan == 'VIP' ? 'selected' : '' ?>>VIP - ₱3,500/month</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="membership_start_date" id="start_date" class="form-control" value="<?=$membership_start_date;?>">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="membership_end_date" id="end_date" class="form-control" value="<?=$membership_end_date;?>" readonly>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="membership_status" class="form-control">
+                        <option value="Active" <?= $membership_status == 'Active' ? 'selected' : '' ?>>Active</option>
+                        <option value="Pending" <?= $membership_status == 'Pending' ? 'selected' : '' ?>>Pending</option>
+                        <option value="Expired" <?= $membership_status == 'Expired' ? 'selected' : '' ?>>Expired</option>
+                        <option value="Suspended" <?= $membership_status == 'Suspended' ? 'selected' : '' ?>>Suspended</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6><i class="ti ti-file-text me-2"></i> Agreements</h6>
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <div class="form-check">
+                        <input type="checkbox" name="waiver_signed" class="form-check-input" id="waiver" value="1" <?= $waiver_signed ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="waiver">
+                            I acknowledge the risks associated with physical exercise and release the gym from liability
+                        </label>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label required">Member No.</label>
-                        <input type="text" name="member_no" class="form-control" value="<?=$member_no;?>" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label required">Last Name</label>
-                        <input type="text" name="last_name" class="form-control" value="<?=$last_name;?>" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label required">First Name</label>
-                        <input type="text" name="first_name" class="form-control" value="<?=$first_name;?>" required>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Middle Name</label>
-                        <input type="text" name="middle_name" class="form-control" value="<?=$middle_name;?>">
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Gender</label>
-                        <select name="gender" class="form-control">
-                            <option value="">Select</option>
-                            <option value="Male" <?= $gender == 'Male' ? 'selected' : '' ?>>Male</option>
-                            <option value="Female" <?= $gender == 'Female' ? 'selected' : '' ?>>Female</option>
-                            <option value="Other" <?= $gender == 'Other' ? 'selected' : '' ?>>Other</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Date of Birth</label>
-                        <input type="date" name="date_of_birth" id="date_of_birth" class="form-control" value="<?=$date_of_birth;?>">
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Age</label>
-                        <input type="number" name="age" id="age" class="form-control" value="<?=$age;?>" readonly>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <div class="form-check">
+                        <input type="checkbox" name="terms_accepted" class="form-check-input" id="terms" value="1" <?= $terms_accepted ? 'checked' : '' ?> required>
+                        <label class="form-check-label required" for="terms">
+                            I agree to the terms and conditions of the gym
+                        </label>
                     </div>
                 </div>
             </div>
-
-            <!-- Section 2: Contact Information -->
-            <div class="form-section">
-                <h6><i class="ti ti-phone me-2"></i> Contact Information</h6>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label required">Email Address</label>
-                        <input type="email" name="email" class="form-control" value="<?=$email;?>" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label required">Mobile Number</label>
-                        <input type="text" name="mobile_number" class="form-control" value="<?=$mobile_number;?>" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Emergency Contact Name</label>
-                        <input type="text" name="emergency_contact_name" class="form-control" value="<?=$emergency_contact_name;?>">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Emergency Contact No.</label>
-                        <input type="text" name="emergency_contact_number" class="form-control" value="<?=$emergency_contact_number;?>">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Relationship</label>
-                        <input type="text" name="emergency_contact_relationship" class="form-control" value="<?=$emergency_contact_relationship;?>">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Address</label>
-                        <textarea name="address" class="form-control" rows="2"><?=$address;?></textarea>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">City</label>
-                        <input type="text" name="city" class="form-control" value="<?=$city;?>">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 3: Health & Fitness -->
-            <div class="form-section">
-                <h6><i class="ti ti-heart me-2"></i> Health & Fitness Information</h6>
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Health Conditions</label>
-                        <textarea name="health_conditions" class="form-control" rows="2" placeholder="e.g., Diabetes, High Blood Pressure, Asthma"><?=$health_conditions;?></textarea>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Allergies</label>
-                        <textarea name="allergies" class="form-control" rows="2" placeholder="e.g., Dust, Pollen, Food allergies"><?=$allergies;?></textarea>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Fitness Goals</label>
-                        <textarea name="fitness_goals" class="form-control" rows="2" placeholder="e.g., Lose weight, Build muscle, Improve endurance"><?=$fitness_goals;?></textarea>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Experience Level</label>
-                        <select name="experience_level" class="form-control">
-                            <option value="Beginner" <?= $experience_level == 'Beginner' ? 'selected' : '' ?>>Beginner</option>
-                            <option value="Intermediate" <?= $experience_level == 'Intermediate' ? 'selected' : '' ?>>Intermediate</option>
-                            <option value="Advanced" <?= $experience_level == 'Advanced' ? 'selected' : '' ?>>Advanced</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 4: Membership Details -->
-            <div class="form-section">
-                <h6><i class="ti ti-id me-2"></i> Membership Details</h6>
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Membership Plan</label>
-                        <select name="membership_plan" id="membership_plan" class="form-control">
-                            <option value="Basic" <?= $membership_plan == 'Basic' ? 'selected' : '' ?>>Basic - ₱1,500/month</option>
-                            <option value="Premium" <?= $membership_plan == 'Premium' ? 'selected' : '' ?>>Premium - ₱2,500/month</option>
-                            <option value="VIP" <?= $membership_plan == 'VIP' ? 'selected' : '' ?>>VIP - ₱3,500/month</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Start Date</label>
-                        <input type="date" name="membership_start_date" id="start_date" class="form-control" value="<?=$membership_start_date;?>">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">End Date</label>
-                        <input type="date" name="membership_end_date" id="end_date" class="form-control" value="<?=$membership_end_date;?>" readonly>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Status</label>
-                        <select name="membership_status" class="form-control">
-                            <option value="Active" <?= $membership_status == 'Active' ? 'selected' : '' ?>>Active</option>
-                            <option value="Pending" <?= $membership_status == 'Pending' ? 'selected' : '' ?>>Pending</option>
-                            <option value="Expired" <?= $membership_status == 'Expired' ? 'selected' : '' ?>>Expired</option>
-                            <option value="Suspended" <?= $membership_status == 'Suspended' ? 'selected' : '' ?>>Suspended</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 5: Legal Agreements -->
-            <div class="form-section">
-                <h6><i class="ti ti-file-text me-2"></i> Agreements</h6>
-                <div class="row">
-                    <div class="col-md-12 mb-2">
-                        <div class="form-check">
-                            <input type="checkbox" name="waiver_signed" class="form-check-input" id="waiver" value="1" <?= $waiver_signed ? 'checked' : '' ?>>
-                            <label class="form-check-label" for="waiver">
-                                I acknowledge the risks associated with physical exercise and release the gym from liability
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-2">
-                        <div class="form-check">
-                            <input type="checkbox" name="terms_accepted" class="form-check-input" id="terms" value="1" <?= $terms_accepted ? 'checked' : '' ?> required>
-                            <label class="form-check-label required" for="terms">
-                                I agree to the terms and conditions of the gym
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="row mt-3">
                 <div class="col text-end">
                     <button type="submit" class="btn btn-danger">
@@ -279,9 +279,9 @@ echo view('templates/myheader.php');
                     <a href="<?=site_url();?>membersmanagement" class="btn btn-secondary">Cancel</a>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <div class="card">
     <div class="card-body">

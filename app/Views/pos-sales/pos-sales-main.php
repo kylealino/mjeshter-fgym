@@ -498,16 +498,16 @@ echo view('templates/myheader.php');
 <script>
 $(document).ready(function () {
     $('#paymentTable').DataTable({
-        pageLength: 10,
+        pageLength: 5,
         lengthChange: false,
-        order: [[0, 'desc']],
+        order: [[6, 'desc']],
         scrollX: false,
         language: {
             search: "Search Transaction:"
         }
     });
     $('#breakdownTable').DataTable({
-        pageLength: 10,
+        pageLength: 5,
         lengthChange: false,
         order: [[0, 'desc']],
         scrollX: false,

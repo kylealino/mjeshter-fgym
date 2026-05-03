@@ -33,4 +33,8 @@ $routes->post('pos', 'POSController::index',['filter' => 'myauthuser']);
 $routes->get('possales', 'POSSalesController::index',['filter' => 'myauthuser']);
 $routes->post('possales', 'POSSalesController::index',['filter' => 'myauthuser']);
 
+//INVENTORY
+$routes->get('inventory', 'InventoryController::index',['filter' => 'myauthuser']);
+$routes->post('inventory', 'InventoryController::index',['filter' => 'myauthuser']);
+
 
