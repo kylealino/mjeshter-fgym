@@ -27,6 +27,7 @@ $low_stock = $this->db->query("
 
 $total_movements = count($movements);
 
+
 echo view('templates/myheader.php');
 ?>
 <style>
@@ -191,54 +192,61 @@ echo view('templates/myheader.php');
     <div class="col-md-6">
         <!-- STOCK IN -->
         <div class="card mb-3">
+        <form action="<?=site_url();?>inventory?meaction=STOCKIN-SAVE" method="post" class="member-reg-form" id="memberRegForm">
             <div class="card-header">
                 <h6 class="fw-semibold mb-0">Stock In Entry</h6>
                 <small class="text-muted">Add or restock products</small>
             </div>
 
             <div class="card-body">
-
-                <div class="mb-2">
-                    <label>Product</label>
-                    <select class="form-control" name="product_id">
-                        <option value="">-- Select Product --</option>
-                        <?php foreach($products as $p): ?>
-                            <option value="<?=$p['product_id'];?>"><?=$p['product_name'];?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
                 <div class="mb-2">
                     <label>Product Name</label>
                     <input type="text" class="form-control" name="product_name">
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Quantity</label>
-                        <input type="number" class="form-control" name="qty">
-                    </div>
+                <div class="mb-2">
+                    <label>Category</label>
+                    <select name="category" id="category" class="form-control">
+                        <option value="">Select</option>
+                        <option value="Merchandise">
+                            Merchandise
+                        </option>
+                        <option value="Accessories">
+                            Accessories
+                        </option>
+                        <option value="Beverages">
+                            Beverages
+                        </option>
+                        <option value="Food">
+                            Food
+                        </option>
+                        <option value="Supplements">
+                            Supplements
+                        </option>
+                    </select>
+                </div>
+                <div class="row mt-2">
                     <div class="col-md-6">
                         <label>Purchase Price</label>
                         <input type="number" class="form-control" name="price">
                     </div>
+                    <div class="col-md-6">
+                        <label>Selling Price</label>
+                        <input type="number" class="form-control" name="price">
+                    </div>
                 </div>
-
-                <div class="mt-2">
-                    <label>Supplier</label>
-                    <input type="text" class="form-control" name="supplier">
-                </div>
-
-                <div class="mt-2">
-                    <label>Remarks</label>
-                    <input type="text" class="form-control" name="remarks">
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label>Quantity</label>
+                        <input type="number" class="form-control" name="qty">
+                    </div>
+                    <div class="col-md-6"></div>
                 </div>
 
                 <button class="btn btn-danger w-100 mt-3">
                     Save Stock In
                 </button>
-
             </div>
+        </form>
         </div>
     </div>
     <div class="col-md-6">
@@ -270,14 +278,39 @@ echo view('templates/myheader.php');
                 </div>
 
                 <div class="mb-2">
+                    <label>Reason</label>
+                    <select name="reason" id="reason" class="form-control">
+                        <option value="">Select</option>
+                        <option value="Physical Count Correction">
+                            Physical Count Correction
+                        </option>
+                        <option value="Damaged Item">
+                            Damaged Item
+                        </option>
+                        <option value="Expired Item">
+                            Expired Item
+                        </option>
+                        <option value="Lost / Missing">
+                            Lost / Missing
+                        </option>
+                        <option value="Free / Complimentary">
+                            Free / Complimentary
+                        </option>
+                        <option value="System Correction">
+                            System Correction
+                        </option>
+                        <option value="Returned Item">
+                            Returned Item
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="mb-2">
                     <label>Quantity</label>
                     <input type="number" class="form-control" name="adj_qty">
                 </div>
 
-                <div class="mb-2">
-                    <label>Reason</label>
-                    <input type="text" class="form-control" name="adj_reason">
-                </div>
 
                 <button class="btn btn-danger w-100 mt-3">
                     Save Adjustment
