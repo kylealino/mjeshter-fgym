@@ -27,6 +27,17 @@ $low_stock = $this->db->query("
 
 $total_movements = count($movements);
 
+$currentInventory = $this->db->query("
+    SELECT 
+        product_name,
+        category,
+        stock_qty,
+        reorder_level,
+        selling_price,
+        status
+    FROM tbl_products
+    ORDER BY stock_qty ASC
+")->getResultArray();
 
 echo view('templates/myheader.php');
 ?>
@@ -71,7 +82,140 @@ echo view('templates/myheader.php');
     font-weight: 700;
     color: #212529;
 }
+
+/* DataTables wrapper adjustments */
+.dataTables_wrapper {
+    font-family: 'Inter', sans-serif;
+    overflow-x: visible !important;
+}
+
+/* Remove side-by-side scroll */
+.table-responsive {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+
+/* Search bar - right aligned with fixed width */
+.dataTables_filter {
+    float: right;
+    margin-bottom: 20px;
+}
+
+.dataTables_filter label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dataTables_filter input {
+    width: 200px;
+    padding: 5px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.dataTables_filter input:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+}
+
+/* Pagination - right aligned, SMALLER and COMPACT */
+.dataTables_paginate {
+    float: right;
+    margin-top: 20px;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 3px 8px !important;
+    margin: 0 2px !important;
+    border-radius: 4px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+    color: #333 !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    display: inline-block !important;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+    color: #fff !important;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #333 !important;
+}
+
+.dataTables_paginate .paginate_button.current:hover {
+    background: #b91c1c !important;
+    border-color: #b91c1c !important;
+    color: #fff !important;
+}
+
+/* Previous/Next buttons - same small size */
+.dataTables_paginate .paginate_button.previous,
+.dataTables_paginate .paginate_button.next {
+    padding: 3px 10px !important;
+}
+
+/* Table info (entries count) - left aligned */
+.dataTables_info {
+    float: left;
+    font-size: 11px;
+    color: #666;
+    margin-top: 20px;
+}
+
+/* Make table container not scroll horizontally */
+.dataTables_scroll {
+    overflow-x: visible !important;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .dataTables_filter,
+    .dataTables_paginate,
+    .dataTables_info {
+        float: none;
+        text-align: center;
+    }
+    
+    .dataTables_filter {
+        margin-bottom: 15px;
+    }
+    
+    .dataTables_filter label {
+        justify-content: center;
+    }
+    
+    .dataTables_paginate {
+        margin-top: 15px;
+    }
+    
+    .dataTables_info {
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .dashboard-card .card-value {
+        font-size: 22px;
+    }
+}
 </style>
+<div class="me-inventory-msg"></div>
+<div class="me-adjustment-msg"></div>
+<input type="hidden" id="__siteurl" data-mesiteurl="<?=site_url();?>" />
+
 <div class="row mb-2 mt-5">
     <div class="col-12">
         <h4 class="fw-semibold my-3">Inventory Management</h4>
@@ -155,6 +299,7 @@ echo view('templates/myheader.php');
                             <th>Type</th>
                             <th>Qty</th>
                             <th>Reference</th>
+                            <th>Remarks</th>
                             <th>User</th>
                             <th>Date</th>
                         </tr>
@@ -178,6 +323,7 @@ echo view('templates/myheader.php');
 
                             <td><?=$row['quantity'];?></td>
                             <td><?=$row['reference_type'];?></td>
+                            <td><?=$row['remarks'];?></td>
                             <td><?=$row['created_by'];?></td>
                             <td><?=date('M d, Y h:i A', strtotime($row['created_at']));?></td>
                         </tr>
@@ -199,13 +345,13 @@ echo view('templates/myheader.php');
             </div>
 
             <div class="card-body">
-                <div class="mb-2">
+                <!-- <div class="mb-2">
                     <label>Supplier</label>
-                    <input type="text" class="form-control" name="supplier">
-                </div>
+                    <input type="text" id="supplier" class="form-control" name="supplier">
+                </div> -->
                 <div class="mb-2">
                     <label>Product Name</label>
-                    <input type="text" class="form-control" name="product_name">
+                    <input type="text" id="product_name" class="form-control" name="product_name">
                 </div>
                 <div class="mb-2">
                     <label>Category</label>
@@ -231,24 +377,26 @@ echo view('templates/myheader.php');
                 <div class="row mt-2">
                     <div class="col-md-6">
                         <label>Purchase Price</label>
-                        <input type="number" class="form-control" name="price">
+                        <input type="number" id="purchase_price" class="form-control" name="purchase_price">
                     </div>
                     <div class="col-md-6">
                         <label>Selling Price</label>
-                        <input type="number" class="form-control" name="price">
+                        <input type="number" id="selling_price" class="form-control" name="selling_price">
                     </div>
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-6">
                         <label>Quantity</label>
-                        <input type="number" class="form-control" name="qty">
+                        <input type="number" id="stock_qty" class="form-control" name="stock_qty">
                     </div>
-                    <div class="col-md-6"></div>
                 </div>
 
-                <button class="btn btn-danger w-100 mt-3">
-                    Save Stock In
-                </button>
+                <div class="col text-end mt-2">
+                    <button type="submit" class="btn btn-danger w-100 mt-2">
+                        <i class="ti ti-device-floppy me-1"></i>
+                        Save Stock In
+                    </button>
+                </div>
             </div>
         </form>
         </div>
@@ -256,6 +404,7 @@ echo view('templates/myheader.php');
     <div class="col-md-6">
         <!-- MANUAL ADJUSTMENT -->
         <div class="card">
+        <form action="<?=site_url();?>inventory?meaction=ADJUSTMENT-SAVE" method="post" class="adj-reg-form" id="adjRegForm">
             <div class="card-header">
                 <h6 class="fw-semibold mb-0">Manual Adjustment</h6>
                 <small class="text-muted">Adjust stock manually</small>
@@ -265,17 +414,17 @@ echo view('templates/myheader.php');
 
                 <div class="mb-2">
                     <label>Product</label>
-                    <select class="form-control" name="adj_product_id">
+                    <select class="form-control" name="adj_product_name" id="adj_product_name">
                         <option value="">-- Select Product --</option>
                         <?php foreach($products as $p): ?>
-                            <option value="<?=$p['product_id'];?>"><?=$p['product_name'];?></option>
+                            <option value="<?=$p['product_name'];?>"><?=$p['product_name'];?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
                 <div class="mb-2">
                     <label>Adjustment Type</label>
-                    <select class="form-control" name="adj_type">
+                    <select class="form-control" name="adj_type" id="adj_type">
                         <option value="INCREASE">Increase</option>
                         <option value="DECREASE">Decrease</option>
                     </select>
@@ -283,7 +432,7 @@ echo view('templates/myheader.php');
 
                 <div class="mb-2">
                     <label>Reason</label>
-                    <select name="reason" id="reason" class="form-control">
+                    <select name="remarks" id="remarks" class="form-control" id="remarks">
                         <option value="">Select</option>
                         <option value="Physical Count Correction">
                             Physical Count Correction
@@ -312,20 +461,122 @@ echo view('templates/myheader.php');
 
                 <div class="mb-2">
                     <label>Quantity</label>
-                    <input type="number" class="form-control" name="adj_qty">
+                    <input type="number" class="form-control" name="adj_qty" id="adj_qty">
                 </div>
 
 
-                <button class="btn btn-danger w-100 mt-3">
-                    Save Adjustment
-                </button>
+                <div class="col text-end mt-2">
+                    <button type="submit" class="btn btn-danger w-100 mt-2">
+                        <i class="ti ti-device-floppy me-1"></i>
+                        Save Adjustment
+                    </button>
+                </div>
 
             </div>
         </div>
     </div>
 </div>
 
+<?php
+$currentInventory = $this->db->query("
+    SELECT 
+        product_name,
+        category,
+        stock_qty,
+        reorder_level,
+        selling_price,
+        status
+    FROM tbl_products
+    ORDER BY stock_qty ASC
+")->getResultArray();
+?>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="card">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="fw-semibold mb-0">Current Inventory</h6>
+                    <small class="text-muted">
+                        Live stock status of all products
+                    </small>
+                </div>
+
+                <span class="badge bg-light text-dark border">
+                    <?=count($currentInventory);?> products
+                </span>
+            </div>
+
+            <div class="card-body">
+
+                <table id="currentInventoryTable" class="table table-hover align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Stock</th>
+                            <th>Reorder Level</th>
+                            <th>Selling Price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <?php foreach($currentInventory as $row): ?>
+                        <tr>
+
+                            <td>
+                                <strong><?=$row['product_name'];?></strong>
+                            </td>
+
+                            <td><?=$row['category'];?></td>
+
+                            <td>
+                                <?php if($row['stock_qty'] <= $row['reorder_level']): ?>
+                                    <span class="badge bg-danger">
+                                        <?=$row['stock_qty'];?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-success">
+                                        <?=$row['stock_qty'];?>
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+
+                            <td><?=$row['reorder_level'];?></td>
+
+                            <td>
+                                ₱<?=number_format($row['selling_price'],2);?>
+                            </td>
+
+                            <td>
+                                <?php if($row['status'] == 'ACTIVE'): ?>
+                                    <span class="badge bg-primary">
+                                        ACTIVE
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-secondary">
+                                        INACTIVE
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="<?=base_url('assets/js/inventory/inventory.js?v=1');?>"></script>
 
 <script>
 $(document).ready(function () {
@@ -339,7 +590,19 @@ $(document).ready(function () {
         }
     });
 
+    $('#currentInventoryTable').DataTable({
+    pageLength: 5,
+    lengthChange: false,
+    order: [[2, 'asc']],
+    language: {
+        search: "Search Product:"
+    }
 });
+
+});
+
+
+
 </script>
 
 <?php

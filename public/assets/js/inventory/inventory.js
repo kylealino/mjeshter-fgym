@@ -7,7 +7,7 @@ function __Inventory() {
     this.__saveInventory = function() { 
         'use strict';
         
-        var forms = document.querySelectorAll('.pos-reg-form');
+        var forms = document.querySelectorAll('.inv-reg-form');
 
         Array.prototype.slice.call(forms).forEach(function (form) {
             form.addEventListener('submit', function (event) {
@@ -21,57 +21,28 @@ function __Inventory() {
                     event.preventDefault();
                     event.stopPropagation();
 
-                    // =========================
-                    // GET CART DATA - LIKE YOUR BUDGET CODE
-                    // =========================
-                    var rowcount = jQuery('#cartBody tr').length;
-                    var cartdata = [];
-                    var cartrow = '';
+                    // var supplier = $('#supplier').val();
+                    var product_name = $('#product_name').val();
+                    var category = $('#category').val();
+                    var purchase_price = $('#purchase_price').val();
+                    var selling_price = $('#selling_price').val();
+                    var stock_qty = $('#stock_qty').val();
 
-                    for (var aa = 0; aa < rowcount; aa++) {
+                    // console.log(supplier);
+                    console.log(product_name);
+                    console.log(category);
+                    console.log(purchase_price);
+                    console.log(selling_price);
+                    console.log(stock_qty);
 
-                        var clonedRow = jQuery('#cartBody tr:eq(' + aa + ')');
-
-                        var itemName  = clonedRow.find('.item-name').val();
-                        var itemType  = clonedRow.find('.item-type').val();
-                        var itemQty = clonedRow.find('.item-qty').val();
-                        var itemPrice = clonedRow.find('.item-price').val();
-                        
-                        var cartrow = itemName + 'x|x' + itemType + 'x|x' + itemQty + 'x|x' + itemPrice;
-                        cartdata.push(cartrow);
-                    }
-
-                    console.log(cartdata);
-
-                    // Get other form values
-                    var transaction_type = $('#transaction_type').val();
-                    var payment_method = $('#paymentMethod').val();
-                    var amount_tendered = $('#amountTendered').val();
-                    var change_amount = $('#changeAmount').val();
-                    var grand_total = $('#grandtotalText').text().replace('₱', '');
-
-                    if (cartdata.length === 0) {
-                        toastr.error('Cart is empty!');
-                        return;
-                    }
-
-                    if (!amount_tendered) {
-                        toastr.error('Amount tendered is required!');
-                        return;
-                    }
-
-                    if (amount_tendered + 1 < grand_total) {
-                        toastr.error('Luge ka diyan idol!');
-                        return;
-                    }
- 
                     var mparam = {
-                        cartdata: cartdata,
-                        payment_method: payment_method,
-                        amount_tendered: amount_tendered,
-                        change_amount: change_amount,
-                        grand_total: grand_total,
-                        meaction: 'POS-SAVE'
+                        // supplier: supplier,
+                        product_name: product_name,
+                        category: category,
+                        purchase_price: purchase_price,
+                        selling_price: selling_price,
+                        stock_qty: stock_qty,
+                        meaction: 'STOCKIN-SAVE'
                     };
 
                     
@@ -80,14 +51,79 @@ function __Inventory() {
                     // =========================
                     jQuery.ajax({
                         type: "POST",
-                        url: mesiteurl + 'pos',
+                        url: mesiteurl + 'inventory',
                         context: document.body,
                         data: mparam,  // Note: your budget code uses eval(mparam) but that's not needed
                         global: false,
                         cache: false,
                         success: function(data) {
-                            jQuery('.me-pos-msg').html(data);
-                            toastr.success('POS saved successfully');
+                            jQuery('.me-inventory-msg').html(data);
+                            toastr.success('Product saved successfully');
+                            return;
+                        },
+                        error: function(xhr, status, error) {
+                            alert('Error: ' + error);
+                            return false;
+                        }
+                    });
+
+                } catch(err) {
+                    alert(err.message);
+                    return false;
+                }
+            }, false);
+        });
+    };
+
+    this.__saveAdjustment = function() { 
+        'use strict';
+        
+        var forms = document.querySelectorAll('.adj-reg-form');
+
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                
+                try {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    var adj_product_name = $('#adj_product_name').val();
+                    var adj_type = $('#adj_type').val();
+                    var remarks = $('#remarks').val();
+                    var adj_qty = $('#adj_qty').val();
+
+                    console.log(adj_product_name);
+                    console.log(adj_type);
+                    console.log(remarks);
+                    console.log(adj_qty);
+
+                    var mparam = {
+                        adj_product_name: adj_product_name,
+                        adj_type: adj_type,
+                        remarks: remarks,
+                        adj_qty: adj_qty,
+                        meaction: 'ADJUSTMENT-SAVE'
+                    };
+
+                    
+                    // =========================
+                    // AJAX - LIKE YOUR BUDGET CODE
+                    // =========================
+                    jQuery.ajax({
+                        type: "POST",
+                        url: mesiteurl + 'inventory',
+                        context: document.body,
+                        data: mparam,  // Note: your budget code uses eval(mparam) but that's not needed
+                        global: false,
+                        cache: false,
+                        success: function(data) {
+                            jQuery('.me-adjustment-msg').html(data);
+                            toastr.success('Product saved successfully');
                             return;
                         },
                         error: function(xhr, status, error) {
@@ -107,4 +143,5 @@ function __Inventory() {
 
 $(document).ready(function() {
     __Inventory.__saveInventory();
+    __Inventory.__saveAdjustment();
 });

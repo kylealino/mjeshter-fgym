@@ -25,8 +25,12 @@ class InventoryController extends BaseController
                 return view('inventory/inventory-main');
                 break;
 
-            case 'INVENTORY-SAVE': 
+            case 'STOCKIN-SAVE': 
                 $this->inventoryModel->saveInventory();
+                break;
+
+            case 'ADJUSTMENT-SAVE': 
+                $this->inventoryModel->saveAdjustment();
                 break;
 
         }
