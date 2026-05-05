@@ -200,6 +200,10 @@ echo view('templates/myheader.php');
 
             <div class="card-body">
                 <div class="mb-2">
+                    <label>Supplier</label>
+                    <input type="text" class="form-control" name="supplier">
+                </div>
+                <div class="mb-2">
                     <label>Product Name</label>
                     <input type="text" class="form-control" name="product_name">
                 </div>
