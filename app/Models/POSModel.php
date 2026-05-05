@@ -50,6 +50,47 @@ class POSModel extends Model
                         $this->cuser
                     ]
                 );
+
+                $query = $this->db->query("
+                UPDATE
+                    `tbl_products`
+                SET
+                    `stock_qty` = `stock_qty` - ?,
+                    `updated_at` = NOW()
+                WHERE product_name = ?
+                ", [
+                    $item_qty, $item_name
+                ]);
+
+                $query = $this->db->query("
+                    SELECT `product_id` FROM `tbl_products` WHERE `product_name` = '$item_name'
+                ");
+                $rw = $query->getRowArray();
+                $product_id = $rw['product_id'];
+
+                $query = $this->db->query("
+                    INSERT INTO `tbl_inventory_movements`(
+                        `product_id`,
+                        `product_name`,
+                        `movement_type`,
+                        `quantity`,
+                        `reference_type`,
+                        `reference_no`,
+                        `remarks`,
+                        `created_by`
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+                    [
+                        $product_id,
+                        $item_name,
+                        'OUT',
+                        -abs($item_qty),
+                        'POS',
+                        $cseqn,
+                        'POS TRANSACTION',
+                        $this->cuser
+                    ]
+                );
                 
             }
         }
@@ -81,11 +122,11 @@ class POSModel extends Model
                 toastr.success('POS Transaction Saved Successfully arararar!', 'Well Done!', {
                     progressBar: true,
                     closeButton: true,
-                    timeOut: 2500,
+                    timeOut: 1500,
                 });
                 setTimeout(function() {
                     window.location.href = 'pos?meaction=MAIN';
-                }, 2500);
+                }, 1500);
             </script>
             ";
             exit;
@@ -148,6 +189,6 @@ class POSModel extends Model
 				$query = $this->db->query("update myctr_pos set {$xfield} = '{$xnumb}'");
 			}
 		}
-		return  $tag . '-' . $xnumb;//.$supp
+		return  $tag . $xsysmonth . $xsysday . $xsysyear. $xnumb;//.$supp
 	} 
 }

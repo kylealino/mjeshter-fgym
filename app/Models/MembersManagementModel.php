@@ -141,11 +141,11 @@ class MembersManagementModel extends Model
                 toastr.{$color}('{$status}!', 'Success', {
                     progressBar: true,
                     closeButton: true,
-                    timeOut: 2500
+                    timeOut: 1500
                 });
                 setTimeout(function() {
                     window.location.href = 'membersmanagement?meaction=MAIN';
-                }, 2500);
+                }, 1500);
             </script>
             ";
         } else {

@@ -279,38 +279,87 @@ echo view('templates/myheader.php');
             </div>
 
             <!-- ITEMS -->
+            <!-- ITEMS -->
+<!-- ITEMS -->
             <div class="form-section d-none" id="itemsSection">
                 <h6><i class="ti ti-shopping-cart me-2"></i> Items POS</h6>
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <div class="product-box" onclick="addItem('Protein Shake','PRODUCT',120)">
-                            <i class="ti ti-bottle fs-8"></i>
-                            <h6 class="mt-2">Protein Shake</h6>
-                            <div>₱120</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="product-box" onclick="addItem('Energy Drink','PRODUCT',90)">
-                            <i class="ti ti-bottle fs-8"></i>
-                            <h6 class="mt-2">Energy Drink</h6>
-                            <div>₱90</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="product-box" onclick="addItem('Gym Towel','PRODUCT',250)">
-                            <i class="ti ti-shirt fs-8"></i>
-                            <h6 class="mt-2">Gym Towel</h6>
-                            <div>₱250</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="product-box" onclick="addItem('Whey Protein','PRODUCT',2500)">
-                            <i class="ti ti-barbell fs-8"></i>
-                            <h6 class="mt-2">Whey Protein</h6>
-                            <div>₱2,500</div>
-                        </div>
-                    </div>
+
+                <?php
+                $categories = ['Merchandise', 'Accessories', 'Beverages', 'Food', 'Supplements'];
+
+                foreach($categories as $cat):
+                ?>
+
+                <!-- CATEGORY TITLE -->
+                <div class="mb-1 mt-4">
+                    <h5 class="fw-bold text-danger border-bottom pb-2">
+                        <?=$cat;?>
+                    </h5>
                 </div>
+
+                <div class="row">
+
+                    <?php
+                    $products_query = $this->db->query("
+                        SELECT 
+                            product_name,
+                            selling_price,
+                            stock_qty,
+                            category
+                        FROM tbl_products
+                        WHERE status = 'ACTIVE'
+                        AND category = '$cat'
+                        ORDER BY product_name ASC
+                    ");
+
+                    foreach($products_query->getResultArray() as $prod):
+                    ?>
+
+                    <div class="col-md-3 mb-1">
+
+                        <div class="product-box"
+                            onclick="addItem(
+                                '<?=$prod['product_name'];?>',
+                                '<?=$prod['category'];?>',
+                                <?=$prod['selling_price'];?>
+                            )">
+
+                            <?php
+                            if($prod['category'] == 'Supplements'){
+                                echo '<i class="ti ti-barbell fs-8"></i>';
+                            }elseif($prod['category'] == 'Beverages'){
+                                echo '<i class="ti ti-bottle fs-8"></i>';
+                            }elseif($prod['category'] == 'Food'){
+                                echo '<i class="ti ti-egg fs-8"></i>';
+                            }elseif($prod['category'] == 'Accessories'){
+                                echo '<i class="ti ti-device-watch fs-8"></i>';
+                            }else{
+                                echo '<i class="ti ti-package fs-8"></i>';
+                            }
+                            ?>
+
+                            <h6 class="mt-2">
+                                <?=$prod['product_name'];?>
+                            </h6>
+
+                            <div class="fw-semibold text-danger">
+                                ₱<?=number_format($prod['selling_price'],2);?>
+                            </div>
+
+                            <small class="text-muted d-block mt-1">
+                                Stock: <?=$prod['stock_qty'];?>
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <?php endforeach; ?>
+
+                </div>
+
+                <?php endforeach; ?>
+
             </div>
         </div>
 
