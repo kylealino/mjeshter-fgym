@@ -64,9 +64,10 @@ class InventoryModel extends Model
                 `quantity`,
                 `reference_type`,
                 `reference_no`,
+                `remarks`,
                 `created_by`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
             [
                 $product_id,
                 $product_name,
@@ -74,6 +75,7 @@ class InventoryModel extends Model
                 $stock_qty,
                 'STOCK IN',
                 $reference_no,
+                'NEW ADDED PRODUCT',
                 $this->cuser
             ]
         );

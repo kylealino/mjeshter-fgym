@@ -21,7 +21,10 @@ class AttendanceController extends BaseController
         $meaction = $this->request->getPostGet('meaction');
 
         switch ($meaction) {
-
+            case 'MAIN':
+                return view('attendance/attendance-main');
+                break;
+                
             case 'SAVE-WALKIN':
                 $this->attendanceModel->saveWalkin();
                 break;
@@ -30,44 +33,7 @@ class AttendanceController extends BaseController
                 $this->attendanceModel->checkinMember();
                 break;
 
-            case 'MAIN':
-            default:
 
-                // TODAY CHECKINS
-                $query = $this->db->query("
-                    SELECT 
-                        a.*,
-                        CONCAT(b.first_name,' ',b.last_name) AS member_name,
-                        b.member_no
-                    FROM tbl_checkin_history a
-                    LEFT JOIN tbl_members b
-                    ON a.member_id = b.member_id
-                    WHERE DATE(a.checkin_time) = CURDATE()
-                    ORDER BY a.checkin_time DESC
-                ");
-
-                $attendance = $query->getResultArray();
-
-                // ACTIVE MEMBERS
-                $memberquery = $this->db->query("
-                    SELECT
-                        member_id,
-                        member_no,
-                        first_name,
-                        last_name
-                    FROM tbl_members
-                    WHERE membership_status = 'Active'
-                    ORDER BY first_name ASC
-                ");
-
-                $members = $memberquery->getResultArray();
-
-                return view('attendance/attendance-main',[
-                    'attendance' => $attendance,
-                    'members' => $members
-                ]);
-
-                break;
         }
     }
 }

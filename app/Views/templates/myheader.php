@@ -502,6 +502,12 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
                 <span>Members Management</span>
               </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="<?=site_url();?>attendance?meaction=MAIN">
+                    <span><i class="ti ti-clock-check"></i></span>
+                    <span>Today's Activity Log</span>
+                </a>
+            </li>
 
             <!-- POS & CASHIERING -->
             <li class="nav-small-cap">

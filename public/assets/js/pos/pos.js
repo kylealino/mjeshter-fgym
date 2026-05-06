@@ -41,7 +41,7 @@ function __POS() {
                         cartdata.push(cartrow);
                     }
 
-                    console.log(cartdata);
+                    
 
                     // Get other form values
                     var transaction_type = $('#transaction_type').val();
@@ -50,6 +50,13 @@ function __POS() {
                     var change_amount = $('#changeAmount').val();
                     var grand_total = $('#grandtotalText').text().replace('₱', '');
 
+                    //MEMBERSHIP
+                    var member_id = $('#member_id').val();
+                    let plan = $('#membership_plan option:selected').data('plan');
+                    var membership_start_date = $('#membership_start_date').val();
+                    var membership_end_date = $('#membership_end_date').val();
+                    var membership_status = $('#membership_status').val();
+                
                     if (cartdata.length === 0) {
                         toastr.error('Cart is empty!');
                         return;
@@ -71,9 +78,15 @@ function __POS() {
                         amount_tendered: amount_tendered,
                         change_amount: change_amount,
                         grand_total: grand_total,
+                        member_id: member_id,
+                        plan: plan,
+                        membership_start_date: membership_start_date,
+                        membership_end_date: membership_end_date,
+                        membership_status: membership_status,
                         meaction: 'POS-SAVE'
                     };
 
+    
                     
                     // =========================
                     // AJAX - LIKE YOUR BUDGET CODE

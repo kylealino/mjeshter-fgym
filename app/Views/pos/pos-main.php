@@ -158,7 +158,7 @@ echo view('templates/myheader.php');
             <div class="form-section" id="membershipSection">
                 <h6><i class="ti ti-user me-2"></i> Membership Payment</h6>
                 <div class="row">
-                    <div class="col-md-5 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label class="form-label">Select Member</label>
                         <select class="form-control" id="member_id">
                             <option value="">-- Select Member --</option>
@@ -179,13 +179,28 @@ echo view('templates/myheader.php');
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label class="form-label">Membership Plan</label>
                         <select class="form-control" id="membership_plan">
-                            <option value="1000">1 Month - ₱1,000</option>
-                            <option value="3000">3 Months - ₱3,000</option>
-                            <option value="6000">6 Months - ₱6,000</option>
-                            <option value="12000">12 Months - ₱12,000</option>
+                            <option value="1000" data-plan="1 Month">1 Month</option>
+                            <option value="3000" data-plan="3 Months">3 Months</option>
+                            <option value="6000" data-plan="6 Months">6 Months</option>
+                            <option value="12000" data-plan="12 Months">12 Months</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" name="membership_start_date" id="membership_start_date" class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" name="membership_end_date" id="membership_end_date" class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Status</label>
+                        <select name="membership_status" id="membership_status" class="form-control">
+                            <option value="Active">Active</option>
+                            <option value="Pending">Pending</option>
                         </select>
                     </div>
                     <div class="col-md-3 mb-3 d-flex align-items-end">
@@ -202,7 +217,7 @@ echo view('templates/myheader.php');
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Customer Name</label>
-                        <input type="text" class="form-control" id="walkin_name">
+                        <input type="text" class="form-control" id="walkin_name" name="walkin_name">
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label">Amount</label>

@@ -75,6 +75,136 @@ echo view('templates/myheader.php');
 .breadcrumb-item.active {
     color: #dc3545;
 }
+
+
+/* DataTables wrapper adjustments */
+.dataTables_wrapper {
+    font-family: 'Inter', sans-serif;
+    overflow-x: visible !important;
+}
+
+/* Remove side-by-side scroll */
+.table-responsive {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+
+/* Search bar - right aligned with fixed width */
+.dataTables_filter {
+    float: right;
+    margin-bottom: 20px;
+}
+
+.dataTables_filter label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dataTables_filter input {
+    width: 200px;
+    padding: 5px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.dataTables_filter input:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+}
+
+/* Pagination - right aligned, SMALLER and COMPACT */
+.dataTables_paginate {
+    float: right;
+    margin-top: 20px;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 3px 8px !important;
+    margin: 0 2px !important;
+    border-radius: 4px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+    color: #333 !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    display: inline-block !important;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+    color: #fff !important;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #333 !important;
+}
+
+.dataTables_paginate .paginate_button.current:hover {
+    background: #b91c1c !important;
+    border-color: #b91c1c !important;
+    color: #fff !important;
+}
+
+/* Previous/Next buttons - same small size */
+.dataTables_paginate .paginate_button.previous,
+.dataTables_paginate .paginate_button.next {
+    padding: 3px 10px !important;
+}
+
+/* Table info (entries count) - left aligned */
+.dataTables_info {
+    float: left;
+    font-size: 11px;
+    color: #666;
+    margin-top: 20px;
+}
+
+/* Make table container not scroll horizontally */
+.dataTables_scroll {
+    overflow-x: visible !important;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .dataTables_filter,
+    .dataTables_paginate,
+    .dataTables_info {
+        float: none;
+        text-align: center;
+    }
+    
+    .dataTables_filter {
+        margin-bottom: 15px;
+    }
+    
+    .dataTables_filter label {
+        justify-content: center;
+    }
+    
+    .dataTables_paginate {
+        margin-top: 15px;
+    }
+    
+    .dataTables_info {
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .dashboard-card .card-value {
+        font-size: 22px;
+    }
+}
 </style>
 
 <!-- REMOVED THE DUPLICATE container-fluid wrapper since body-wrapper already provides padding -->
@@ -216,36 +346,101 @@ echo view('templates/myheader.php');
         </div>
     </div>
 
-    <div class="card mb-3">
+    <div class="card mb-3 <?= !empty($member_id) ? 'border-success shadow-sm' : 'border-warning shadow-sm'; ?>">
         <div class="card-body">
-            <h6><i class="ti ti-id me-2"></i> Membership Details</h6>
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Membership Plan</label>
-                    <select name="membership_plan" id="membership_plan" class="form-control">
-                        <option value="Basic" <?= $membership_plan == 'Basic' ? 'selected' : '' ?>>Basic - ₱1,500/month</option>
-                        <option value="Premium" <?= $membership_plan == 'Premium' ? 'selected' : '' ?>>Premium - ₱2,500/month</option>
-                        <option value="VIP" <?= $membership_plan == 'VIP' ? 'selected' : '' ?>>VIP - ₱3,500/month</option>
-                    </select>
+
+            <h6 class="<?= !empty($member_id) ? 'text-success' : 'text-warning'; ?>">
+                <i class="ti ti-id me-2"></i> Membership Details
+            </h6>
+
+            <?php if(empty($member_id)): ?>
+
+                <div class="alert alert-warning border-warning">
+                    <div class="d-flex align-items-center">
+
+                        <i class="ti ti-alert-circle fs-5 me-2"></i>
+
+                        <div>
+                            <strong>No Active Membership Found</strong><br>
+
+                            Please transact the member's membership first in the 
+                            <b>POS Membership Module</b> before accessing membership details.
+                        </div>
+
+                    </div>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Start Date</label>
-                    <input type="date" name="membership_start_date" id="start_date" class="form-control" value="<?=$membership_start_date;?>">
+
+            <?php else: ?>
+
+                <!-- HIGHLIGHT ACTIVE MEMBERSHIP -->
+                <div class="alert alert-success border-success">
+                    <div class="d-flex align-items-center">
+
+                        <i class="ti ti-circle-check fs-5 me-2"></i>
+
+                        <div>
+                            <strong>Membership Active</strong><br>
+
+                            This member currently has an active membership subscription.
+                        </div>
+
+                    </div>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">End Date</label>
-                    <input type="date" name="membership_end_date" id="end_date" class="form-control" value="<?=$membership_end_date;?>" readonly>
+
+                <div class="row">
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Membership Plan</label>
+
+                        <select class="form-control" id="membership_plan" disabled>
+                            <option value="1 Month" <?= $membership_plan == '1 Month' ? 'selected' : '' ?>>1 Month</option>
+                            <option value="3 Months" <?= $membership_plan == '3 Months' ? 'selected' : '' ?>>3 Months</option>
+                            <option value="6 Months" <?= $membership_plan == '6 Months' ? 'selected' : '' ?>>6 Months</option>
+                            <option value="12 Months" <?= $membership_plan == '12 Months' ? 'selected' : '' ?>>12 Months</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Start Date</label>
+
+                        <input type="date"
+                            name="membership_start_date"
+                            id="start_date"
+                            class="form-control"
+                            value="<?=$membership_start_date;?>"
+                            disabled>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">End Date</label>
+
+                        <input type="date"
+                            name="membership_end_date"
+                            id="end_date"
+                            class="form-control"
+                            value="<?=$membership_end_date;?>"
+                            disabled>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Status</label>
+
+                        <select name="membership_status"
+                            class="form-control"
+                            disabled>
+
+                            <option value="Active" <?= $membership_status == 'Active' ? 'selected' : '' ?>>Active</option>
+                            <option value="Pending" <?= $membership_status == 'Pending' ? 'selected' : '' ?>>Pending</option>
+                            <option value="Expired" <?= $membership_status == 'Expired' ? 'selected' : '' ?>>Expired</option>
+                            <option value="Suspended" <?= $membership_status == 'Suspended' ? 'selected' : '' ?>>Suspended</option>
+
+                        </select>
+                    </div>
+
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Status</label>
-                    <select name="membership_status" class="form-control">
-                        <option value="Active" <?= $membership_status == 'Active' ? 'selected' : '' ?>>Active</option>
-                        <option value="Pending" <?= $membership_status == 'Pending' ? 'selected' : '' ?>>Pending</option>
-                        <option value="Expired" <?= $membership_status == 'Expired' ? 'selected' : '' ?>>Expired</option>
-                        <option value="Suspended" <?= $membership_status == 'Suspended' ? 'selected' : '' ?>>Suspended</option>
-                    </select>
-                </div>
-            </div>
+
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -334,6 +529,17 @@ echo view('templates/myheader.php');
 <script src="<?=base_url('assets/js/members-management/member-management.js?v=1');?>"></script>
 
 <script>
+$(document).ready(function () {
+    $('#datatablesSimple').DataTable({
+        pageLength: 5,
+        lengthChange: false,
+        order: [[6, 'desc']],
+        scrollX: false,
+        language: {
+            search: "Search Transaction:"
+        }
+    });
+});
 // Auto-calculate age from date of birth
 var dobField = document.getElementById('date_of_birth');
 if(dobField) {

@@ -15,11 +15,21 @@ class POSModel extends Model
     }
 
     public function savePOS() { 
-        $cartdata = $this->request->getPost('cartdata');
-        $payment_method = $this->request->getPost('payment_method');
-        $amount_tendered = $this->request->getPost('amount_tendered');
-        $change_amount = $this->request->getPost('change_amount');
-        $grand_total = $this->request->getPost('grand_total');
+        $cartdata = $this->request->getPostGet('cartdata');
+        $payment_method = $this->request->getPostGet('payment_method');
+        $amount_tendered = $this->request->getPostGet('amount_tendered');
+        $change_amount = $this->request->getPostGet('change_amount');
+        $grand_total = $this->request->getPostGet('grand_total');
+
+        //MEMBERSHIP VARIABLES
+        $member_id = $this->request->getPostGet('member_id');
+        $plan = $this->request->getPostGet('plan');
+        $membership_start_date = $this->request->getPostGet('membership_start_date');
+        $membership_end_date = $this->request->getPostGet('membership_end_date');
+        $membership_status = $this->request->getPostGet('membership_status');   
+
+        //WALKING
+        $walkin_name = $this->request->getPostGet('walkin_name');
 
         $cseqn =  $this->get_ctr_pos('POS','CTRL_NO01');//TRANSACTION NO
 
@@ -30,6 +40,9 @@ class POSModel extends Model
                 $item_type = $medata[1]; 
                 $item_qty = $medata[2]; 
                 $item_amount = $medata[3];
+
+                $first_word = explode(' ', $item_name)[0];
+                $walkin_name = explode('-', $item_name)[2];
     
                 $query = $this->db->query("
                     INSERT INTO `tbl_pos_dt`(
@@ -51,50 +64,105 @@ class POSModel extends Model
                     ]
                 );
 
-                $query = $this->db->query("
-                UPDATE
-                    `tbl_products`
-                SET
-                    `stock_qty` = `stock_qty` - ?,
-                    `updated_at` = NOW()
-                WHERE product_name = ?
-                ", [
-                    $item_qty, $item_name
-                ]);
+                //KINUKUHA YUNG 1ST WORD NG ITEMS SA CART PARA MA TRANSACT SA INVENTORY, ATTENDANCE O MEMBERSHIP YUNG CART
+                if ($first_word == 'Membership') {
+                    $query = $this->db->query("
+                    UPDATE
+                        `tbl_members`
+                    SET
+                        `membership_plan` = ?,
+                        `membership_start_date` = ?,
+                        `membership_end_date` = ?,
+                        `membership_status` = ?,
+                        `updated_at` = NOW()
+                    WHERE member_id = ?
+                    ", [
+                        $plan, $membership_start_date, $membership_end_date, $membership_status, $member_id
+                    ]);
 
-                $query = $this->db->query("
-                    SELECT `product_id` FROM `tbl_products` WHERE `product_name` = '$item_name'
-                ");
-                $rw = $query->getRowArray();
-                $product_id = $rw['product_id'];
+                    $query = $this->db->query("SELECT rfid_uid FROM tbl_members WHERE member_id = ?", [$member_id]);
+                    $data = $query->getRowArray();
+                    $rfid_uid = $data['rfid_uid'];
 
-                $query = $this->db->query("
-                    INSERT INTO `tbl_inventory_movements`(
-                        `product_id`,
-                        `product_name`,
-                        `movement_type`,
-                        `quantity`,
-                        `reference_type`,
-                        `reference_no`,
-                        `remarks`,
-                        `created_by`
-                    )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-                    [
-                        $product_id,
-                        $item_name,
-                        'OUT',
-                        -abs($item_qty),
-                        'POS',
-                        $cseqn,
-                        'POS TRANSACTION',
-                        $this->cuser
-                    ]
-                );
-                
+                    $this->db->query("
+                        INSERT INTO tbl_checkin_history
+                        (member_id, rfid_uid, checkin_time, checkin_method, status)
+                        VALUES (?, ?, NOW(), 'RFID', 'Active')
+                    ", [$member_id, $rfid_uid]);
+
+                    $this->db->query("
+                        UPDATE tbl_members
+                        SET is_loggedin = 1
+                        WHERE member_id = ?
+                    ", [$member_id]);
+
+                }elseif($first_word == 'Walk-In'){
+                    $query = $this->db->query("
+                        INSERT INTO `tbl_walkin_checkin_history`(
+                            `walkin_name`,
+                            `checkin_time`,
+                            `checkout_time`
+                        )
+                        VALUES (?, NOW(), DATE_ADD(NOW(), INTERVAL 4 HOUR))", 
+                        [
+                            $walkin_name
+                        ]
+                    );
+
+                }elseif ($first_word == 'Zumba') {
+                    # code...
+                }elseif ($first_word == 'Crossfit') {
+                    # code...
+                }elseif ($first_word == 'Yoga') {
+                    # code...
+                }else{
+                    //MATIK ETO YUNG SA INVENTORY
+                    $query = $this->db->query("
+                    UPDATE
+                        `tbl_products`
+                    SET
+                        `stock_qty` = `stock_qty` - ?,
+                        `updated_at` = NOW()
+                    WHERE product_name = ?
+                    ", [
+                        $item_qty, $item_name
+                    ]);
+
+                    $query = $this->db->query("
+                        SELECT `product_id` FROM `tbl_products` WHERE `product_name` = '$item_name'
+                    ");
+                    $rw = $query->getRowArray();
+                    $product_id = $rw['product_id'];
+
+                    $query = $this->db->query("
+                        INSERT INTO `tbl_inventory_movements`(
+                            `product_id`,
+                            `product_name`,
+                            `movement_type`,
+                            `quantity`,
+                            `reference_type`,
+                            `reference_no`,
+                            `remarks`,
+                            `created_by`
+                        )
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+                        [
+                            $product_id,
+                            $item_name,
+                            'OUT',
+                            -abs($item_qty),
+                            'POS',
+                            $cseqn,
+                            'POS TRANSACTION',
+                            $this->cuser
+                        ]
+                    );
+                }
+     
             }
         }
 
+        //KAHIT ANONG CONDITION KAILANGAN PASOK DITO SA POS SALES TRANSACTION
         $query = $this->db->query("
             INSERT INTO `tbl_pos_payment`(
                 `postrxno`,
