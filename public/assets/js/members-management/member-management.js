@@ -161,10 +161,6 @@ function __membersManagement() {
                         fitness_goals: fitness_goals.value,
                         experience_level: experience_level.value,
 
-                        membership_plan: membership_plan.value,
-                        membership_start_date: membership_start_date.value,
-                        membership_end_date: membership_end_date.value,
-                        membership_status: membership_status.value,
 
                         waiver_signed: waiver_signed.checked ? 1 : 0,
                         terms_accepted: terms_accepted.checked ? 1 : 0,

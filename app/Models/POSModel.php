@@ -42,8 +42,7 @@ class POSModel extends Model
                 $item_amount = $medata[3];
 
                 $first_word = explode(' ', $item_name)[0];
-                $walkin_name = explode('-', $item_name)[2];
-    
+                
                 $query = $this->db->query("
                     INSERT INTO `tbl_pos_dt`(
                         `postrxno`,
@@ -80,8 +79,8 @@ class POSModel extends Model
                         $plan, $membership_start_date, $membership_end_date, $membership_status, $member_id
                     ]);
 
-                    $query = $this->db->query("SELECT rfid_uid FROM tbl_members WHERE member_id = ?", [$member_id]);
-                    $data = $query->getRowArray();
+                    $queryy = $this->db->query("SELECT rfid_uid FROM tbl_members WHERE member_id = ?", [$member_id]);
+                    $data = $queryy->getRowArray();
                     $rfid_uid = $data['rfid_uid'];
 
                     $this->db->query("
@@ -97,6 +96,7 @@ class POSModel extends Model
                     ", [$member_id]);
 
                 }elseif($first_word == 'Walk-In'){
+                    $walkin_name = explode('-', $item_name)[2];
                     $query = $this->db->query("
                         INSERT INTO `tbl_walkin_checkin_history`(
                             `walkin_name`,

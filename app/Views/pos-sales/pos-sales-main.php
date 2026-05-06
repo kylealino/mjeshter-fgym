@@ -4,7 +4,7 @@ $this->db = \Config\Database::connect();
 
 $postrxno = $this->request->getPostGet('postrxno');
 
-$query = $this->db->query("SELECT * FROM tbl_pos_payment ORDER BY recid DESC");
+$query = $this->db->query("SELECT * FROM tbl_pos_payment ORDER BY recid DESC" );
 $payments = $query->getResultArray();
 if (!empty($postrxno)) {
     $query = $this->db->query("
@@ -500,8 +500,8 @@ $(document).ready(function () {
     $('#paymentTable').DataTable({
         pageLength: 5,
         lengthChange: false,
-        order: [[6, 'desc']],
         scrollX: false,
+        order: [[6, 'desc']], // Date column index
         language: {
             search: "Search Transaction:"
         }

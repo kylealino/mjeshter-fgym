@@ -57,6 +57,7 @@ function __POS() {
                     var membership_end_date = $('#membership_end_date').val();
                     var membership_status = $('#membership_status').val();
                 
+                    console.log(plan);
                     if (cartdata.length === 0) {
                         toastr.error('Cart is empty!');
                         return;

@@ -25,6 +25,7 @@ class MembersManagementController extends BaseController
                 last_name,
                 middle_name,
                 contact_number,
+                mobile_number,
                 email
             FROM tbl_members
             ORDER BY member_id DESC

@@ -56,62 +56,6 @@ echo view('templates/myheader.php');
 
 <style>
 
-/* =========================================
-DATATABLES PROFESSIONAL UI
-========================================= */
-
-.dataTables_wrapper{
-    font-size:13px;
-}
-
-.dataTables_filter{
-    margin-bottom:15px;
-}
-
-.dataTables_filter input{
-    border:1px solid #dcdcdc !important;
-    border-radius:8px !important;
-    padding:6px 10px !important;
-    margin-left:5px !important;
-}
-
-.dataTables_length select{
-    border:1px solid #dcdcdc !important;
-    border-radius:8px !important;
-    padding:4px 8px !important;
-}
-
-.dataTables_paginate{
-    margin-top:20px !important;
-}
-
-.dataTables_paginate .paginate_button{
-    border:none !important;
-    background:#f1f5f9 !important;
-    color:#333 !important;
-    border-radius:8px !important;
-    margin:0 3px !important;
-    padding:6px 12px !important;
-    font-size:12px !important;
-    transition:.2s;
-}
-
-.dataTables_paginate .paginate_button:hover{
-    background:#dc3545 !important;
-    color:#fff !important;
-}
-
-.dataTables_paginate .paginate_button.current{
-    background:#0d6efd !important;
-    color:#fff !important;
-}
-
-.dataTables_info{
-    font-size:12px;
-    color:#777;
-    margin-top:15px;
-}
-
 .table thead th{
     font-size:13px;
     font-weight:600;
@@ -156,6 +100,137 @@ FILTER BOX
 .filter-box{
     border-radius:14px;
     border:none;
+}
+
+
+
+/* DataTables wrapper adjustments */
+.dataTables_wrapper {
+    font-family: 'Inter', sans-serif;
+    overflow-x: visible !important;
+}
+
+/* Remove side-by-side scroll */
+.table-responsive {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+
+/* Search bar - right aligned with fixed width */
+.dataTables_filter {
+    float: right;
+    margin-bottom: 20px;
+}
+
+.dataTables_filter label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dataTables_filter input {
+    width: 200px;
+    padding: 5px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.dataTables_filter input:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+}
+
+/* Pagination - right aligned, SMALLER and COMPACT */
+.dataTables_paginate {
+    float: right;
+    margin-top: 20px;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 3px 8px !important;
+    margin: 0 2px !important;
+    border-radius: 4px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+    color: #333 !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    display: inline-block !important;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+    color: #fff !important;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #333 !important;
+}
+
+.dataTables_paginate .paginate_button.current:hover {
+    background: #b91c1c !important;
+    border-color: #b91c1c !important;
+    color: #fff !important;
+}
+
+/* Previous/Next buttons - same small size */
+.dataTables_paginate .paginate_button.previous,
+.dataTables_paginate .paginate_button.next {
+    padding: 3px 10px !important;
+}
+
+/* Table info (entries count) - left aligned */
+.dataTables_info {
+    float: left;
+    font-size: 11px;
+    color: #666;
+    margin-top: 20px;
+}
+
+/* Make table container not scroll horizontally */
+.dataTables_scroll {
+    overflow-x: visible !important;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .dataTables_filter,
+    .dataTables_paginate,
+    .dataTables_info {
+        float: none;
+        text-align: center;
+    }
+    
+    .dataTables_filter {
+        margin-bottom: 15px;
+    }
+    
+    .dataTables_filter label {
+        justify-content: center;
+    }
+    
+    .dataTables_paginate {
+        margin-top: 15px;
+    }
+    
+    .dataTables_info {
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .dashboard-card .card-value {
+        font-size: 22px;
+    }
 }
 
 </style>
@@ -475,8 +550,7 @@ $(document).ready(function(){
 
     $('#walkinAttendanceTable').DataTable({
         pageLength: 10,
-        ordering: false,
-        searching: false,
+        order: [[1, 'ASC']],
         lengthChange: false
     });
 

@@ -338,3 +338,29 @@ in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
  9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
 10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
 11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-06 21:20:23 --> ErrorException: Undefined array key "mobile_number"
+[Method: GET, Route: membersmanagement]
+in APPPATH\Views\members-management\members-main.php on line 515.
+ 1 APPPATH\Views\members-management\members-main.php(515): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "mobile_number"', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\members-main.php', 515)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\members-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-main', [], true)
+ 5 APPPATH\Controllers\MembersManagementController.php(34): view('members-management/members-main', [...])
+ 6 APPPATH\Controllers\MembersManagementController.php(46): App\Controllers\MembersManagementController->loadMembersListView()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-06 21:22:10 --> ErrorException: Undefined array key 2
+[Method: POST, Route: pos]
+in APPPATH\Models\POSModel.php on line 45.
+ 1 APPPATH\Models\POSModel.php(45): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key 2', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Models\\POSModel.php', 45)
+ 2 APPPATH\Controllers\POSController.php(29): App\Models\POSModel->savePOS()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\POSController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\POSController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

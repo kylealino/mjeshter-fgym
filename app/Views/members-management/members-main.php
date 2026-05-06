@@ -22,7 +22,7 @@ $health_conditions = "";
 $allergies = "";
 $fitness_goals = "";
 $experience_level = "Beginner";
-$membership_plan = "Basic";
+$membership_plan = "";
 $membership_start_date = "";
 $membership_end_date = "";
 $membership_status = "Pending";
@@ -346,14 +346,30 @@ echo view('templates/myheader.php');
         </div>
     </div>
 
-    <div class="card mb-3 <?= !empty($member_id) ? 'border-success shadow-sm' : 'border-warning shadow-sm'; ?>">
+    <div class="card mb-3 <?= (!empty($member_id) && $membership_status == 'Active') ? 'border-success shadow-sm' : 'border-warning shadow-sm'; ?>">
         <div class="card-body">
 
-            <h6 class="<?= !empty($member_id) ? 'text-success' : 'text-warning'; ?>">
+            <h6 class="<?= (!empty($member_id) && $membership_status == 'Active') ? 'text-success' : 'text-warning'; ?>">
                 <i class="ti ti-id me-2"></i> Membership Details
             </h6>
 
-            <?php if(empty($member_id)): ?>
+            <?php if(empty($member_id) && $membership_status !== 'Active'): ?>
+
+                <div class="alert alert-warning border-warning">
+                    <div class="d-flex align-items-center">
+
+                        <i class="ti ti-alert-circle fs-5 me-2"></i>
+
+                        <div>
+                            <strong>No Active Membership Found</strong><br>
+
+                            Please transact the member's membership first in the 
+                            <b>POS Membership Module</b> before accessing membership details.
+                        </div>
+
+                    </div>
+                </div>
+            <?php elseif(!empty($member_id) && $membership_status == ''): ?>
 
                 <div class="alert alert-warning border-warning">
                     <div class="d-flex align-items-center">
@@ -393,6 +409,7 @@ echo view('templates/myheader.php');
                         <label class="form-label">Membership Plan</label>
 
                         <select class="form-control" id="membership_plan" disabled>
+                            <option value="">--select--</option>
                             <option value="1 Month" <?= $membership_plan == '1 Month' ? 'selected' : '' ?>>1 Month</option>
                             <option value="3 Months" <?= $membership_plan == '3 Months' ? 'selected' : '' ?>>3 Months</option>
                             <option value="6 Months" <?= $membership_plan == '6 Months' ? 'selected' : '' ?>>6 Months</option>
@@ -512,7 +529,7 @@ echo view('templates/myheader.php');
                         <td class="text-center"><?=$data['member_no'];?></td>
                         <td class="text-center"><?=$data['last_name'];?></td>
                         <td class="text-center"><?=$data['first_name'];?></td>
-                        <td class="text-center"><?=$data['contact_number'];?></td>
+                        <td class="text-center"><?=$data['mobile_number'];?></td>
                         <td class="text-center"><?=$data['email'];?></td>
                         <td class="text-center">
                             <span class="status-pill status-active">Active</span>
@@ -559,20 +576,6 @@ if(dobField) {
     });
 }
 
-// Auto-calculate membership end date
-function calculateEndDate() {
-    const startDate = document.getElementById('start_date').value;
-    if(startDate) {
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 30);
-        document.getElementById('end_date').value = endDate.toISOString().split('T')[0];
-    }
-}
-
-var planField = document.getElementById('membership_plan');
-var startDateField = document.getElementById('start_date');
-if(planField) planField.addEventListener('change', calculateEndDate);
-if(startDateField) startDateField.addEventListener('change', calculateEndDate);
 </script>
 
 <?php
