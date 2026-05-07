@@ -468,20 +468,16 @@ RESPONSIVE
 
     <div class="col-6">
         <div class="d-flex justify-content-end align-items-end gap-2 flex-wrap my-3">
-
             <div style="min-width:260px;">
                 <label class="form-label fw-semibold small mb-1">
                     Attendance Date
                 </label>
-
                 <input type="date"
                     id="attendance_date"
                     class="form-control form-control-sm"
                     value="<?=$selected_date;?>">
             </div>
-
             <div class="d-flex gap-2">
-
                 <button type="button"
                     class="btn btn-dark btn-sm px-4"
                     onclick="filterAttendance()">
@@ -489,50 +485,39 @@ RESPONSIVE
                     <i class="ti ti-search me-1"></i>
                     Filter
                 </button>
-
                 <a href="<?=site_url();?>attendance?meaction=MAIN"
                     class="btn btn-light border btn-sm px-4">
 
                     <i class="ti ti-refresh me-1"></i>
                     Today
                 </a>
-
             </div>
-
             <div class="current-view-box">
                 <small class="text-muted d-block">
                     CURRENT VIEW
                 </small>
-
                 <strong>
                     <?=date('F d, Y', strtotime($selected_date));?>
                 </strong>
             </div>
-
         </div>
     </div>
-
 </div>
 
 <!-- DASHBOARD -->
 <div class="row g-3 mb-4">
-
     <div class="col">
         <div class="card attendance-card h-100">
             <div class="card-body d-flex justify-content-between align-items-center">
-
                 <div>
                     <div class="text-muted small mb-1">
                         Membership
                     </div>
-
                     <div class="attendance-value">
                         <?=$totalMembersToday;?>
                     </div>
                 </div>
-
                 <i class="ti ti-user-check attendance-icon"></i>
-
             </div>
         </div>
     </div>
@@ -540,19 +525,15 @@ RESPONSIVE
     <div class="col">
         <div class="card attendance-card h-100">
             <div class="card-body d-flex justify-content-between align-items-center">
-
                 <div>
                     <div class="text-muted small mb-1">
                         Walk-In
                     </div>
-
                     <div class="attendance-value">
                         <?=$totalWalkinsToday;?>
                     </div>
                 </div>
-
                 <i class="ti ti-users attendance-icon"></i>
-
             </div>
         </div>
     </div>
@@ -560,19 +541,15 @@ RESPONSIVE
     <div class="col">
         <div class="card attendance-card h-100">
             <div class="card-body d-flex justify-content-between align-items-center">
-
                 <div>
                     <div class="text-muted small mb-1">
                         Zumba
                     </div>
-
                     <div class="attendance-value">
                         <?=$totalZumbaToday;?>
                     </div>
                 </div>
-
                 <i class="ti ti-activity-heartbeat attendance-icon"></i>
-
             </div>
         </div>
     </div>
@@ -580,19 +557,15 @@ RESPONSIVE
     <div class="col">
         <div class="card attendance-card h-100">
             <div class="card-body d-flex justify-content-between align-items-center">
-
                 <div>
                     <div class="text-muted small mb-1">
                         Crossfit
                     </div>
-
                     <div class="attendance-value">
                         <?=$totalCrossfitToday;?>
                     </div>
                 </div>
-
                 <i class="ti ti-barbell attendance-icon"></i>
-
             </div>
         </div>
     </div>
@@ -600,7 +573,6 @@ RESPONSIVE
     <div class="col">
         <div class="card attendance-card h-100">
             <div class="card-body d-flex justify-content-between align-items-center">
-
                 <div>
                     <div class="text-muted small mb-1">
                         Yoga
@@ -610,22 +582,16 @@ RESPONSIVE
                         <?=$totalYogaToday;?>
                     </div>
                 </div>
-
                 <i class="ti ti-stretching attendance-icon"></i>
-
             </div>
         </div>
     </div>
-
 </div>
 
 <!-- TABS -->
 <div class="card shadow-sm">
-
     <div class="card-body">
-
         <ul class="nav nav-tabs custom-tabs" id="attendanceTabs" role="tablist">
-
             <li class="nav-item">
                 <button class="nav-link active"
                     data-bs-toggle="tab"
@@ -635,7 +601,6 @@ RESPONSIVE
                     (<?=$totalMembersToday;?>)
                 </button>
             </li>
-
             <li class="nav-item">
                 <button class="nav-link"
                     data-bs-toggle="tab"
@@ -645,7 +610,6 @@ RESPONSIVE
                     (<?=$totalWalkinsToday;?>)
                 </button>
             </li>
-
             <li class="nav-item">
                 <button class="nav-link"
                     data-bs-toggle="tab"
@@ -655,7 +619,6 @@ RESPONSIVE
                     (<?=$totalZumbaToday;?>)
                 </button>
             </li>
-
             <li class="nav-item">
                 <button class="nav-link"
                     data-bs-toggle="tab"
@@ -665,7 +628,6 @@ RESPONSIVE
                     (<?=$totalCrossfitToday;?>)
                 </button>
             </li>
-
             <li class="nav-item">
                 <button class="nav-link"
                     data-bs-toggle="tab"
@@ -675,18 +637,13 @@ RESPONSIVE
                     (<?=$totalYogaToday;?>)
                 </button>
             </li>
-
         </ul>
 
         <div class="tab-content">
-
             <!-- MEMBERSHIP -->
             <div class="tab-pane fade show active" id="membershipTab">
-
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle"
-                        id="memberAttendanceTable">
-
+                    <table class="table table-hover align-middle" id="memberAttendanceTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -698,11 +655,8 @@ RESPONSIVE
                                 <th>Status</th>
                             </tr>
                         </thead>
-
                         <tbody>
-
                             <?php $count=1; foreach($memberAttendance as $row): ?>
-
                             <tr>
                                 <td><?=$count;?></td>
                                 <td>
