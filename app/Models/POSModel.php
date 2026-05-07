@@ -110,11 +110,44 @@ class POSModel extends Model
                     );
 
                 }elseif ($first_word == 'Zumba') {
-                    # code...
+                    $zumba_name = explode('-', $item_name)[1];
+                    $query = $this->db->query("
+                        INSERT INTO `tbl_zumba_checkin_history`(
+                            `zumba_name`,
+                            `checkin_time`,
+                            `checkout_time`
+                        )
+                        VALUES (?, NOW(), DATE_ADD(NOW(), INTERVAL 4 HOUR))", 
+                        [
+                            $zumba_name
+                        ]
+                    );
                 }elseif ($first_word == 'Crossfit') {
-                    # code...
+                    $crossfit_name = explode('-', $item_name)[1];
+                    $query = $this->db->query("
+                        INSERT INTO `tbl_crossfit_checkin_history`(
+                            `crossfit_name`,
+                            `checkin_time`,
+                            `checkout_time`
+                        )
+                        VALUES (?, NOW(), DATE_ADD(NOW(), INTERVAL 4 HOUR))", 
+                        [
+                            $crossfit_name
+                        ]
+                    );
                 }elseif ($first_word == 'Yoga') {
-                    # code...
+                    $yoga_name = explode('-', $item_name)[1];
+                    $query = $this->db->query("
+                        INSERT INTO `tbl_yoga_checkin_history`(
+                            `yoga_name`,
+                            `checkin_time`,
+                            `checkout_time`
+                        )
+                        VALUES (?, NOW(), DATE_ADD(NOW(), INTERVAL 4 HOUR))", 
+                        [
+                            $yoga_name
+                        ]
+                    );
                 }else{
                     //MATIK ETO YUNG SA INVENTORY
                     $query = $this->db->query("
