@@ -122,7 +122,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .nav-small-cap {
-      padding: 6px 5px 4px;
+      padding: 2px 2px 2px;
     }
 
     .nav-small-cap span {
@@ -483,7 +483,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
         <nav class="sidebar-nav scroll-sidebar" style="height: 100vh !important;">
           <ul id="sidebarnav" style="list-style: none; padding-left: 0;">
-            <li class="sidebar-item">
+            <li class="sidebar-item mt-4">
               <a class="sidebar-link" href="<?=site_url();?>myadmindashboard">
                 <span><i class="ti ti-dashboard"></i></span>
                 <span>Dashboard</span>
