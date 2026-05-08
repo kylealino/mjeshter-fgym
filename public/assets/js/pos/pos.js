@@ -22,6 +22,11 @@ function __POS() {
                     event.stopPropagation();
 
                     // =========================
+                    // SHOW PRELOADER
+                    // =========================
+                    $('.preloader').css('display','flex').hide().fadeIn(200);
+
+                    // =========================
                     // GET CART DATA - LIKE YOUR BUDGET CODE
                     // =========================
                     var rowcount = jQuery('#cartBody tr').length;
@@ -58,21 +63,25 @@ function __POS() {
                     var membership_status = $('#membership_status').val();
                 
                     console.log(plan);
+
                     if (cartdata.length === 0) {
+                        $('.preloader').fadeOut();
                         toastr.error('Cart is empty!');
                         return;
                     }
 
                     if (!amount_tendered) {
+                        $('.preloader').fadeOut();
                         toastr.error('Amount tendered is required!');
                         return;
                     }
 
                     if (amount_tendered + 1 < grand_total) {
+                        $('.preloader').fadeOut();
                         toastr.error('Luge ka diyan idol!');
                         return;
                     }
- 
+
                     var mparam = {
                         cartdata: cartdata,
                         payment_method: payment_method,
@@ -87,7 +96,6 @@ function __POS() {
                         meaction: 'POS-SAVE'
                     };
 
-    
                     
                     // =========================
                     // AJAX - LIKE YOUR BUDGET CODE
@@ -96,21 +104,39 @@ function __POS() {
                         type: "POST",
                         url: mesiteurl + 'pos',
                         context: document.body,
-                        data: mparam,  // Note: your budget code uses eval(mparam) but that's not needed
+                        data: mparam,
                         global: false,
                         cache: false,
                         success: function(data) {
+
+                            // =========================
+                            // HIDE PRELOADER
+                            // =========================
+                            $('.preloader').fadeOut(200);
+
                             jQuery('.me-pos-msg').html(data);
                             toastr.success('POS saved successfully');
                             return;
                         },
                         error: function(xhr, status, error) {
+
+                            // =========================
+                            // HIDE PRELOADER
+                            // =========================
+                            $('.preloader').fadeOut(200);
+
                             alert('Error: ' + error);
                             return false;
                         }
                     });
 
                 } catch(err) {
+
+                    // =========================
+                    // HIDE PRELOADER
+                    // =========================
+                    $('.preloader').fadeOut();
+
                     alert(err.message);
                     return false;
                 }

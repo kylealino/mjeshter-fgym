@@ -12,6 +12,7 @@ class POSModel extends Model
         $this->request = \Config\Services::request();
         $this->db = \Config\Database::connect();
         $this->cuser = $this->session->get('__xsys_myuserzicas__');
+        
     }
 
     public function savePOS() { 
@@ -30,6 +31,7 @@ class POSModel extends Model
 
         //WALKING
         $walkin_name = $this->request->getPostGet('walkin_name');
+        $email = \Config\Services::email();
 
         $cseqn =  $this->get_ctr_pos('POS','CTRL_NO01');//TRANSACTION NO
 
@@ -79,9 +81,13 @@ class POSModel extends Model
                         $plan, $membership_start_date, $membership_end_date, $membership_status, $member_id
                     ]);
 
-                    $queryy = $this->db->query("SELECT rfid_uid FROM tbl_members WHERE member_id = ?", [$member_id]);
+                    $queryy = $this->db->query("SELECT rfid_uid,email,membership_start_date,membership_end_date,first_name FROM tbl_members WHERE member_id = ?", [$member_id]);
                     $data = $queryy->getRowArray();
                     $rfid_uid = $data['rfid_uid'];
+                    $from = $data['email'];
+                    $membership_end_date = $data['membership_end_date'];
+                    $membership_start_date = $data['membership_start_date'];
+                    $first_name = $data['first_name'];
 
                     $this->db->query("
                         INSERT INTO tbl_checkin_history
@@ -95,6 +101,197 @@ class POSModel extends Model
                         WHERE member_id = ?
                     ", [$member_id]);
 
+                    // IMPORTANT
+                    // FORMAT DATES
+                    $start_date = date('F d, Y', strtotime($membership_start_date));
+                    $end_date   = date('F d, Y', strtotime($membership_end_date));
+
+                    $email->setFrom(
+                        'kylealino@gmail.com',
+                        'MJESHTER FITNESS GYM'
+                    );
+
+                    $email->setTo($from);
+
+                    $email->setSubject('Welcome to MJESHTER FITNESS GYM - Membership Activated');
+
+                    // ============================
+                    // PROFESSIONAL HTML EMAIL
+                    // ============================
+                    $message = '
+                    <div style="font-family: Arial, sans-serif; background:#f4f4f4; padding:30px;">
+
+                        <div style="
+                            max-width:700px;
+                            margin:auto;
+                            background:#ffffff;
+                            border-radius:12px;
+                            overflow:hidden;
+                            box-shadow:0 5px 15px rgba(0,0,0,0.08);
+                        ">
+
+                            <!-- HEADER -->
+                            <div style="
+                                background:#111827;
+                                color:#ffffff;
+                                padding:30px;
+                                text-align:center;
+                            ">
+                                <h1 style="margin:0; font-size:30px;">
+                                    MJESHTER FITNESS GYM
+                                </h1>
+
+                                <p style="
+                                    margin-top:10px;
+                                    font-size:16px;
+                                    color:#d1d5db;
+                                ">
+                                    Membership Payment Successfully Received
+                                </p>
+                            </div>
+
+                            <!-- BODY -->
+                            <div style="padding:40px; color:#374151;">
+
+                                <h2 style="margin-top:0;">
+                                    Welcome to the MJESHTER Fitness Community! 💪
+                                </h2>
+
+                                <p style="
+                                    font-size:15px;
+                                    line-height:1.8;
+                                ">
+                                    Hi <strong>'.$first_name.'</strong>,
+                                </p>
+
+                                <p style="
+                                    font-size:15px;
+                                    line-height:1.8;
+                                ">
+                                    Thank you for your payment and welcome to 
+                                    <strong>MJESHTER FITNESS GYM</strong>.
+                                    We are excited to have you as part of our growing fitness family.
+                                </p>
+
+                                <p style="
+                                    font-size:15px;
+                                    line-height:1.8;
+                                ">
+                                    Your membership subscription has been successfully activated.
+                                    Below are your membership details:
+                                </p>
+
+                                <!-- MEMBERSHIP DETAILS -->
+                                <div style="
+                                    background:#f9fafb;
+                                    border:1px solid #e5e7eb;
+                                    border-radius:10px;
+                                    padding:25px;
+                                    margin-top:25px;
+                                ">
+
+                                    <table width="100%" cellpadding="8" cellspacing="0">
+
+                                        <tr>
+                                            <td style="font-weight:bold;">Membership Plan:</td>
+                                            <td>'.$plan.'</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="font-weight:bold;">Start Date:</td>
+                                            <td>'.$start_date.'</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="font-weight:bold;">End Date:</td>
+                                            <td>'.$end_date.'</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="font-weight:bold;">Payment Status:</td>
+                                            <td style="color:green; font-weight:bold;">
+                                                PAID
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
+                                </div>
+
+                                <!-- WELCOME MESSAGE -->
+                                <div style="
+                                    margin-top:30px;
+                                    padding:20px;
+                                    background:#eff6ff;
+                                    border-left:5px solid #2563eb;
+                                    border-radius:8px;
+                                ">
+
+                                    <p style="
+                                        margin:0;
+                                        font-size:15px;
+                                        line-height:1.7;
+                                    ">
+                                        We are committed to helping you achieve your fitness goals.
+                                        Stay consistent, stay motivated, and let us grow stronger together.
+                                    </p>
+
+                                </div>
+
+                                <p style="
+                                    margin-top:35px;
+                                    font-size:15px;
+                                    line-height:1.8;
+                                ">
+                                    If you have any questions regarding your membership,
+                                    feel free to contact our staff anytime.
+                                </p>
+
+                                <p style="
+                                    margin-top:35px;
+                                    font-size:15px;
+                                    line-height:1.8;
+                                ">
+                                    Welcome again and see you at the gym!
+                                </p>
+
+                                <p style="
+                                    margin-top:40px;
+                                    font-size:15px;
+                                ">
+                                    Best Regards,<br>
+                                    <strong>MJESHTER FITNESS GYM Team</strong>
+                                </p>
+
+                            </div>
+
+                            <!-- FOOTER -->
+                            <div style="
+                                background:#111827;
+                                color:#9ca3af;
+                                text-align:center;
+                                padding:20px;
+                                font-size:13px;
+                            ">
+                                © '.date('Y').' MJESHTER FITNESS GYM. All Rights Reserved.
+                            </div>
+
+                        </div>
+
+                    </div>
+                    ';
+
+                    $email->setMessage($message);
+
+                    if ($email->send()) {
+
+                        echo 'EMAIL SENT SUCCESSFULLY';
+
+                    } else {
+
+                        echo $email->printDebugger(['headers']);
+                    }
+                    
                 }elseif($first_word == 'Walk-In'){
                     $walkin_name = explode('-', $item_name)[2];
                     $query = $this->db->query("
@@ -220,7 +417,7 @@ class POSModel extends Model
             // Echo JavaScript to show the toast and then redirect - EXACTLY like your budget code
             echo "
             <script>
-                toastr.success('POS Transaction Saved Successfully arararar!', 'Well Done!', {
+                toastr.success('POS Transaction Saved Successfully!', 'Well Done!', {
                     progressBar: true,
                     closeButton: true,
                     timeOut: 1500,

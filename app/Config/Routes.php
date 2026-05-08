@@ -38,3 +38,5 @@ $routes->get('inventory', 'InventoryController::index',['filter' => 'myauthuser'
 $routes->post('inventory', 'InventoryController::index',['filter' => 'myauthuser']);
 
 
+// EMAIL TEST
+$routes->get('testemail', 'TestEmail::index');

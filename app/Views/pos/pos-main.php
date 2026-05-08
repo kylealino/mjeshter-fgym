@@ -74,11 +74,53 @@ echo view('templates/myheader.php');
     text-align:center;
 }
 
+.preloader{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+
+    background: rgba(0,0,0,0.25);
+
+    z-index:999999;
+
+    display:none;
+
+    /* CENTER CONTENT */
+    justify-content:center;
+    align-items:center;
+
+    backdrop-filter: blur(2px);
+}
+
+.loader{
+    width:60px;
+    height:60px;
+
+    border:6px solid rgba(255,255,255,0.3);
+    border-top:6px solid #ffffff;
+
+    border-radius:50%;
+
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
 </style>
 
 <div class="me-pos-msg"></div>
 <input type="hidden" id="__siteurl" data-mesiteurl="<?=site_url();?>"/>
-
+<div class="preloader">
+    <div class="loader"></div>
+</div>
 <div class="row mb-2 mt-5">
     <div class="col-12">
 

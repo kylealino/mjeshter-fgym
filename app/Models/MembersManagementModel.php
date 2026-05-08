@@ -55,10 +55,6 @@ class MembersManagementModel extends Model
 
         
         // Validation
-        if(empty($member_no)) {
-            echo "<script>toastr.error('Member number is required!', 'Error', {progressBar: true, timeOut:2000});</script>";
-            exit;
-        }
         if(empty($last_name)) {
             echo "<script>toastr.error('Last name is required!', 'Error', {progressBar: true, timeOut:2000});</script>";
             exit;
@@ -69,10 +65,6 @@ class MembersManagementModel extends Model
         }
         if(empty($email)) {
             echo "<script>toastr.error('Email is required!', 'Error', {progressBar: true, timeOut:2000});</script>";
-            exit;
-        }
-        if(empty($mobile_number)) {
-            echo "<script>toastr.error('Mobile number is required!', 'Error', {progressBar: true, timeOut:2000});</script>";
             exit;
         }
         if(empty($terms_accepted)) {
