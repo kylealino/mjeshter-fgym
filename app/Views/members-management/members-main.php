@@ -45,173 +45,351 @@ echo view('templates/myheader.php');
 ?>
 
 <style>
-.form-section {
-    background: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #e0e0e0;
-}
-.form-section h6 {
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #333;
-    border-left: 3px solid #dc3545;
-    padding-left: 10px;
-}
-.required:after {
-    content: " *";
-    color: red;
-}
-/* Fix for breadcrumb visibility */
-.breadcrumb {
-    background: transparent;
-    padding: 0;
-    margin-bottom: 1rem;
-}
-.breadcrumb-item a {
-    text-decoration: none;
-}
-.breadcrumb-item.active {
-    color: #dc3545;
-}
+    :root {
+        --primary: #1e3a5f;
+        --primary-dark: #0f2b44;
+        --primary-light: #2c5a8c;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --gray-900: #0f172a;
+        --danger: #dc2626;
+        --success: #10b981;
+        --warning: #f59e0b;
+    }
 
+    body {
+        background: var(--gray-50);
+    }
 
-/* DataTables wrapper adjustments */
-.dataTables_wrapper {
-    font-family: 'Inter', sans-serif;
-    overflow-x: visible !important;
-}
-
-/* Remove side-by-side scroll */
-.table-responsive {
-    overflow-x: visible !important;
-    overflow-y: visible !important;
-}
-
-/* Search bar - right aligned with fixed width */
-.dataTables_filter {
-    float: right;
-    margin-bottom: 20px;
-}
-
-.dataTables_filter label {
-    font-size: 12px;
-    font-weight: 500;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.dataTables_filter input {
-    width: 200px;
-    padding: 5px 8px;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    font-size: 12px;
-    transition: all 0.2s;
-}
-
-.dataTables_filter input:focus {
-    outline: none;
-    border-color: #dc2626;
-    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
-}
-
-/* Pagination - right aligned, SMALLER and COMPACT */
-.dataTables_paginate {
-    float: right;
-    margin-top: 20px;
-}
-
-.dataTables_paginate .paginate_button {
-    padding: 3px 8px !important;
-    margin: 0 2px !important;
-    border-radius: 4px !important;
-    border: 1px solid #e2e8f0 !important;
-    background: #fff !important;
-    color: #333 !important;
-    font-size: 11px !important;
-    font-weight: 500 !important;
-    cursor: pointer;
-    display: inline-block !important;
-}
-
-.dataTables_paginate .paginate_button.current {
-    background: #dc2626 !important;
-    border-color: #dc2626 !important;
-    color: #fff !important;
-}
-
-.dataTables_paginate .paginate_button:hover {
-    background: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
-    color: #333 !important;
-}
-
-.dataTables_paginate .paginate_button.current:hover {
-    background: #b91c1c !important;
-    border-color: #b91c1c !important;
-    color: #fff !important;
-}
-
-/* Previous/Next buttons - same small size */
-.dataTables_paginate .paginate_button.previous,
-.dataTables_paginate .paginate_button.next {
-    padding: 3px 10px !important;
-}
-
-/* Table info (entries count) - left aligned */
-.dataTables_info {
-    float: left;
-    font-size: 11px;
-    color: #666;
-    margin-top: 20px;
-}
-
-/* Make table container not scroll horizontally */
-.dataTables_scroll {
-    overflow-x: visible !important;
-}
-
-/* Responsive behavior */
-@media (max-width: 768px) {
-    .dataTables_filter,
-    .dataTables_paginate,
-    .dataTables_info {
-        float: none;
-        text-align: center;
+    /* Form Sections */
+    .form-section {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid var(--gray-200);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    
+    .form-section h6 {
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: var(--gray-800);
+        border-left: 3px solid var(--danger);
+        padding-left: 12px;
+        font-size: 14px;
+    }
+    
+    .required:after {
+        content: " *";
+        color: var(--danger);
+    }
+    
+    /* Breadcrumb */
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .breadcrumb-item a {
+        text-decoration: none;
+        color: var(--gray-500);
+        font-size: 12px;
+    }
+    
+    .breadcrumb-item.active {
+        color: var(--primary);
+        font-weight: 600;
+    }
+    
+    /* Cards */
+    .card {
+        border: 1px solid var(--gray-200);
+        border-radius: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        background: #ffffff;
+        margin-bottom: 24px;
+    }
+    
+    .card-body {
+        padding: 24px;
+    }
+    
+    /* Form Controls */
+    .form-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-bottom: 6px;
+        display: block;
+    }
+    
+    .form-control, .form-select {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: var(--gray-700);
+        background: #ffffff;
+        transition: all 0.2s;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08);
+    }
+    
+    textarea.form-control {
+        resize: vertical;
+    }
+    
+    /* Checkboxes */
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        border: 1.5px solid var(--gray-300);
+        border-radius: 5px;
+    }
+    
+    .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+    
+    .form-check-label {
+        font-size: 13px;
+        color: var(--gray-600);
+        margin-left: 8px;
+    }
+    
+    /* Buttons */
+    .btn-danger {
+        background: var(--danger);
+        border: none;
+        border-radius: 12px;
+        padding: 10px 24px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    
+    .btn-danger:hover {
+        background: #b91c1c;
+        transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+        background: #ffffff;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 10px 24px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray-600);
+        transition: all 0.2s;
+    }
+    
+    .btn-secondary:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: #ffffff;
+    }
+    
+    /* Alerts */
+    .alert {
+        border-radius: 14px;
+        padding: 16px 20px;
+        border-left-width: 4px;
+    }
+    
+    .alert-warning {
+        background: #fffbeb;
+        border-color: var(--warning);
+        color: #92400e;
+    }
+    
+    .alert-success {
+        background: #ecfdf5;
+        border-color: var(--success);
+        color: #065f46;
+    }
+    
+    /* DataTables */
+    .dataTables_wrapper {
+        font-family: 'Inter', sans-serif;
+        overflow-x: visible !important;
     }
     
     .dataTables_filter {
-        margin-bottom: 15px;
+        float: right;
+        margin-bottom: 20px;
     }
     
     .dataTables_filter label {
-        justify-content: center;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--gray-500);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .dataTables_filter input {
+        width: 220px;
+        padding: 8px 14px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        font-size: 12px;
+        transition: all 0.2s;
+    }
+    
+    .dataTables_filter input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08);
     }
     
     .dataTables_paginate {
-        margin-top: 15px;
+        float: right;
+        margin-top: 20px;
+    }
+    
+    .dataTables_paginate .paginate_button {
+        padding: 6px 12px !important;
+        margin: 0 3px !important;
+        border-radius: 10px !important;
+        border: 1px solid var(--gray-200) !important;
+        background: #ffffff !important;
+        color: var(--gray-600) !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        transition: all 0.2s;
+    }
+    
+    .dataTables_paginate .paginate_button.current {
+        background: var(--primary) !important;
+        border-color: var(--primary) !important;
+        color: #ffffff !important;
+    }
+    
+    .dataTables_paginate .paginate_button:hover {
+        background: var(--gray-50) !important;
+        border-color: var(--gray-300) !important;
+        color: var(--primary) !important;
     }
     
     .dataTables_info {
-        margin-top: 15px;
-        margin-bottom: 10px;
+        float: left;
+        font-size: 12px;
+        color: var(--gray-500);
+        margin-top: 20px;
     }
     
-    .dashboard-card .card-value {
-        font-size: 22px;
+    /* Table Styles */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
     }
-}
+    
+    .table thead th {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-500);
+        background: var(--gray-50);
+        border-bottom: 1px solid var(--gray-200);
+        padding: 14px 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    
+    .table tbody td {
+        font-size: 13px;
+        color: var(--gray-700);
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--gray-100);
+        vertical-align: middle;
+    }
+    
+    .table-hover tbody tr:hover {
+        background: var(--gray-50);
+    }
+    
+    /* Status Pill */
+    .status-pill {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+    
+    .status-active {
+        background: #ecfdf5;
+        color: #10b981;
+    }
+    
+    /* Action Icons */
+    .nav-icon-hover {
+        transition: all 0.2s;
+        display: inline-block;
+    }
+    
+    .nav-icon-hover:hover {
+        transform: scale(1.1);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .dataTables_filter,
+        .dataTables_paginate,
+        .dataTables_info {
+            float: none;
+            text-align: center;
+        }
+        
+        .dataTables_filter {
+            margin-bottom: 15px;
+        }
+        
+        .dataTables_filter label {
+            justify-content: center;
+        }
+        
+        .dataTables_paginate {
+            margin-top: 15px;
+        }
+        
+        .dataTables_info {
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .card-body {
+            padding: 18px;
+        }
+        
+        .btn-danger, .btn-secondary {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
 </style>
 
 <!-- REMOVED THE DUPLICATE container-fluid wrapper since body-wrapper already provides padding -->
 <div class="me-membersmanagement-msg"></div>
 <input type="hidden" id="__siteurl" data-mesiteurl="<?=site_url();?>" />
 
-<div class="row mb-2 mt-5">
+<div class="row mb-2">
     <div class="col-12">
         <?php if(empty($member_id)):?>
             <h4 class="fw-semibold my-3">Registration</h4>
@@ -346,10 +524,10 @@ echo view('templates/myheader.php');
         </div>
     </div>
 
-    <div class="card mb-3 <?= (!empty($member_id) && $membership_status == 'Active') ? 'border-success shadow-sm' : 'border-warning shadow-sm'; ?>">
+    <div class="card mb-3 <?= (!empty($member_id) && $membership_status == 'Active') ? 'border-success shadow-sm' : ''; ?>">
         <div class="card-body">
 
-            <h6 class="<?= (!empty($member_id) && $membership_status == 'Active') ? 'text-success' : 'text-warning'; ?>">
+            <h6 class="<?= (!empty($member_id) && $membership_status == 'Active') ? 'text-success' : ''; ?>">
                 <i class="ti ti-id me-2"></i> Membership Details
             </h6>
 
@@ -498,7 +676,7 @@ echo view('templates/myheader.php');
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table id="datatablesSimple" class="table table-bordered table-striped table-hover">
+            <table id="datatablesSimple" class="table table-hover align-middle">
                 <thead>
                     <tr>
                         <th>Action</th>
@@ -580,3 +758,4 @@ if(dobField) {
 
 <?php
 echo view('templates/myfooter.php');
+?>

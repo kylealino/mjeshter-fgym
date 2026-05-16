@@ -42,181 +42,331 @@ $currentInventory = $this->db->query("
 echo view('templates/myheader.php');
 ?>
 <style>
-    .dash-card {
-    background: #fff;
-    border-radius: 14px;
-    padding: 18px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
-    transition: 0.2s ease-in-out;
-}
+    :root {
+        --primary: #1e3a5f;
+        --primary-dark: #0f2b44;
+        --danger: #dc2626;
+        --danger-dark: #b91c1c;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --info: #3b82f6;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+    }
 
-.dash-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.10);
-}
+    body {
+        background: var(--gray-50);
+    }
 
-.dash-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 22px;
-}
+    /* Dashboard Cards - Matching Attendance Module */
+    .attendance-card {
+        border-radius: 20px;
+        border: 1px solid var(--gray-200);
+        transition: all 0.3s ease;
+        background: #ffffff;
+        margin-bottom: 20px;
+    }
 
-.dash-info h6 {
-    margin: 0;
-    font-size: 13px;
-    color: #6c757d;
-    font-weight: 500;
-}
+    .attendance-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 20px -12px rgba(0,0,0,0.1);
+        border-color: var(--gray-300);
+    }
 
-.dash-info h3 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 700;
-    color: #212529;
-}
+    .attendance-card .card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+    }
 
-/* DataTables wrapper adjustments */
-.dataTables_wrapper {
-    font-family: 'Inter', sans-serif;
-    overflow-x: visible !important;
-}
+    .attendance-value {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--gray-800);
+    }
 
-/* Remove side-by-side scroll */
-.table-responsive {
-    overflow-x: visible !important;
-    overflow-y: visible !important;
-}
+    .attendance-icon {
+        font-size: 42px;
+        opacity: 0.12;
+        color: var(--primary);
+    }
 
-/* Search bar - right aligned with fixed width */
-.dataTables_filter {
-    float: right;
-    margin-bottom: 20px;
-}
+    .attendance-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
 
-.dataTables_filter label {
-    font-size: 12px;
-    font-weight: 500;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+    .attendance-sub {
+        font-size: 11px;
+        color: var(--gray-400);
+        margin-top: 6px;
+    }
 
-.dataTables_filter input {
-    width: 200px;
-    padding: 5px 8px;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    font-size: 12px;
-    transition: all 0.2s;
-}
+    /* Cards */
+    .card {
+        border-radius: 20px;
+        border: 1px solid var(--gray-200);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        background: #ffffff;
+        margin-bottom: 24px;
+    }
 
-.dataTables_filter input:focus {
-    outline: none;
-    border-color: #dc2626;
-    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
-}
+    .card-header {
+        background: #ffffff;
+        border-bottom: 1px solid var(--gray-200);
+        padding: 16px 24px;
+    }
 
-/* Pagination - right aligned, SMALLER and COMPACT */
-.dataTables_paginate {
-    float: right;
-    margin-top: 20px;
-}
+    .card-body {
+        padding: 20px 24px;
+    }
 
-.dataTables_paginate .paginate_button {
-    padding: 3px 8px !important;
-    margin: 0 2px !important;
-    border-radius: 4px !important;
-    border: 1px solid #e2e8f0 !important;
-    background: #fff !important;
-    color: #333 !important;
-    font-size: 11px !important;
-    font-weight: 500 !important;
-    cursor: pointer;
-    display: inline-block !important;
-}
+    /* Form Controls */
+    .form-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-bottom: 6px;
+        display: block;
+    }
 
-.dataTables_paginate .paginate_button.current {
-    background: #dc2626 !important;
-    border-color: #dc2626 !important;
-    color: #fff !important;
-}
+    .form-control, select.form-control {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: var(--gray-700);
+        background: #ffffff;
+        transition: all 0.2s;
+        width: 100%;
+    }
 
-.dataTables_paginate .paginate_button:hover {
-    background: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
-    color: #333 !important;
-}
+    .form-control:focus, select.form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30,58,95,0.08);
+    }
 
-.dataTables_paginate .paginate_button.current:hover {
-    background: #b91c1c !important;
-    border-color: #b91c1c !important;
-    color: #fff !important;
-}
+    /* Buttons */
+    .btn-danger {
+        background: var(--danger);
+        border: none;
+        border-radius: 12px;
+        padding: 10px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
 
-/* Previous/Next buttons - same small size */
-.dataTables_paginate .paginate_button.previous,
-.dataTables_paginate .paginate_button.next {
-    padding: 3px 10px !important;
-}
+    .btn-danger:hover {
+        background: var(--danger-dark);
+        transform: translateY(-1px);
+    }
 
-/* Table info (entries count) - left aligned */
-.dataTables_info {
-    float: left;
-    font-size: 11px;
-    color: #666;
-    margin-top: 20px;
-}
+    /* Badges */
+    .badge {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 30px;
+        letter-spacing: 0.3px;
+    }
 
-/* Make table container not scroll horizontally */
-.dataTables_scroll {
-    overflow-x: visible !important;
-}
+    .bg-success {
+        background: var(--success) !important;
+    }
 
-/* Responsive behavior */
-@media (max-width: 768px) {
-    .dataTables_filter,
-    .dataTables_paginate,
-    .dataTables_info {
-        float: none;
+    .bg-danger {
+        background: var(--danger) !important;
+    }
+
+    .bg-warning {
+        background: var(--warning) !important;
+        color: #ffffff;
+    }
+
+    .bg-primary {
+        background: var(--primary) !important;
+    }
+
+    .bg-secondary {
+        background: var(--gray-400) !important;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+
+    .breadcrumb-item a {
+        text-decoration: none;
+        color: var(--gray-500);
+        font-size: 12px;
+    }
+
+    .breadcrumb-item.active {
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    /* Tables */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table thead th {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-500);
+        background: var(--gray-50);
+        border-bottom: 1px solid var(--gray-200);
+        padding: 14px 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
         text-align: center;
     }
-    
+
+    .table tbody td {
+        font-size: 13px;
+        color: var(--gray-700);
+        padding: 12px;
+        border-bottom: 1px solid var(--gray-100);
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .table-hover tbody tr:hover {
+        background: var(--gray-50);
+    }
+
+    /* DataTables */
+    .dataTables_wrapper {
+        font-family: 'Inter', sans-serif;
+        overflow-x: visible !important;
+    }
+
     .dataTables_filter {
-        margin-bottom: 15px;
+        float: right;
+        margin-bottom: 20px;
     }
-    
+
     .dataTables_filter label {
-        justify-content: center;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--gray-500);
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    
+
+    .dataTables_filter input {
+        width: 220px;
+        padding: 8px 14px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        font-size: 12px;
+        transition: all 0.2s;
+    }
+
+    .dataTables_filter input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30,58,95,0.08);
+    }
+
     .dataTables_paginate {
-        margin-top: 15px;
+        float: right;
+        margin-top: 20px;
     }
-    
+
+    .dataTables_paginate .paginate_button {
+        padding: 6px 12px !important;
+        margin: 0 3px !important;
+        border-radius: 10px !important;
+        border: 1px solid var(--gray-200) !important;
+        background: #ffffff !important;
+        color: var(--gray-600) !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        transition: all 0.2s;
+    }
+
+    .dataTables_paginate .paginate_button.current {
+        background: var(--danger) !important;
+        border-color: var(--danger) !important;
+        color: #ffffff !important;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+        background: var(--gray-50) !important;
+        border-color: var(--gray-300) !important;
+        color: var(--primary) !important;
+    }
+
     .dataTables_info {
-        margin-top: 15px;
-        margin-bottom: 10px;
+        float: left;
+        font-size: 12px;
+        color: var(--gray-500);
+        margin-top: 20px;
     }
-    
-    .dashboard-card .card-value {
-        font-size: 22px;
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .dataTables_filter,
+        .dataTables_paginate,
+        .dataTables_info {
+            float: none;
+            text-align: center;
+        }
+        
+        .dataTables_filter {
+            margin-bottom: 15px;
+        }
+        
+        .dataTables_filter label {
+            justify-content: center;
+        }
+        
+        .dataTables_paginate {
+            margin-top: 15px;
+        }
+        
+        .dataTables_info {
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .attendance-value {
+            font-size: 24px;
+        }
+        
+        .attendance-icon {
+            font-size: 34px;
+        }
     }
-}
 </style>
+
 <div class="me-inventory-msg"></div>
 <div class="me-adjustment-msg"></div>
 <input type="hidden" id="__siteurl" data-mesiteurl="<?=site_url();?>" />
 
-<div class="row mb-2 mt-5">
+<div class="row mb-2">
     <div class="col-12">
         <h4 class="fw-semibold my-3">Inventory Management</h4>
 
@@ -234,48 +384,53 @@ echo view('templates/myheader.php');
     </div>
 </div>
 
-<div class="row mb-3">
+<!-- Dashboard Cards - Matching Attendance Module Style -->
+<div class="row g-3 mb-4">
     <div class="col-md-3">
-        <div class="dash-card">
-            <div class="dash-icon bg-primary">
-                <i class="ti ti-box"></i>
-            </div>
-            <div class="dash-info">
-                <h6>Total Products</h6>
-                <h3><?=$total_products;?></h3>
+        <div class="card attendance-card h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="attendance-label">Total Products</div>
+                    <div class="attendance-value"><?=$total_products;?></div>
+                    <div class="attendance-sub">Active products</div>
+                </div>
+                <i class="ti ti-box attendance-icon"></i>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="dash-card">
-            <div class="dash-icon bg-success">
-                <i class="ti ti-package"></i>
-            </div>
-            <div class="dash-info">
-                <h6>Total Stock</h6>
-                <h3><?=$total_stock;?></h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="dash-card">
-            <div class="dash-icon bg-danger">
-                <i class="ti ti-alert-triangle"></i>
-            </div>
-            <div class="dash-info">
-                <h6>Low Stock</h6>
-                <h3><?=$low_stock;?></h3>
+        <div class="card attendance-card h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="attendance-label">Total Stock</div>
+                    <div class="attendance-value"><?=$total_stock;?></div>
+                    <div class="attendance-sub">Units in inventory</div>
+                </div>
+                <i class="ti ti-package attendance-icon"></i>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="dash-card">
-            <div class="dash-icon bg-warning">
-                <i class="ti ti-exchange"></i>
+        <div class="card attendance-card h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="attendance-label">Low Stock</div>
+                    <div class="attendance-value"><?=$low_stock;?></div>
+                    <div class="attendance-sub">Below reorder level</div>
+                </div>
+                <i class="ti ti-alert-triangle attendance-icon"></i>
             </div>
-            <div class="dash-info">
-                <h6>Movements</h6>
-                <h3><?=$total_movements;?></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card attendance-card h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="attendance-label">Movements</div>
+                    <div class="attendance-value"><?=$total_movements;?></div>
+                    <div class="attendance-sub">Total transactions</div>
+                </div>
+                <i class="ti ti-exchange attendance-icon"></i>
             </div>
         </div>
     </div>
@@ -345,48 +500,34 @@ echo view('templates/myheader.php');
             </div>
 
             <div class="card-body">
-                <!-- <div class="mb-2">
-                    <label>Supplier</label>
-                    <input type="text" id="supplier" class="form-control" name="supplier">
-                </div> -->
-                <div class="mb-2">
-                    <label>Product Name</label>
+                <div class="mb-3">
+                    <label class="form-label">Product Name</label>
                     <input type="text" id="product_name" class="form-control" name="product_name">
                 </div>
-                <div class="mb-2">
-                    <label>Category</label>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
                     <select name="category" id="category" class="form-control">
                         <option value="">Select</option>
-                        <option value="Merchandise">
-                            Merchandise
-                        </option>
-                        <option value="Accessories">
-                            Accessories
-                        </option>
-                        <option value="Beverages">
-                            Beverages
-                        </option>
-                        <option value="Food">
-                            Food
-                        </option>
-                        <option value="Supplements">
-                            Supplements
-                        </option>
+                        <option value="Merchandise">Merchandise</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Beverages">Beverages</option>
+                        <option value="Food">Food</option>
+                        <option value="Supplements">Supplements</option>
                     </select>
                 </div>
-                <div class="row mt-2">
-                    <div class="col-md-6">
-                        <label>Purchase Price</label>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Purchase Price</label>
                         <input type="number" id="purchase_price" class="form-control" name="purchase_price">
                     </div>
-                    <div class="col-md-6">
-                        <label>Selling Price</label>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Selling Price</label>
                         <input type="number" id="selling_price" class="form-control" name="selling_price">
                     </div>
                 </div>
-                <div class="row mt-2">
-                    <div class="col-md-6">
-                        <label>Quantity</label>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Quantity</label>
                         <input type="number" id="stock_qty" class="form-control" name="stock_qty">
                     </div>
                 </div>
@@ -412,8 +553,8 @@ echo view('templates/myheader.php');
 
             <div class="card-body">
 
-                <div class="mb-2">
-                    <label>Product</label>
+                <div class="mb-3">
+                    <label class="form-label">Product</label>
                     <select class="form-control" name="adj_product_name" id="adj_product_name">
                         <option value="">-- Select Product --</option>
                         <?php foreach($products as $p): ?>
@@ -422,45 +563,30 @@ echo view('templates/myheader.php');
                     </select>
                 </div>
 
-                <div class="mb-2">
-                    <label>Adjustment Type</label>
+                <div class="mb-3">
+                    <label class="form-label">Adjustment Type</label>
                     <select class="form-control" name="adj_type" id="adj_type">
                         <option value="INCREASE">Increase</option>
                         <option value="DECREASE">Decrease</option>
                     </select>
                 </div>
 
-                <div class="mb-2">
-                    <label>Reason</label>
-                    <select name="remarks" id="remarks" class="form-control" id="remarks">
+                <div class="mb-3">
+                    <label class="form-label">Reason</label>
+                    <select name="remarks" id="remarks" class="form-control">
                         <option value="">Select</option>
-                        <option value="Physical Count Correction">
-                            Physical Count Correction
-                        </option>
-                        <option value="Damaged Item">
-                            Damaged Item
-                        </option>
-                        <option value="Expired Item">
-                            Expired Item
-                        </option>
-                        <option value="Lost / Missing">
-                            Lost / Missing
-                        </option>
-                        <option value="Free / Complimentary">
-                            Free / Complimentary
-                        </option>
-                        <option value="System Correction">
-                            System Correction
-                        </option>
-                        <option value="Returned Item">
-                            Returned Item
-                        </option>
-
+                        <option value="Physical Count Correction">Physical Count Correction</option>
+                        <option value="Damaged Item">Damaged Item</option>
+                        <option value="Expired Item">Expired Item</option>
+                        <option value="Lost / Missing">Lost / Missing</option>
+                        <option value="Free / Complimentary">Free / Complimentary</option>
+                        <option value="System Correction">System Correction</option>
+                        <option value="Returned Item">Returned Item</option>
                     </select>
                 </div>
 
-                <div class="mb-2">
-                    <label>Quantity</label>
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
                     <input type="number" class="form-control" name="adj_qty" id="adj_qty">
                 </div>
 
@@ -473,23 +599,10 @@ echo view('templates/myheader.php');
                 </div>
 
             </div>
+        </form>
         </div>
     </div>
 </div>
-
-<?php
-$currentInventory = $this->db->query("
-    SELECT 
-        product_name,
-        category,
-        stock_qty,
-        reorder_level,
-        selling_price,
-        status
-    FROM tbl_products
-    ORDER BY stock_qty ASC
-")->getResultArray();
-?>
 
 <div class="row mb-3">
     <div class="col-md-12">
@@ -591,17 +704,15 @@ $(document).ready(function () {
     });
 
     $('#currentInventoryTable').DataTable({
-    pageLength: 5,
-    lengthChange: false,
-    order: [[2, 'asc']],
-    language: {
-        search: "Search Product:"
-    }
-});
+        pageLength: 5,
+        lengthChange: false,
+        order: [[2, 'asc']],
+        language: {
+            search: "Search Product:"
+        }
+    });
 
 });
-
-
 
 </script>
 

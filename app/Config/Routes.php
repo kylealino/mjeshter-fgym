@@ -40,3 +40,15 @@ $routes->post('inventory', 'InventoryController::index',['filter' => 'myauthuser
 
 // EMAIL TEST
 $routes->get('testemail', 'TestEmail::index');
+
+//CASH RECEIPTS
+$routes->get('cashreceipts', 'CashReceiptsController::index',['filter' => 'myauthuser']);
+$routes->post('cashreceipts', 'CashReceiptsController::index',['filter' => 'myauthuser']);
+
+//CHART OF ACCOUNTS
+$routes->get('chartofaccounts', 'ChartOfAccountsController::index',['filter' => 'myauthuser']);
+$routes->post('chartofaccounts', 'ChartOfAccountsController::index',['filter' => 'myauthuser']);
+
+//GYM ASSETS
+$routes->get('gym-assets', 'GymAssetsController::index',['filter' => 'myauthuser']);
+$routes->post('gym-assets', 'GymAssetsController::index',['filter' => 'myauthuser']);

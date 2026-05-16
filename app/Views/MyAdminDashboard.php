@@ -343,10 +343,6 @@ for ($i = 5; $i >= 0; $i--) {
 }
 
 // =============================================
-// RECENT CHECK-INS
-// =============================================
-
-// =============================================
 // RECENT CHECK-INS (TODAY ONLY)
 // =============================================
 
@@ -680,94 +676,179 @@ $attendanceYogaQuery = $this->db->query("
 ");
 $attendanceYoga = $attendanceYogaQuery->getRow()->total ?? 0;
 
+// LATEST INVENTORY MOVEMENT
+$inventoryMovementQuery = $this->db->query("
+    SELECT
+        product_name,
+        movement_type,
+        quantity,
+        DATE_FORMAT(created_at, '%M %d, %Y %h:%i %p') as movement_date,
+        created_by
+    FROM tbl_inventory_movements
+    ORDER BY created_at DESC
+    LIMIT 5
+");
+$inventoryMovements = $inventoryMovementQuery->getResultArray();
 
 echo view('templates/myheader.php');
 ?>
 
 <style>
     :root {
-        --gym-black: #1a1a1a;
+        --gym-black: #0a0a0a;
+        --gym-black-light: #111111;
         --gym-red: #dc2626;
+        --gym-red-dark: #b91c1c;
         --gym-red-light: #fee2e2;
+        --gym-white: #ffffff;
         --gym-gray: #6c757d;
+        --gym-gray-dark: #6b7280;
         --gym-border: #e5e7eb;
     }
     
-    .stat-card {
-        background: white;
-        border-radius: 16px;
-        padding: 1.25rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    /* Dashboard Cards - Matching Attendance Module */
+    .attendance-card {
+        background: var(--gym-white);
+        border-radius: 20px;
         border: 1px solid var(--gym-border);
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        margin-bottom: 0;
+    }
+    
+    .attendance-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 20px -12px rgba(0,0,0,0.1);
+        border-color: #d1d5db;
+    }
+    
+    .attendance-card .card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+    }
+    
+    .attendance-value {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--gym-black);
+    }
+    
+    .attendance-icon {
+        font-size: 42px;
+        opacity: 0.12;
+        color: var(--gym-red);
+    }
+    
+    .attendance-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gym-gray);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+    
+    .attendance-sub {
+        font-size: 11px;
+        color: var(--gym-gray-dark);
+        margin-top: 6px;
+    }
+    
+    /* Financial Overview Card */
+    .financial-card {
+        background: linear-gradient(135deg, var(--gym-black) 0%, var(--gym-black-light) 100%);
+        border-radius: 20px;
+        border: none;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+    
+    /* Section Title */
+    .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gym-black);
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--gym-red);
+        display: inline-block;
+    }
+    
+    /* Stat Cards */
+    .stat-card {
+        background: var(--gym-white);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid var(--gym-border);
+        transition: all 0.3s ease;
+        height: 100%;
     }
     
     .stat-card:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        border-color: #d1d5db;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 20px -12px rgba(0,0,0,0.1);
     }
     
     .stat-icon {
         width: 48px;
         height: 48px;
         background: var(--gym-red-light);
-        border-radius: 12px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    
+    .stat-icon i {
         font-size: 1.5rem;
         color: var(--gym-red);
     }
     
-    .stat-value {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--gym-black);
-        line-height: 1.2;
-    }
-    
-    .stat-label {
-        font-size: 0.8rem;
-        color: var(--gym-gray);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-weight: 500;
-    }
-    
-    .section-title {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--gym-black);
-        margin-bottom: 0;
-    }
-    
-    .badge.bg-opacity-10 {
-        background-color: rgba(220,38,38,0.1) !important;
-    }
-    
+    /* Progress Bars */
     .progress {
         background-color: #f3f4f6;
         border-radius: 10px;
+        height: 6px;
     }
     
     .progress-bar {
         border-radius: 10px;
     }
     
-    .table td, .table th {
-        padding: 0.75rem 0.5rem;
-        vertical-align: middle;
+    /* Badges */
+    .badge {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 30px;
     }
     
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
+    /* Tables */
+    .table td, .table th {
+        padding: 10px 8px;
+        vertical-align: middle;
+        font-size: 13px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .attendance-value {
+            font-size: 24px;
+        }
+        .attendance-icon {
+            font-size: 34px;
+        }
+        .financial-card {
+            padding: 16px;
+        }
     }
 </style>
 
 <div class="container-fluid px-0">
     
-    <!-- Header -->
+    <!-- Header Welcome Section -->
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
             <h4 class="fw-semibold mb-1" style="color: var(--gym-black);">Welcome back, <?= htmlspecialchars($full_name) ?>!</h4>
@@ -781,29 +862,29 @@ echo view('templates/myheader.php');
         </div>
     </div>
 
-    <!-- Financial Overview -->
-    <div class="stat-card mb-4" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); border: none;">
+    <!-- Financial Overview - Matching Theme -->
+    <div class="financial-card mb-4">
         <div class="d-flex align-items-center justify-content-between mb-3">
             <h5 class="text-white mb-0"><i class="bi bi-graph-up me-2 text-danger"></i> FINANCIAL OVERVIEW</h5>
-            <span class="badge bg-success"><i class="bi bi-database"></i> Live Data</span>
+            <span class="badge" style="background: rgba(220,38,38,0.2); color: #fca5a5;"><i class="bi bi-database"></i> Live Data</span>
         </div>
         
         <div class="row g-4">
             <div class="col-xl-3 col-md-6">
-                <div class="text-center text-md-start">
-                    <div class="text-light small text-uppercase mb-1 opacity-75">Monthly Revenue</div>
-                    <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+                <div>
+                    <div class="text-white-50 small text-uppercase mb-1">Monthly Revenue</div>
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
                         <h2 class="text-white mb-0 fw-bold">₱<?= number_format($monthlyRevenue) ?></h2>
                         <span class="badge <?= $monthlyRevenueGrowth >= 0 ? 'bg-success' : 'bg-danger' ?>">
                             <i class="bi bi-arrow-<?= $monthlyRevenueGrowth >= 0 ? 'up' : 'down' ?>"></i> <?= abs($monthlyRevenueGrowth) ?>%
                         </span>
                     </div>
                     <div class="mt-2">
-                        <div class="d-flex justify-content-between small text-light opacity-75 mb-1">
+                        <div class="d-flex justify-content-between small text-white-50 mb-1">
                             <span>Target: ₱<?= number_format($monthlyRevenueTarget) ?></span>
                             <span><?= $monthlyRevenuePercent ?>% achieved</span>
                         </div>
-                        <div class="progress" style="height: 4px; background: rgba(255,255,255,0.2);">
+                        <div class="progress" style="background: rgba(255,255,255,0.2);">
                             <div class="progress-bar bg-danger" style="width: <?= $monthlyRevenuePercent ?>%"></div>
                         </div>
                     </div>
@@ -811,51 +892,42 @@ echo view('templates/myheader.php');
             </div>
             
             <div class="col-xl-3 col-md-6">
-                <div class="text-center text-md-start">
-                    <div class="text-light small text-uppercase mb-1 opacity-75">Year-to-Date Revenue</div>
+                <div>
+                    <div class="text-white-50 small text-uppercase mb-1">Year-to-Date Revenue</div>
                     <h3 class="text-white mb-0 fw-bold">₱<?= number_format($ytdRevenue) ?></h3>
                     <div class="mt-1">
                         <span class="text-success small"><i class="bi bi-arrow-up"></i> <?= $ytdGrowth ?>% vs last year</span>
-                        <span class="text-light opacity-50 small ms-2">(₱<?= number_format($ytdRevenueLastYear) ?>)</span>
                     </div>
                 </div>
             </div>
             
             <div class="col-xl-3 col-md-6">
-                <div class="text-center text-md-start">
-                    <div class="text-light small text-uppercase mb-1 opacity-75">Collection Status</div>
+                <div>
+                    <div class="text-white-50 small text-uppercase mb-1">Collection Status</div>
                     <div class="row g-2">
                         <div class="col-6">
-                            <div class="small text-light opacity-75">Collected</div>
+                            <div class="small text-white-50">Collected</div>
                             <span class="text-success fw-bold">₱<?= number_format($collectedPayments) ?></span>
                         </div>
                         <div class="col-6">
-                            <div class="small text-light opacity-75">Pending</div>
+                            <div class="small text-white-50">Pending</div>
                             <span class="text-warning fw-bold">₱<?= number_format($pendingPayments) ?></span>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <div class="small text-light opacity-75">Collection Rate</div>
-                            <span class="text-white fw-bold"><?= $collectionRate ?>%</span>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="col-xl-3 col-md-6">
-                <div class="text-center text-md-start">
-                    <div class="text-light small text-uppercase mb-1 opacity-75">Key Metrics</div>
+                <div>
+                    <div class="text-white-50 small text-uppercase mb-1">Key Metrics</div>
                     <div class="row g-2">
                         <div class="col-6">
-                            <div class="small text-light opacity-75">Avg Ticket</div>
+                            <div class="small text-white-50">Avg Ticket</div>
                             <span class="text-white fw-bold">₱<?= number_format($averageTicketSize) ?></span>
                         </div>
                         <div class="col-6">
-                            <div class="small text-light opacity-75">Active Subs</div>
+                            <div class="small text-white-50">Active Subs</div>
                             <span class="text-white fw-bold"><?= number_format($activeSubscriptions) ?></span>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <div class="small text-light opacity-75">Projected Monthly</div>
-                            <span class="text-info fw-bold">₱<?= number_format($activeSubscriptions * $averageTicketSize) ?></span>
                         </div>
                     </div>
                 </div>
@@ -863,114 +935,100 @@ echo view('templates/myheader.php');
         </div>
     </div>
 
-    <!-- Quick Stats -->
+    <!-- Quick Stats Cards - Matching Attendance Module -->
     <div class="row g-4 mb-4">
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
-                    <span class="small text-success"><i class="bi bi-arrow-up"></i> <?= $totalMembers > 0 ? round(($newMembersThisMonth / $totalMembers) * 100, 1) : 0 ?>%</span>
+            <div class="attendance-card">
+                <div class="card-body">
+                    <div>
+                        <div class="attendance-label">Total Members</div>
+                        <div class="attendance-value"><?= number_format($totalMembers) ?></div>
+                        <div class="attendance-sub">+<?= $newMembersThisMonth ?> this month</div>
+                    </div>
+                    <i class="bi bi-people-fill attendance-icon"></i>
                 </div>
-                <div class="stat-value mt-2"><?= number_format($totalMembers) ?></div>
-                <div class="stat-label">Total Members</div>
-                <div class="mt-1"><small class="text-muted">+<?= $newMembersThisMonth ?> this month</small></div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="stat-icon"><i class="bi bi-box-arrow-in-right"></i></div>
-                    <span class="small text-success">Today</span>
+            <div class="attendance-card">
+                <div class="card-body">
+                    <div>
+                        <div class="attendance-label">Today's Check-ins</div>
+                        <div class="attendance-value"><?= number_format($todayCheckins) ?></div>
+                        <div class="attendance-sub"><?= $currentlyInGym ?> currently inside</div>
+                    </div>
+                    <i class="bi bi-box-arrow-in-right attendance-icon"></i>
                 </div>
-                <div class="stat-value mt-2"><?= number_format($todayCheckins) ?></div>
-                <div class="stat-label">Today's Check-ins</div>
-                <div class="mt-1"><small class="text-success"><?= $currentlyInGym ?> currently inside</small></div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="stat-icon"><i class="bi bi-box-arrow-right"></i></div>
-                    <span class="small text-muted">Today</span>
+            <div class="attendance-card">
+                <div class="card-body">
+                    <div>
+                        <div class="attendance-label">Today's Check-outs</div>
+                        <div class="attendance-value"><?= number_format($todayCheckouts) ?></div>
+                        <div class="attendance-sub">Total completed</div>
+                    </div>
+                    <i class="bi bi-box-arrow-right attendance-icon"></i>
                 </div>
-                <div class="stat-value mt-2"><?= number_format($todayCheckouts) ?></div>
-                <div class="stat-label">Today's Check-outs</div>
-                <div class="mt-1"><small class="text-muted">Total completed</small></div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
-                    <span class="small text-danger">Urgent</span>
+            <div class="attendance-card">
+                <div class="card-body">
+                    <div>
+                        <div class="attendance-label">Expiring Soon</div>
+                        <div class="attendance-value text-danger"><?= $expiringToday + $expiringThisWeek ?></div>
+                        <div class="attendance-sub text-danger"><?= $expiringToday ?> expire TODAY!</div>
+                    </div>
+                    <i class="bi bi-exclamation-triangle-fill attendance-icon"></i>
                 </div>
-                <div class="stat-value mt-2 text-danger"><?= $expiringToday + $expiringThisWeek ?></div>
-                <div class="stat-label">Expiring Soon</div>
-                <div class="mt-1"><small class="text-danger"><?= $expiringToday ?> expire TODAY!</small></div>
             </div>
         </div>
     </div>
 
-    <!-- Charts -->
+    <!-- Charts Row -->
     <div class="row g-4 mb-4">
         <div class="col-xl-5">
             <div class="stat-card">
-                <h6 class="section-title mb-3"><i class="bi bi-graph-up me-1 text-danger"></i> Revenue Trend (Last 6 Months)</h6>
-                <canvas id="revenueChart" style="height: 200px;"></canvas>
+                <h6 class="section-title"><i class="bi bi-graph-up me-1 text-danger"></i> Revenue Trend (Last 6 Months)</h6>
+                <canvas id="revenueChart" style="height: 200px; width: 100%;"></canvas>
             </div>
         </div>
         <div class="col-xl-3">
             <div class="stat-card">
-              <h6 class="section-title mb-3">
-                  <i class="bi bi-pie-chart-fill me-1 text-danger"></i>
-                  Attendance Distribution Today
-              </h6>
-              <canvas id="membershipChart" style="height: 130px;"></canvas>
-              <div class="row mt-2 text-center small g-1">
-                  <div class="col-6">
-                      <span class="text-danger">●</span>
-                      Members: <?= $attendanceMembers ?>
-                  </div>
-                  <div class="col-6">
-                      <span class="text-primary">●</span>
-                      Walk-in: <?= $attendanceWalkin ?>
-                  </div>
-                  <div class="col-6">
-                      <span class="text-success">●</span>
-                      Zumba: <?= $attendanceZumba ?>
-                  </div>
-                  <div class="col-6">
-                      <span class="text-warning">●</span>
-                      Crossfit: <?= $attendanceCrossfit ?>
-                  </div>
-                  <div class="col-12 mt-1">
-                      <span class="text-info">●</span>
-                      Yoga: <?= $attendanceYoga ?>
-                  </div>
-              </div>
+                <h6 class="section-title"><i class="bi bi-pie-chart-fill me-1 text-danger"></i> Attendance Today</h6>
+                <canvas id="membershipChart" style="height: 130px; width: 100%;"></canvas>
+                <div class="row mt-2 text-center small g-1">
+                    <div class="col-6"><span class="text-danger">●</span> Members: <?= $attendanceMembers ?></div>
+                    <div class="col-6"><span class="text-primary">●</span> Walk-in: <?= $attendanceWalkin ?></div>
+                    <div class="col-6"><span class="text-success">●</span> Zumba: <?= $attendanceZumba ?></div>
+                    <div class="col-6"><span class="text-warning">●</span> Crossfit: <?= $attendanceCrossfit ?></div>
+                    <div class="col-12 mt-1"><span class="text-info">●</span> Yoga: <?= $attendanceYoga ?></div>
+                </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="stat-card">
-                <h6 class="section-title mb-3"><i class="bi bi-cash-stack me-1 text-danger"></i> Financial Summary</h6>
+                <h6 class="section-title"><i class="bi bi-cash-stack me-1 text-danger"></i> Financial Summary</h6>
                 <div class="mb-3">
                     <div class="d-flex justify-content-between small mb-1">
                         <span>Collection Rate</span>
                         <span class="fw-bold"><?= $collectionRate ?>%</span>
                     </div>
-                    <div class="progress" style="height: 6px;"><div class="progress-bar bg-success" style="width: <?= $collectionRate ?>%"></div></div>
+                    <div class="progress"><div class="progress-bar bg-success" style="width: <?= $collectionRate ?>%"></div></div>
                 </div>
                 <div class="mb-3">
                     <div class="d-flex justify-content-between small mb-1">
                         <span>Revenue vs Target</span>
                         <span class="fw-bold"><?= $monthlyRevenuePercent ?>%</span>
                     </div>
-                    <div class="progress" style="height: 6px;"><div class="progress-bar bg-danger" style="width: <?= $monthlyRevenuePercent ?>%"></div></div>
+                    <div class="progress"><div class="progress-bar bg-danger" style="width: <?= $monthlyRevenuePercent ?>%"></div></div>
                 </div>
                 <div class="mt-3 pt-2 border-top">
                     <div class="d-flex justify-content-between small">
                         <span>Pending Collection</span>
-                        <span class="text-warning">₱<?= number_format($pendingPayments) ?></span>
+                        <span class="text-warning fw-bold">₱<?= number_format($pendingPayments) ?></span>
                     </div>
                 </div>
             </div>
@@ -981,20 +1039,19 @@ echo view('templates/myheader.php');
     <div class="row g-4 mb-4">
         <div class="col-xl-6">
             <div class="stat-card">
-                <h6 class="section-title mb-3"><i class="bi bi-box-arrow-in-right text-success me-1"></i> Recent Check-ins</h6>
+                <h6 class="section-title"><i class="bi bi-box-arrow-in-right text-success me-1"></i> Recent Check-ins</h6>
                 <div class="table-responsive">
-                    <table class="table table-sm table-borderless mb-0">
+                    <table class="table table-sm mb-0">
                         <tbody>
                             <?php foreach($recentCheckins as $ci): ?>
                             <tr>
-                                <td><i class="bi bi-person-circle text-muted me-2"></i> <?= htmlspecialchars($ci['name'] ?? $ci['walkin_name'] ?? 'Walk-in') ?></td>
+                                <td><i class="bi bi-person-circle text-muted me-2"></i> <?= htmlspecialchars($ci['name'] ?? 'Walk-in') ?></td>
                                 <td><?= $ci['time'] ?></td>
                                 <td class="text-end"><span class="badge bg-success bg-opacity-10 text-success">Checked In</span></td>
                             </tr>
                             <?php endforeach; ?>
                             <?php if(empty($recentCheckins)): ?>
-                            <tr><td colspan="3" class="text-center text-muted py-3">No check-ins recorded today</td></td>
-                            <?php endif; ?>
+                            <tr><td colspan="3" class="text-center text-muted py-3">No check-ins recorded today</td><?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -1002,20 +1059,19 @@ echo view('templates/myheader.php');
         </div>
         <div class="col-xl-6">
             <div class="stat-card">
-                <h6 class="section-title mb-3"><i class="bi bi-box-arrow-right text-warning me-1"></i> Recent Check-outs</h6>
+                <h6 class="section-title"><i class="bi bi-box-arrow-right text-warning me-1"></i> Recent Check-outs</h6>
                 <div class="table-responsive">
-                    <table class="table table-sm table-borderless mb-0">
+                    <table class="table table-sm mb-0">
                         <tbody>
                             <?php foreach($recentCheckouts as $co): ?>
                             <tr>
-                                <td><i class="bi bi-person-circle text-muted me-2"></i> <?= htmlspecialchars($co['name'] ?? $co['walkin_name'] ?? 'Walk-in') ?></td>
+                                <td><i class="bi bi-person-circle text-muted me-2"></i> <?= htmlspecialchars($co['name'] ?? 'Walk-in') ?></td>
                                 <td><?= $co['time'] ?></td>
                                 <td class="text-end"><span class="badge bg-info bg-opacity-10 text-info"><?= $co['duration'] ?></span></td>
                             </tr>
                             <?php endforeach; ?>
                             <?php if(empty($recentCheckouts)): ?>
-                            <tr><td colspan="3" class="text-center text-muted py-3">No check-outs recorded today</td></tr>
-                            <?php endif; ?>
+                            <tr><td colspan="3" class="text-center text-muted py-3">No check-outs recorded today</td><?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -1027,23 +1083,17 @@ echo view('templates/myheader.php');
     <div class="row g-4 mb-4">
         <div class="col-12">
             <div class="stat-card">
-                <h6 class="section-title mb-3"><i class="bi bi-exclamation-triangle-fill text-danger me-1"></i> URGENT: Expiring Memberships</h6>
+                <h6 class="section-title"><i class="bi bi-exclamation-triangle-fill text-danger me-1"></i> URGENT: Expiring Memberships</h6>
                 
                 <?php if(!empty($expiringTodayList)): ?>
-                <div class="mb-3 p-3" style="background: var(--gym-red-light); border-radius: 12px;">
+                <div class="mb-3 p-3" style="background: var(--gym-red-light); border-radius: 16px;">
                     <strong class="text-danger">⚠️ EXPIRING TODAY (<?= count($expiringTodayList) ?> members)</strong>
                     <div class="table-responsive mt-2">
                         <table class="table table-sm mb-0">
-                            <thead>
-                                <tr><th>Member</th><th>Plan</th><th>Contact</th></tr>
-                            </thead>
+                            <thead><tr><th>Member</th><th>Plan</th><th>Contact</th></tr></thead>
                             <tbody>
                                 <?php foreach($expiringTodayList as $exp): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($exp['name']) ?></td>
-                                    <td><?= htmlspecialchars($exp['plan']) ?></td>
-                                    <td><?= htmlspecialchars($exp['phone'] ?? 'N/A') ?></td>
-                                </tr>
+                                <tr><td><?= htmlspecialchars($exp['name']) ?></td><td><?= htmlspecialchars($exp['plan']) ?></td><td><?= htmlspecialchars($exp['phone'] ?? 'N/A') ?></td></tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -1056,16 +1106,10 @@ echo view('templates/myheader.php');
                     <strong class="text-warning">⚠️ Expiring This Week (<?= count($expiringThisWeekList) ?> members)</strong>
                     <div class="table-responsive mt-2">
                         <table class="table table-sm mb-0">
-                            <thead>
-                                <tr><th>Member</th><th>Plan</th><th>Days Left</th></tr>
-                            </thead>
+                            <thead><tr><th>Member</th><th>Plan</th><th>Days Left</th></tr></thead>
                             <tbody>
                                 <?php foreach($expiringThisWeekList as $exp): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($exp['name']) ?></td>
-                                    <td><?= htmlspecialchars($exp['plan']) ?></td>
-                                    <td class="text-warning fw-bold"><?= $exp['days_left'] ?> days</td>
-                                </tr>
+                                <tr><td><?= htmlspecialchars($exp['name']) ?></td><td><?= htmlspecialchars($exp['plan']) ?></td><td class="text-warning fw-bold"><?= $exp['days_left'] ?> days</td></tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -1074,155 +1118,71 @@ echo view('templates/myheader.php');
                 <?php endif; ?>
 
                 <?php if(empty($expiringTodayList) && empty($expiringThisWeekList)): ?>
-                <div class="text-center text-success py-3">
-                    <i class="bi bi-check-circle-fill me-2"></i> No members expiring in the next 7 days
-                </div>
+                <div class="text-center text-success py-3"><i class="bi bi-check-circle-fill me-2"></i> No members expiring in the next 7 days</div>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 
-    <!-- Recent Payments & Overdue -->
-<!-- ============================================= -->
-<!-- RECENT PAYMENTS & LATEST INVENTORY MOVEMENT -->
-<!-- ============================================= -->
+    <!-- Recent Payments & Latest Inventory Movement -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-6">
+            <div class="stat-card">
+                <h6 class="section-title"><i class="bi bi-cash-stack me-1 text-danger"></i> Recent Payments</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Transaction</th><th>Amount</th><th>Date</th><th>Method</th></tr></thead>
+                        <tbody>
+                            <?php foreach($recentPayments as $pay): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($pay['postrxno']) ?></td>
+                                <td>₱<?= number_format($pay['amount']) ?></td>
+                                <td><?= date('M d', strtotime($pay['date'])) ?></td>
+                                <td><span class="badge bg-success bg-opacity-10 text-success"><?= ucfirst($pay['payment_method']) ?></span></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php if(empty($recentPayments)): ?>
+                            <tr><td colspan="4" class="text-center text-muted py-3">No recent payments recorded</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-  <div class="row g-4 mb-4">
-
-      <!-- RECENT PAYMENTS -->
-      <div class="col-xl-6">
-          <div class="stat-card">
-              <h6 class="section-title mb-3">
-                  <i class="bi bi-cash-stack me-1 text-danger"></i>
-                  Recent Payments
-              </h6>
-              <div class="table-responsive">
-                  <table class="table table-sm mb-0">
-                      <thead>
-                          <tr>
-                              <th>Transaction</th>
-                              <th>Amount</th>
-                              <th>Date</th>
-                              <th>Method</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <?php foreach($recentPayments as $pay): ?>
-                          <tr>
-                              <td><?= htmlspecialchars($pay['postrxno']) ?></td>
-                              <td>
-                                  ₱<?= number_format($pay['amount']) ?>
-                              </td>
-                              <td>
-                                  <?= date('M d', strtotime($pay['date'])) ?>
-                              </td>
-                              <td>
-                                  <span class="badge bg-success bg-opacity-10 text-success">
-                                      <?= ucfirst($pay['payment_method']) ?>
-                                  </span>
-                              </td>
-                          </tr>
-                          <?php endforeach; ?>
-                          <?php if(empty($recentPayments)): ?>
-                          <tr>
-                              <td colspan="4" class="text-center text-muted py-3">
-                                  No recent payments recorded
-                              </td>
-                          </tr>
-                          <?php endif; ?>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-
-      <!-- LATEST INVENTORY MOVEMENT -->
-      <div class="col-xl-6">
-          <div class="stat-card">
-              <h6 class="section-title mb-3">
-                  <i class="bi bi-box-seam me-1 text-danger"></i>
-                  Latest Inventory Movement
-              </h6>
-
-              <?php
-              // =============================================
-              // LATEST INVENTORY MOVEMENT QUERY
-              // =============================================
-              $inventoryMovementQuery = $this->db->query("
-                  SELECT
-                      product_name,
-                      movement_type,
-                      quantity,
-                      DATE_FORMAT(created_at, '%M %d, %Y %h:%i %p') as movement_date,
-                      created_by
-                  FROM tbl_inventory_movements
-                  ORDER BY created_at DESC
-                  LIMIT 5
-
-              ");
-
-              $inventoryMovements = $inventoryMovementQuery->getResultArray();
-              ?>
-              <?php if(!empty($inventoryMovements)): ?>
-              <div class="table-responsive">
-                  <table class="table table-sm mb-0">
-                      <thead>
-                          <tr>
-                              <th>Item</th>
-                              <th>Type</th>
-                              <th>Qty</th>
-                              <th>Date</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <?php foreach($inventoryMovements as $mov): ?>
-                          <tr>
-                              <td>
-                                  <?= htmlspecialchars($mov['product_name']) ?>
-                              </td>
-                              <td>
-                                  <?php
-                                      $badgeClass = 'bg-secondary';
-
-                                      if(strtolower($mov['movement_type']) == 'stock in'){
-                                          $badgeClass = 'bg-success';
-                                      }
-
-                                      if(strtolower($mov['movement_type']) == 'stock out'){
-                                          $badgeClass = 'bg-danger';
-                                      }
-
-                                      if(strtolower($mov['movement_type']) == 'adjustment'){
-                                          $badgeClass = 'bg-warning';
-                                      }
-                                  ?>
-
-                                  <span class="badge <?= $badgeClass ?>">
-                                      <?= htmlspecialchars($mov['movement_type']) ?>
-                                  </span>
-
-                              </td>
-                              <td>
-                                  <?= number_format($mov['quantity']) ?>
-                              </td>
-
-                              <td style="font-size:11px;">
-                                  <?= $mov['movement_date'] ?>
-                              </td>
-                          </tr>
-                          <?php endforeach; ?>
-                      </tbody>
-                  </table>
-              </div>
-              <?php else: ?>
-              <div class="text-center text-muted py-4">
-                  <i class="bi bi-box-seam fs-1 d-block mb-2"></i>
-                  No inventory movement found
-              </div>
-              <?php endif; ?>
-          </div>
-      </div>
-  </div>
+        <div class="col-xl-6">
+            <div class="stat-card">
+                <h6 class="section-title"><i class="bi bi-box-seam me-1 text-danger"></i> Latest Inventory Movement</h6>
+                <?php if(!empty($inventoryMovements)): ?>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Item</th><th>Type</th><th>Qty</th><th>Date</th></tr></thead>
+                        <tbody>
+                            <?php foreach($inventoryMovements as $mov): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($mov['product_name']) ?></td>
+                                <td>
+                                    <?php
+                                        $badgeClass = 'bg-secondary';
+                                        if(strtolower($mov['movement_type']) == 'in') $badgeClass = 'bg-success';
+                                        if(strtolower($mov['movement_type']) == 'out') $badgeClass = 'bg-danger';
+                                        if(strtolower($mov['movement_type']) == 'adjustment') $badgeClass = 'bg-warning';
+                                    ?>
+                                    <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($mov['movement_type']) ?></span>
+                                </td>
+                                <td><?= number_format($mov['quantity']) ?></td>
+                                <td style="font-size:11px;"><?= $mov['movement_date'] ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <div class="text-center text-muted py-4"><i class="bi bi-box-seam fs-1 d-block mb-2"></i>No inventory movement found</div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -1254,7 +1214,7 @@ echo view('templates/myheader.php');
         }
     });
 
-    // Membership Chart
+    // Attendance Chart
     new Chart(document.getElementById('membershipChart'), {
         type: 'doughnut',
         data: {

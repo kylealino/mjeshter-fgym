@@ -21,17 +21,65 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-<!-- Active Menu Highlight -->
+
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const currentUrl = window.location.href;
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebar = document.getElementById('sidebar');
+  const pageWrapper = document.getElementById('pageWrapper');
+  const overlay = document.getElementById('sidebarOverlay');
+  const mobileToggle = document.getElementById('mobileMenuToggle');
+  const closeSidebar = document.getElementById('closeSidebar');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutForm = document.getElementById('logoutForm');
+  const currentUrl = window.location.href;
     document.querySelectorAll('.sidebar-item a').forEach(link => {
       if (link.href === currentUrl) {
         link.parentElement.classList.add('active');
       }
     });
-  });
-</script>
+  // Desktop sidebar toggle (collapse/expand)
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+      pageWrapper.classList.toggle('expanded');
+    });
+  }
 
+  // Mobile sidebar open
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', function() {
+      sidebar.classList.add('open');
+      if (overlay) overlay.classList.add('active');
+    });
+  }
+
+  // Mobile sidebar close
+  function closeSidebarMenu() {
+    sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+  }
+
+  if (closeSidebar) {
+    closeSidebar.addEventListener('click', closeSidebarMenu);
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', closeSidebarMenu);
+  }
+
+  // Logout confirmation
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (confirm('Are you sure you want to logout?')) {
+        if (logoutForm) {
+          logoutForm.submit();
+        }
+      }
+    });
+  }
+});
+</script>
 </body>
 </html>

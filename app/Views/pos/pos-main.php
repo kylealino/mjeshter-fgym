@@ -6,114 +6,312 @@ echo view('templates/myheader.php');
 ?>
 
 <style>
-
-.form-section{
-    background:#fff;
-    border-radius:10px;
-    padding:20px;
-    margin-bottom:20px;
-    border:1px solid #e5e5e5;
-}
-
-.form-section h6{
-    font-weight:600;
-    margin-bottom:20px;
-    color:#333;
-    border-left:3px solid #dc3545;
-    padding-left:10px;
-}
-
-.pos-card{
-    border:1px solid #ddd;
-    border-radius:10px;
-    padding:20px;
-    cursor:pointer;
-    transition:.2s;
-    height:100%;
-}
-
-.pos-card:hover{
-    border-color:#dc3545;
-    transform:translateY(-2px);
-}
-
-.pos-selected{
-    border:2px solid #dc3545;
-    background:#fff5f5;
-}
-
-.product-box{
-    border:1px solid #ddd;
-    border-radius:10px;
-    padding:15px;
-    text-align:center;
-    cursor:pointer;
-    transition:.2s;
-    height:100%;
-}
-
-.product-box:hover{
-    border-color:#dc3545;
-    background:#fff5f5;
-}
-
-.cart-table td{
-    vertical-align:middle;
-}
-
-.qty-btn{
-    border:none;
-    width:28px;
-    height:28px;
-    border-radius:5px;
-    background:#f1f1f1;
-}
-
-.item-qty{
-    width:55px;
-    text-align:center;
-}
-
-.preloader{
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-
-    background: rgba(0,0,0,0.25);
-
-    z-index:999999;
-
-    display:none;
-
-    /* CENTER CONTENT */
-    justify-content:center;
-    align-items:center;
-
-    backdrop-filter: blur(2px);
-}
-
-.loader{
-    width:60px;
-    height:60px;
-
-    border:6px solid rgba(255,255,255,0.3);
-    border-top:6px solid #ffffff;
-
-    border-radius:50%;
-
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin{
-    0%{
-        transform: rotate(0deg);
+    :root {
+        --primary: #1e3a5f;
+        --primary-dark: #0f2b44;
+        --primary-light: #2c5a8c;
+        --danger: #dc2626;
+        --danger-dark: #b91c1c;
+        --success: #10b981;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
     }
-    100%{
-        transform: rotate(360deg);
+
+    body {
+        background: var(--gray-50);
     }
-}
+
+    .form-section {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 24px;
+        margin-bottom: 24px;
+        border: 1px solid var(--gray-200);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .form-section h6 {
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: var(--gray-800);
+        border-left: 3px solid var(--danger);
+        padding-left: 12px;
+        font-size: 14px;
+    }
+
+    /* POS Cards */
+    .pos-card {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 16px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        height: 100%;
+        background: #ffffff;
+    }
+
+    .pos-card:hover {
+        border-color: var(--danger);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px -12px rgba(0,0,0,0.15);
+    }
+
+    .pos-card h5 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--gray-800);
+        margin-bottom: 8px;
+    }
+
+    .pos-card small {
+        font-size: 11px;
+        color: var(--gray-500);
+    }
+
+    .pos-selected {
+        border: 2px solid var(--danger);
+        background: #fef2f2;
+    }
+
+    /* Product Boxes */
+    .product-box {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 16px;
+        padding: 16px 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        height: 100%;
+        background: #ffffff;
+    }
+
+    .product-box:hover {
+        border-color: var(--danger);
+        background: #fef2f2;
+        transform: translateY(-2px);
+    }
+
+    .product-box i {
+        font-size: 32px;
+        color: var(--primary);
+        opacity: 0.7;
+    }
+
+    .product-box h6 {
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 12px;
+        margin-bottom: 6px;
+        color: var(--gray-800);
+    }
+
+    /* Cart Table */
+    .cart-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .cart-table thead th {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-500);
+        background: var(--gray-50);
+        padding: 12px 12px;
+        border-bottom: 1px solid var(--gray-200);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .cart-table tbody td {
+        font-size: 13px;
+        color: var(--gray-700);
+        padding: 12px;
+        border-bottom: 1px solid var(--gray-100);
+        vertical-align: middle;
+    }
+
+    /* Quantity Controls */
+    .qty-btn {
+        border: 1.5px solid var(--gray-200);
+        background: #ffffff;
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .qty-btn:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+    }
+
+    .item-qty {
+        width: 60px;
+        text-align: center;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 10px;
+        padding: 6px 8px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .item-qty:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30,58,95,0.08);
+    }
+
+    /* Form Controls */
+    .form-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-control {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: var(--gray-700);
+        background: #ffffff;
+        transition: all 0.2s;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30,58,95,0.08);
+    }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    /* Buttons */
+    .btn-danger {
+        background: var(--danger);
+        border: none;
+        border-radius: 12px;
+        padding: 10px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-danger:hover {
+        background: var(--danger-dark);
+        transform: translateY(-1px);
+    }
+
+    /* Category Headers */
+    .category-header h5 {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--danger);
+        border-bottom: 2px solid var(--gray-200);
+        padding-bottom: 10px;
+        margin-bottom: 16px;
+    }
+
+    /* Preloader */
+    .preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.3);
+        z-index: 999999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(4px);
+    }
+
+    .loader {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255,255,255,0.3);
+        border-top: 4px solid #ffffff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+
+    .breadcrumb-item a {
+        text-decoration: none;
+        color: var(--gray-500);
+        font-size: 12px;
+    }
+
+    .breadcrumb-item.active {
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    /* Remove Row Button */
+    .btn-remove-row {
+        background: #fef2f2;
+        border: none;
+        border-radius: 8px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.2s;
+    }
+
+    .btn-remove-row:hover {
+        background: var(--danger);
+        color: #ffffff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .form-section {
+            padding: 16px;
+        }
+        
+        .product-box i {
+            font-size: 24px;
+        }
+        
+        .product-box h6 {
+            font-size: 11px;
+        }
+        
+        .pos-card h5 {
+            font-size: 14px;
+        }
+        
+        .btn-danger {
+            width: 100%;
+        }
+    }
 </style>
 
 <div class="me-pos-msg"></div>
@@ -121,7 +319,7 @@ echo view('templates/myheader.php');
 <div class="preloader">
     <div class="loader"></div>
 </div>
-<div class="row mb-2 mt-5">
+<div class="row mb-2">
     <div class="col-12">
 
         <h4 class="fw-semibold my-3">Gym POS Module</h4>
@@ -336,8 +534,6 @@ echo view('templates/myheader.php');
             </div>
 
             <!-- ITEMS -->
-            <!-- ITEMS -->
-<!-- ITEMS -->
             <div class="form-section d-none" id="itemsSection">
                 <h6><i class="ti ti-shopping-cart me-2"></i> Items POS</h6>
 
@@ -425,7 +621,7 @@ echo view('templates/myheader.php');
             <div class="form-section">
                 <h6><i class="ti ti-receipt me-2"></i> POS Cart</h6>
                 <div class="table-responsive">
-                    <table class="table table-bordered cart-table">
+                    <table class="table cart-table">
                         <thead>
                             <tr>
                                 <th>Item</th>

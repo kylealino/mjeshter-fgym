@@ -101,350 +101,425 @@ echo view('templates/myheader.php');
 ?>
 
 <style>
-
-body{
-    background:#f5f6fa;
-}
-
-/* =========================================
-TABLES
-========================================= */
-
-.table thead th{
-    font-size:13px;
-    font-weight:600;
-    border-bottom:1px solid #e9ecef;
-    color:#495057;
-    white-space:nowrap;
-}
-
-.table tbody td{
-    font-size:13px;
-    vertical-align:middle;
-    color:#343a40;
-    padding-top:14px;
-    padding-bottom:14px;
-}
-
-.table-hover tbody tr:hover{
-    background:#fafafa;
-}
-
-/* =========================================
-CARDS
-========================================= */
-
-.card{
-    border:none;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,.04);
-}
-
-.card-header{
-    background:#fff !important;
-    border-bottom:1px solid #f1f3f5;
-    padding:16px 20px;
-}
-
-.card-body{
-    padding:20px;
-}
-
-/* =========================================
-DASHBOARD CARDS
-========================================= */
-
-.attendance-card{
-    border-radius:12px;
-    border:none;
-    transition:.2s ease;
-    background:#fff;
-}
-
-.attendance-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
-}
-
-.attendance-value{
-    font-size:32px;
-    font-weight:700;
-    line-height:1;
-    color:#212529 !important;
-}
-
-.attendance-icon{
-    font-size:42px;
-    opacity:.10;
-    color:#212529 !important;
-}
-
-/* =========================================
-FILTER SECTION
-========================================= */
-
-.form-label{
-    font-size:12px;
-    font-weight:600;
-    color:#495057;
-}
-
-.form-control{
-    border:1px solid #dee2e6;
-    border-radius:8px;
-    min-height:38px;
-    font-size:13px;
-    box-shadow:none !important;
-}
-
-.form-control:focus{
-    border-color:#adb5bd;
-}
-
-/* =========================================
-BUTTONS
-========================================= */
-
-.btn-dark{
-    background:#212529;
-    border-color:#212529;
-}
-
-.btn-dark:hover{
-    background:#000;
-    border-color:#000;
-}
-
-.btn-light{
-    background:#fff;
-}
-
-/* =========================================
-BADGES
-========================================= */
-
-.badge{
-    font-size:11px;
-    font-weight:600;
-    padding:6px 10px;
-    border-radius:20px;
-}
-
-.bg-primary{
-    background:#212529 !important;
-}
-
-.bg-danger{
-    background:#495057 !important;
-}
-
-.bg-success{
-    background:#198754 !important;
-}
-
-.bg-secondary{
-    background:#6c757d !important;
-}
-
-/* =========================================
-BREADCRUMB
-========================================= */
-
-.breadcrumb-item,
-.breadcrumb-item a{
-    font-size:13px;
-    color:#6c757d;
-    text-decoration:none;
-}
-
-.breadcrumb-item.active{
-    color:#212529;
-    font-weight:500;
-}
-
-/* =========================================
-DATATABLES
-========================================= */
-
-.dataTables_wrapper{
-    font-family:'Inter', sans-serif;
-    overflow-x:visible !important;
-}
-
-.table-responsive{
-    overflow-x:visible !important;
-    overflow-y:visible !important;
-}
-
-.dataTables_filter{
-    float:right;
-    margin-bottom:18px;
-}
-
-.dataTables_filter label{
-    font-size:12px;
-    font-weight:500;
-    color:#6c757d;
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.dataTables_filter input{
-    width:200px;
-    padding:6px 10px;
-    border:1px solid #dee2e6;
-    border-radius:8px;
-    font-size:12px;
-    transition:.2s;
-}
-
-.dataTables_filter input:focus{
-    outline:none;
-    border-color:#adb5bd;
-    box-shadow:none;
-}
-
-.dataTables_paginate{
-    float:right;
-    margin-top:20px;
-}
-
-.dataTables_paginate .paginate_button{
-    padding:5px 10px !important;
-    margin:0 2px !important;
-    border-radius:6px !important;
-    border:1px solid #e9ecef !important;
-    background:#fff !important;
-    color:#495057 !important;
-    font-size:11px !important;
-    font-weight:500 !important;
-    transition:.2s;
-}
-
-.dataTables_paginate .paginate_button.current{
-    background:#212529 !important;
-    border-color:#212529 !important;
-    color:#fff !important;
-}
-
-.dataTables_paginate .paginate_button:hover{
-    background:#f8f9fa !important;
-    border-color:#dee2e6 !important;
-    color:#212529 !important;
-}
-
-.dataTables_paginate .paginate_button.current:hover{
-    background:#000 !important;
-    border-color:#000 !important;
-    color:#fff !important;
-}
-
-.dataTables_info{
-    float:left;
-    font-size:11px;
-    color:#6c757d;
-    margin-top:20px;
-}
-
-.dataTables_length label{
-    font-size:12px;
-    color:#6c757d;
-}
-
-.dataTables_length select{
-    border:1px solid #dee2e6;
-    border-radius:6px;
-    padding:3px 8px;
-    font-size:12px;
-}
-
-/* =========================================
-CURRENT VIEW BOX
-========================================= */
-
-.current-view-box{
-    padding:8px 14px;
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:10px;
-    min-width:140px;
-    text-align:center;
-    box-shadow:0 1px 2px rgba(0,0,0,.04);
-}
-
-/* =========================================
-TABS
-========================================= */
-
-.custom-tabs{
-    border-bottom:1px solid #e9ecef;
-    margin-bottom:20px;
-}
-
-.custom-tabs .nav-link{
-    border:none !important;
-    background:none !important;
-    color:#6c757d;
-    font-size:13px;
-    font-weight:600;
-    padding:12px 18px;
-    border-radius:8px 8px 0 0;
-    transition:.2s;
-}
-
-.custom-tabs .nav-link.active{
-    color:#212529;
-    background:#f8f9fa !important;
-    border-bottom:2px solid #212529 !important;
-}
-
-.custom-tabs .nav-link:hover{
-    color:#212529;
-}
-
-/* =========================================
-RESPONSIVE
-========================================= */
-
-@media (max-width:768px){
-
-    .dataTables_filter,
-    .dataTables_paginate,
-    .dataTables_info{
-        float:none;
-        text-align:center;
+    :root {
+        --primary: #1e3a5f;
+        --primary-dark: #0f2b44;
+        --primary-light: #2c5a8c;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --gray-900: #0f172a;
     }
 
-    .dataTables_filter{
-        margin-bottom:15px;
+    body {
+        background: var(--gray-50);
     }
 
-    .dataTables_filter label{
-        justify-content:center;
+    /* =========================================
+    TABLES
+    ========================================= */
+
+    .table thead th {
+        font-size: 12px;
+        font-weight: 600;
+        border-bottom: 1px solid var(--gray-200);
+        color: var(--gray-500);
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        background: var(--gray-50);
     }
 
-    .dataTables_paginate{
-        margin-top:15px;
+    .table tbody td {
+        font-size: 13px;
+        vertical-align: middle;
+        color: var(--gray-700);
+        padding-top: 14px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--gray-100);
     }
 
-    .dataTables_info{
-        margin-top:15px;
-        margin-bottom:10px;
+    .table-hover tbody tr:hover {
+        background: var(--gray-50);
     }
 
-    .attendance-value{
-        font-size:24px;
+    /* =========================================
+    CARDS
+    ========================================= */
+
+    .card {
+        border: 1px solid var(--gray-200);
+        border-radius: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        background: #ffffff;
     }
 
-    .attendance-icon{
-        font-size:34px;
+    .card-header {
+        background: #ffffff !important;
+        border-bottom: 1px solid var(--gray-200);
+        padding: 16px 24px;
     }
-}
 
+    .card-body {
+        padding: 20px 24px;
+    }
+
+    /* =========================================
+    DASHBOARD CARDS (Attendance Cards)
+    ========================================= */
+
+    .attendance-card {
+        border-radius: 20px;
+        border: 1px solid var(--gray-200);
+        transition: all 0.3s ease;
+        background: #ffffff;
+    }
+
+    .attendance-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.1);
+        border-color: var(--gray-300);
+    }
+
+    .attendance-value {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--gray-800);
+    }
+
+    .attendance-icon {
+        font-size: 42px;
+        opacity: 0.12;
+        color: var(--primary);
+    }
+
+    /* =========================================
+    FILTER SECTION
+    ========================================= */
+
+    .form-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+
+    .form-control, .form-select {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        min-height: 42px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--gray-700);
+        background: #ffffff;
+        transition: all 0.2s;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08);
+        outline: none;
+    }
+
+    /* =========================================
+    BUTTONS
+    ========================================= */
+
+    .btn-dark {
+        background: var(--primary);
+        border-color: var(--primary);
+        border-radius: 12px;
+        padding: 8px 20px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-dark:hover {
+        background: var(--primary-dark);
+        border-color: var(--primary-dark);
+        transform: translateY(-1px);
+    }
+
+    .btn-light {
+        background: #ffffff;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 8px 20px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-600);
+        transition: all 0.2s;
+    }
+
+    .btn-light:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: #ffffff;
+    }
+
+    /* =========================================
+    BADGES
+    ========================================= */
+
+    .badge {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 30px;
+        letter-spacing: 0.3px;
+    }
+
+    .bg-primary {
+        background: var(--primary) !important;
+    }
+
+    .bg-danger {
+        background: #ef4444 !important;
+    }
+
+    .bg-success {
+        background: #10b981 !important;
+    }
+
+    .bg-secondary {
+        background: var(--gray-400) !important;
+    }
+
+    /* =========================================
+    BREADCRUMB
+    ========================================= */
+
+    .breadcrumb-item,
+    .breadcrumb-item a {
+        font-size: 12px;
+        color: var(--gray-500);
+        text-decoration: none;
+    }
+
+    .breadcrumb-item.active {
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    /* =========================================
+    CURRENT VIEW BOX
+    ========================================= */
+
+    .current-view-box {
+        padding: 10px 18px;
+        background: #ffffff;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 14px;
+        min-width: 160px;
+        text-align: center;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .current-view-box small {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--gray-400);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .current-view-box strong {
+        font-size: 14px;
+        color: var(--gray-800);
+    }
+
+    /* =========================================
+    TABS
+    ========================================= */
+
+    .custom-tabs {
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 24px;
+        gap: 4px;
+    }
+
+    .custom-tabs .nav-link {
+        border: none !important;
+        background: none !important;
+        color: var(--gray-500);
+        font-size: 13px;
+        font-weight: 600;
+        padding: 12px 20px;
+        border-radius: 12px 12px 0 0;
+        transition: all 0.2s;
+    }
+
+    .custom-tabs .nav-link.active {
+        color: var(--primary);
+        background: transparent !important;
+        border-bottom: 2px solid var(--primary) !important;
+    }
+
+    .custom-tabs .nav-link:hover {
+        color: var(--primary);
+    }
+
+    /* =========================================
+    DATATABLES
+    ========================================= */
+
+    .dataTables_wrapper {
+        font-family: 'Inter', sans-serif;
+        overflow-x: visible !important;
+    }
+
+    .table-responsive {
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+    }
+
+    .dataTables_filter {
+        float: right;
+        margin-bottom: 20px;
+    }
+
+    .dataTables_filter label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--gray-500);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .dataTables_filter input {
+        width: 220px;
+        padding: 8px 14px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        font-size: 12px;
+        transition: all 0.2s;
+    }
+
+    .dataTables_filter input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08);
+    }
+
+    .dataTables_paginate {
+        float: right;
+        margin-top: 20px;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 6px 12px !important;
+        margin: 0 3px !important;
+        border-radius: 10px !important;
+        border: 1px solid var(--gray-200) !important;
+        background: #ffffff !important;
+        color: var(--gray-600) !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        transition: all 0.2s;
+    }
+
+    .dataTables_paginate .paginate_button.current {
+        background: var(--primary) !important;
+        border-color: var(--primary) !important;
+        color: #ffffff !important;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+        background: var(--gray-50) !important;
+        border-color: var(--gray-300) !important;
+        color: var(--primary) !important;
+    }
+
+    .dataTables_paginate .paginate_button.current:hover {
+        background: var(--primary-dark) !important;
+        border-color: var(--primary-dark) !important;
+        color: #ffffff !important;
+    }
+
+    .dataTables_info {
+        float: left;
+        font-size: 12px;
+        color: var(--gray-500);
+        margin-top: 20px;
+    }
+
+    .dataTables_length {
+        margin-bottom: 20px;
+    }
+
+    .dataTables_length label {
+        font-size: 12px;
+        color: var(--gray-500);
+    }
+
+    .dataTables_length select {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 10px;
+        padding: 5px 10px;
+        font-size: 12px;
+        margin: 0 5px;
+    }
+
+    /* =========================================
+    RESPONSIVE
+    ========================================= */
+
+    @media (max-width: 768px) {
+        .dataTables_filter,
+        .dataTables_paginate,
+        .dataTables_info {
+            float: none;
+            text-align: center;
+        }
+
+        .dataTables_filter {
+            margin-bottom: 15px;
+        }
+
+        .dataTables_filter label {
+            justify-content: center;
+        }
+
+        .dataTables_paginate {
+            margin-top: 15px;
+        }
+
+        .dataTables_info {
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .attendance-value {
+            font-size: 24px;
+        }
+
+        .attendance-icon {
+            font-size: 34px;
+        }
+
+        .current-view-box {
+            min-width: 130px;
+            padding: 6px 12px;
+        }
+
+        .current-view-box strong {
+            font-size: 12px;
+        }
+    }
 </style>
 
-<div class="row mb-2 mt-5">
+<div class="row mb-2">
 
     <div class="col-6">
         <h4 class="fw-semibold my-3">Attendance Log</h4>
