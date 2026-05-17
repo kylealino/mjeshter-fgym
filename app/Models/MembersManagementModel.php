@@ -48,41 +48,35 @@ class MembersManagementModel extends Model
         $membership_end_date = $this->request->getPost('membership_end_date');
         $membership_status = $this->request->getPost('membership_status');
         
-        
         // Legal
         $waiver_signed = $this->request->getPost('waiver_signed') ? 1 : 0;
         $terms_accepted = $this->request->getPost('terms_accepted') ? 1 : 0;
 
-        
         // Validation
         if(empty($last_name)) {
-            echo "<script>toastr.error('Last name is required!', 'Error', {progressBar: true, timeOut:2000});</script>";
-            exit;
+            return ['status' => 'error', 'message' => 'Last name is required!'];
         }
         if(empty($first_name)) {
-            echo "<script>toastr.error('First name is required!', 'Error', {progressBar: true, timeOut:2000});</script>";
-            exit;
+            return ['status' => 'error', 'message' => 'First name is required!'];
         }
         if(empty($email)) {
-            echo "<script>toastr.error('Email is required!', 'Error', {progressBar: true, timeOut:2000});</script>";
-            exit;
+            return ['status' => 'error', 'message' => 'Email is required!'];
         }
         if(empty($terms_accepted)) {
-            echo "<script>toastr.error('Please accept terms and conditions!', 'Error', {progressBar: true, timeOut:2000});</script>";
-            exit;
+            return ['status' => 'error', 'message' => 'Please accept terms and conditions!'];
         }
         
         // Check if RFID already exists
         if(!empty($rfid_uid)) {
             $checkRFID = $this->db->query("SELECT member_id FROM tbl_members WHERE rfid_uid = ? AND member_id != ?", [$rfid_uid, $member_id ? $member_id : 0]);
             if($checkRFID->getNumRows() > 0) {
-                echo "<script>toastr.error('RFID card already assigned to another member!', 'Error', {progressBar: true, timeOut:2000});</script>";
-                exit;
+                return ['status' => 'error', 'message' => 'RFID card already assigned to another member!'];
             }
         }
         
         if(empty($member_id)) {
             // Insert new member
+            $membership_status = 'Pending';
             $query = $this->db->query("
                 INSERT INTO tbl_members (
                     member_no, rfid_uid, last_name, first_name, middle_name,
@@ -101,8 +95,11 @@ class MembersManagementModel extends Model
                 $membership_status, $waiver_signed, $terms_accepted, $this->cuser
             ]);
             
-            $status = "Member registered successfully";
-            $color = "success";
+            if($query) {
+                return ['status' => 'success', 'message' => 'Member Registered Successfully!'];
+            } else {
+                return ['status' => 'error', 'message' => 'Database error occurred!'];
+            }
         } else {
             // Update existing member
             $query = $this->db->query("
@@ -120,29 +117,14 @@ class MembersManagementModel extends Model
                 $emergency_contact_name, $emergency_contact_number, $emergency_contact_relationship,
                 $address, $city, $health_conditions, $allergies, $fitness_goals,
                 $experience_level, $membership_plan, $membership_start_date, $membership_end_date,
-                $membership_status,$waiver_signed, $terms_accepted, $member_id
+                $membership_status, $waiver_signed, $terms_accepted, $member_id
             ]);
             
-            $status = "Member updated successfully";
-            $color = "info";
+            if($query) {
+                return ['status' => 'success', 'message' => 'Member Updated Successfully!'];
+            } else {
+                return ['status' => 'error', 'message' => 'Database error occurred!'];
+            }
         }
-        
-        if($query) {
-            echo "
-            <script>
-                toastr.{$color}('{$status}!', 'Success', {
-                    progressBar: true,
-                    closeButton: true,
-                    timeOut: 1500
-                });
-                setTimeout(function() {
-                    window.location.href = 'membersmanagement?meaction=MAIN';
-                }, 1500);
-            </script>
-            ";
-        } else {
-            echo "<script>toastr.error('Database error occurred!', 'Error', {progressBar: true, timeOut:2000});</script>";
-        }
-        exit;
     }
 }

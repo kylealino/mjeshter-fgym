@@ -71,7 +71,7 @@ function __membersManagement() {
     };
 
     // =========================
-    // KEEP THIS (IMPORTANT)
+    // SAVE MEMBER - JSON STYLE
     // =========================
     this.__saveMember = function() { 
         'use strict';
@@ -161,7 +161,6 @@ function __membersManagement() {
                         fitness_goals: fitness_goals.value,
                         experience_level: experience_level.value,
 
-
                         waiver_signed: waiver_signed.checked ? 1 : 0,
                         terms_accepted: terms_accepted.checked ? 1 : 0,
 
@@ -169,18 +168,22 @@ function __membersManagement() {
                     };
 
                     // =========================
-                    // AJAX
+                    // AJAX - JSON RESPONSE
                     // =========================
                     jQuery.ajax({
                         type: "POST",
                         url: mesiteurl + 'membersmanagement',
-                        context: document.body,
                         data: mparam,
-                        global: false,
-                        cache: false,
-                        success: function(data) {
-                            jQuery('.me-membersmanagement-msg').html(data);
-                            toastr.success('Member saved successfully');
+                        dataType: 'json',
+                        success: function(response) {
+                            if(response.status == 'success'){
+                                toastr.success(response.message);
+                                setTimeout(function() {
+                                    window.location.href = mesiteurl + 'membersmanagement?meaction=MAIN';
+                                }, 1500);
+                            } else {
+                                toastr.error(response.message);
+                            }
                         },
                         error: function(xhr, status, error) {
                             toastr.error("Error saving member: " + error);
@@ -195,41 +198,6 @@ function __membersManagement() {
             }, false);
         });
     };
-
-    // =========================
-    // HELPERS
-    // =========================
-    function showSuccess(memberName){
-        toastr.clear();
-        toastr.success('Welcome ' + memberName);
-
-        document.getElementById('scanText').innerText = "Access Granted";
-        document.getElementById('scanStatus').innerText = "Welcome " + memberName + "!";
-        document.getElementById('scanPanel').style.borderColor = "#28a745";
-
-        setTimeout(() => {
-            processing = false;
-
-            // ✅ KEEP REDIRECT ONLY FOR CHECK-IN
-            document.getElementById('checkinForm').submit();
-        }, 1500);
-    }
-
-    function showError(message){
-        toastr.clear();
-        toastr.error(message || 'Denied');
-
-        document.getElementById('scanText').innerText = "Denied";
-        document.getElementById('scanStatus').innerText = message;
-        document.getElementById('scanPanel').style.borderColor = "#dc3545";
-
-        setTimeout(() => {
-            document.getElementById('scanText').innerText = "Ready";
-            document.getElementById('scanStatus').innerText = "Waiting RFID...";
-            document.getElementById('scanPanel').style.borderColor = "#eef2f6";
-            processing = false;
-        }, 2000);
-    }
 }
 
 $(document).ready(function() {

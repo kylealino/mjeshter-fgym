@@ -15,7 +15,6 @@ class MembersManagementController extends BaseController
         $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
-    // Add this method to your existing MembersManagementController
     private function loadMembersListView() {
         $membersdataquery = $this->db->query("
             SELECT
@@ -37,7 +36,6 @@ class MembersManagementController extends BaseController
         ]);
     }
 
-    // Update your index method to include the new routes
     public function index() {
         
         $meaction = $this->request->getPostGet('meaction');
@@ -48,8 +46,8 @@ class MembersManagementController extends BaseController
                 break;
 
             case 'MEMBER-SAVE': 
-                $this->memberModel->saveMember();
-                return redirect()->to('membersmanagement?meaction=MAIN');
+                $result = $this->memberModel->saveMember();
+                return $this->response->setJSON($result);
                 break;
 
             case 'CHECK-RFID':
@@ -57,8 +55,8 @@ class MembersManagementController extends BaseController
                 break;
             
             case 'MEMBERS-UPDATE': 
-                $this->memberModel->saveMember();
-                return redirect()->to('membersmanagement?meaction=MAIN');
+                $result = $this->memberModel->saveMember();
+                return $this->response->setJSON($result);
                 break;
 
             case 'MEMBERS-PRINT':
