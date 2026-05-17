@@ -4,7 +4,10 @@
 </div> <!-- Close body-wrapper -->
 </div> <!-- Close page-wrapper -->
 </div> <!-- Close main-wrapper -->
-
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- Scripts -->
 <script src="<?=base_url('assets/js/vendor.min.js')?>"></script>
 <script src="<?=base_url('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js')?>"></script>

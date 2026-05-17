@@ -52,3 +52,15 @@ $routes->post('chartofaccounts', 'ChartOfAccountsController::index',['filter' =>
 //GYM ASSETS
 $routes->get('gym-assets', 'GymAssetsController::index',['filter' => 'myauthuser']);
 $routes->post('gym-assets', 'GymAssetsController::index',['filter' => 'myauthuser']);
+
+//CASH DISBURSEMENT
+$routes->get('cash-disbursement-journal', 'CashDisbursementController::index',['filter' => 'myauthuser']);
+$routes->post('cash-disbursement-journal', 'CashDisbursementController::index',['filter' => 'myauthuser']);
+
+//GENERAL JOURNAL
+$routes->get('general-journal', 'GeneralJournalController::index',['filter' => 'myauthuser']);
+$routes->post('general-journal', 'GeneralJournalController::index',['filter' => 'myauthuser']);
+
+//FINANCIAL REPORTS
+$routes->get('financial-reports', 'FinancialReportsController::index',['filter' => 'myauthuser']);
+$routes->post('financial-reports', 'FinancialReportsController::index',['filter' => 'myauthuser']);

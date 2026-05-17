@@ -15,7 +15,6 @@ class POSController extends BaseController
         $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
-    // Update your index method to include the new routes
     public function index() {
         
         $meaction = $this->request->getPostGet('meaction');
@@ -26,10 +25,9 @@ class POSController extends BaseController
                 break;
 
             case 'POS-SAVE': 
-                $this->posModel->savePOS();
+                $result = $this->posModel->savePOS();
+                return $this->response->setJSON($result);
                 break;
-
         }
     }
-
 }

@@ -570,18 +570,31 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
           </li>
 
           <li class="sidebar-item <?= strpos($current_url, 'cash-disbursement-journal') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>cash-disbursement-journal">
+            <a class="sidebar-link" href="<?=site_url();?>cash-disbursement-journal?meaction=MAIN">
               <i class="ti ti-cash-banknote"></i>
               <span>Cash Disbursement Journal</span>
             </a>
           </li>
 
           <li class="sidebar-item <?= strpos($current_url, 'general-journal') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>general-journal">
+            <a class="sidebar-link" href="<?=site_url();?>general-journal?meaction=MAIN">
               <i class="ti ti-book"></i>
               <span>General Journal</span>
             </a>
           </li>
+          
+          <!-- FINANCIAL REPORTS -->
+          <li class="nav-small-cap">
+            <span>FINANCIAL REPORTS</span>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'financial-reports') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>financial-reports?meaction=MAIN">
+              <i class="ti ti-file-report"></i>
+              <span>Financial Reports</span>
+            </a>
+          </li>
+          
         </ul>
       </nav>
 

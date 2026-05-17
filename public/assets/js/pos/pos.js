@@ -27,7 +27,7 @@ function __POS() {
                     $('.preloader').css('display','flex').hide().fadeIn(200);
 
                     // =========================
-                    // GET CART DATA - LIKE YOUR BUDGET CODE
+                    // GET CART DATA
                     // =========================
                     var rowcount = jQuery('#cartBody tr').length;
                     var cartdata = [];
@@ -46,10 +46,7 @@ function __POS() {
                         cartdata.push(cartrow);
                     }
 
-                    
-
                     // Get other form values
-                    var transaction_type = $('#transaction_type').val();
                     var payment_method = $('#paymentMethod').val();
                     var amount_tendered = $('#amountTendered').val();
                     var change_amount = $('#changeAmount').val();
@@ -76,9 +73,9 @@ function __POS() {
                         return;
                     }
 
-                    if (amount_tendered + 1 < grand_total) {
+                    if (parseFloat(amount_tendered) < parseFloat(grand_total)) {
                         $('.preloader').fadeOut();
-                        toastr.error('Luge ka diyan idol!');
+                        toastr.error('Insufficient amount!');
                         return;
                     }
 
@@ -96,47 +93,33 @@ function __POS() {
                         meaction: 'POS-SAVE'
                     };
 
-                    
                     // =========================
-                    // AJAX - LIKE YOUR BUDGET CODE
+                    // AJAX - JSON RESPONSE
                     // =========================
                     jQuery.ajax({
                         type: "POST",
                         url: mesiteurl + 'pos',
-                        context: document.body,
                         data: mparam,
-                        global: false,
-                        cache: false,
-                        success: function(data) {
-
-                            // =========================
-                            // HIDE PRELOADER
-                            // =========================
+                        dataType: 'json',
+                        success: function(response) {
                             $('.preloader').fadeOut(200);
-
-                            jQuery('.me-pos-msg').html(data);
-                            toastr.success('POS saved successfully');
-                            return;
+                            if(response.status == 'success'){
+                                toastr.success(response.message);
+                                setTimeout(function() {
+                                    window.location.href = mesiteurl + 'pos?meaction=MAIN';
+                                }, 1500);
+                            } else {
+                                toastr.error(response.message);
+                            }
                         },
                         error: function(xhr, status, error) {
-
-                            // =========================
-                            // HIDE PRELOADER
-                            // =========================
                             $('.preloader').fadeOut(200);
-
-                            alert('Error: ' + error);
-                            return false;
+                            toastr.error('Error: ' + error);
                         }
                     });
 
                 } catch(err) {
-
-                    // =========================
-                    // HIDE PRELOADER
-                    // =========================
                     $('.preloader').fadeOut();
-
                     alert(err.message);
                     return false;
                 }

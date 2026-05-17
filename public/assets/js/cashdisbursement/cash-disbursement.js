@@ -1,12 +1,10 @@
-var __CashReceipts = new __CashReceipts();
+var __CashDisbursement = new __CashDisbursement();
 
-function __CashReceipts() {  
+function __CashDisbursement() {  
     const mesiteurl = $('#__siteurl').attr('data-mesiteurl');
 
-    this.__saveCashReceipt = function() { 
-        'use strict';
-        
-        var forms = document.querySelectorAll('.cr-reg-form');
+    this.__saveDisbursement = function() { 
+        var forms = document.querySelectorAll('.cd-reg-form');
 
         Array.prototype.slice.call(forms).forEach(function (form) {
             form.addEventListener('submit', function (event) {
@@ -23,17 +21,21 @@ function __CashReceipts() {
                     var date = $('#date').val();
                     var account_code = $('#account_code').val();
                     var amount = $('#amount').val();
+                    var payee = $('#payee').val();
+                    var description = $('#description').val();
 
                     var mparam = {
                         date: date,
                         account_code: account_code,
                         amount: amount,
+                        payee: payee,
+                        description: description,
                         meaction: 'SAVE'
                     };
 
                     jQuery.ajax({
                         type: "POST",
-                        url: mesiteurl + 'cashreceipts',
+                        url: mesiteurl + 'cash-disbursement-journal',
                         data: mparam,
                         dataType: 'json',
                         success: function(response) {
@@ -61,5 +63,5 @@ function __CashReceipts() {
 }
 
 $(document).ready(function() {
-    __CashReceipts.__saveCashReceipt();
+    __CashDisbursement.__saveDisbursement();
 });

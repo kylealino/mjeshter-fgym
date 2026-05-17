@@ -40,22 +40,9 @@ class CashReceiptsModel extends Model
         );
 
         if ($query) {
-            echo "
-            <script>
-                toastr.success('Cash Receipt Saved Successfully!', 'Well Done!', {
-                    progressBar: true,
-                    closeButton: true,
-                    timeOut: 1500,
-                });
-                setTimeout(function() {
-                    window.location.href = 'cashreceipts?meaction=MAIN';
-                }, 1500);
-            </script>
-            ";
-            exit;
+            return ['status' => 'success', 'message' => 'Cash Receipt Saved Successfully!'];
         } else {
-            echo "<script>alert('An error occurred while saving.');</script>";
-            exit;
+            return ['status' => 'error', 'message' => 'An error occurred while saving.'];
         }
     }
 

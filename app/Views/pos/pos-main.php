@@ -340,7 +340,7 @@ echo view('templates/myheader.php');
     </div>
 </div>
 
-<form action="<?=site_url();?>pos" method="post" class="pos-reg-form" id="posRegForm">
+<form class="pos-reg-form" id="posRegForm">
     <div class="row">
 
         <!-- LEFT SIDE -->

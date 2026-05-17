@@ -15,7 +15,6 @@ class InventoryController extends BaseController
         $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
-    // Update your index method to include the new routes
     public function index() {
         
         $meaction = $this->request->getPostGet('meaction');
@@ -26,14 +25,14 @@ class InventoryController extends BaseController
                 break;
 
             case 'STOCKIN-SAVE': 
-                $this->inventoryModel->saveInventory();
+                $result = $this->inventoryModel->saveInventory();
+                return $this->response->setJSON($result);
                 break;
 
             case 'ADJUSTMENT-SAVE': 
-                $this->inventoryModel->saveAdjustment();
+                $result = $this->inventoryModel->saveAdjustment();
+                return $this->response->setJSON($result);
                 break;
-
         }
     }
-
 }

@@ -493,7 +493,7 @@ echo view('templates/myheader.php');
     <div class="col-md-6">
         <!-- STOCK IN -->
         <div class="card mb-3">
-        <form action="<?=site_url();?>inventory?meaction=STOCKIN-SAVE" method="post" class="inv-reg-form" id="invRegForm">
+        <form class="inv-reg-form" id="invRegForm">
             <div class="card-header">
                 <h6 class="fw-semibold mb-0">Stock In Entry</h6>
                 <small class="text-muted">Add or restock products</small>
@@ -545,7 +545,7 @@ echo view('templates/myheader.php');
     <div class="col-md-6">
         <!-- MANUAL ADJUSTMENT -->
         <div class="card">
-        <form action="<?=site_url();?>inventory?meaction=ADJUSTMENT-SAVE" method="post" class="adj-reg-form" id="adjRegForm">
+        <form class="adj-reg-form" id="adjRegForm">
             <div class="card-header">
                 <h6 class="fw-semibold mb-0">Manual Adjustment</h6>
                 <small class="text-muted">Adjust stock manually</small>

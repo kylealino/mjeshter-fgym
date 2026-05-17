@@ -4,12 +4,12 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 
-class CashReceiptsController extends BaseController
+class GeneralJournalController extends BaseController
 {
     public function __construct()
     {
         $this->request = \Config\Services::request();
-        $this->cashReceiptsModel = model('App\Models\CashReceiptsModel');
+        $this->generalJournalModel = model('App\Models\GeneralJournalModel');
         $this->db = \Config\Database::connect();
         $this->session = session();
         $this->cuser = $this->session->get('__xsys_myuserzicas__');
@@ -21,32 +21,37 @@ class CashReceiptsController extends BaseController
 
         switch ($meaction) {
             case 'MAIN': 
-                return view('cashreceipts/cashreceipts-main');
+                return view('generaljournal/general-journal-main');
                 break;
 
             case 'SAVE': 
-                $result = $this->cashReceiptsModel->saveCashReceipt();
+                $result = $this->generalJournalModel->saveEntry();
                 return $this->response->setJSON($result);
                 break;
 
+            case 'DELETE': 
+                $result = $this->generalJournalModel->deleteEntry();
+                return $this->response->setJSON($result);
+                break;
+                
             case 'PRINT-DAILY': 
-                return view('cashreceipts/cashreceipts-daily-pdf');
+                return view('generaljournal/general-journal-daily-pdf');
                 break;
 
             case 'PRINT-SUMMARY': 
-                return view('cashreceipts/cashreceipts-summary-pdf');
+                return view('generaljournal/general-journal-summary-pdf');
                 break;
 
             case 'PRINT-JOURNAL': 
-                return view('cashreceipts/cashreceipts-journal-pdf');
+                return view('generaljournal/general-journal-main-pdf');
                 break;
 
-            case 'PRINT-INCOME': 
-                return view('cashreceipts/cashreceipts-income-pdf');
+            case 'PRINT-ACCOUNT': 
+                return view('generaljournal/general-journal-account-pdf');
                 break;
 
             case 'PRINT-MONTHLY': 
-                return view('cashreceipts/cashreceipts-monthly-pdf');
+                return view('generaljournal/general-journal-monthly-pdf');
                 break;
         }
     }
