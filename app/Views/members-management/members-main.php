@@ -57,6 +57,20 @@ $expiring_soon = $this->db->query("
     AND membership_status = 'Active'
 ")->getRow()->total;
 
+// Get members data for the list table
+$membersdata = $this->db->query("
+    SELECT 
+        member_id,
+        member_no,
+        first_name,
+        last_name,
+        mobile_number,
+        email,
+        membership_status
+    FROM tbl_members
+    ORDER BY member_id DESC
+")->getResultArray();
+
 echo view('templates/myheader.php');
 ?>
 
@@ -480,8 +494,82 @@ echo view('templates/myheader.php');
         color: white;
     }
     
-    /* Responsive */
+    /* Progress Images Grid - FIXED: 2 COLUMNS AT A TIME */
+    .progress-grid-2cols {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+    
+    .progress-card {
+        transition: all 0.3s ease;
+        overflow: hidden;
+        border-radius: 16px;
+        background: white;
+        border: 1px solid var(--gray-200);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    
+    .progress-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px -12px rgba(0,0,0,0.15);
+    }
+    
+    .progress-img-container {
+        position: relative;
+        overflow: hidden;
+        background: var(--gray-100);
+        border-radius: 16px 16px 0 0;
+    }
+    
+    .progress-img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        display: block;
+    }
+    
+    .progress-img:hover {
+        transform: scale(1.02);
+    }
+    
+    .delete-img-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(220, 38, 38, 0.9);
+        border: none;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        z-index: 10;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    
+    .delete-img-btn:hover {
+        background: #b91c1c;
+        transform: scale(1.1);
+    }
+    
+    .progress-card .card-body {
+        padding: 16px;
+    }
+    
+    /* Responsive: on mobile, switch to 1 column */
     @media (max-width: 768px) {
+        .progress-grid-2cols {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
         .dataTables_filter,
         .dataTables_paginate,
         .dataTables_info {
@@ -526,6 +614,12 @@ echo view('templates/myheader.php');
         
         .attendance-icon {
             font-size: 34px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .progress-img {
+            height: 180px;
         }
     }
 </style>
@@ -624,6 +718,11 @@ echo view('templates/myheader.php');
     <li class="nav-item" role="presentation">
         <button class="nav-link <?= $active_tab == 'form' ? 'active' : ''; ?>" data-tab="form">
             <i class="ti ti-user-plus me-2"></i> <?= empty($member_id) ? 'Register New Member' : 'Edit Member' ?>
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link <?= $active_tab == 'progress' ? 'active' : ''; ?>" data-tab="progress">
+            <i class="ti ti-camera me-2"></i> Progress Photos
         </button>
     </li>
 </ul>
@@ -914,6 +1013,133 @@ echo view('templates/myheader.php');
     </form>
 </div>
 
+<!-- Tab Content: Progress Images - FIXED 2 COLUMNS GRID LAYOUT -->
+<div class="tab-content <?= $active_tab == 'progress' ? 'active' : ''; ?>" id="progressTab">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="fw-semibold mb-0"><i class="ti ti-camera me-2"></i>Quarterly Progress Photos</h6>
+                <small class="text-muted">Upload and track member's fitness progress by quarter</small>
+            </div>
+            <?php if(!empty($member_id)): ?>
+            <button class="btn btn-danger btn-sm" onclick="showUploadModal()">
+                <i class="ti ti-upload me-1"></i> Upload Progress Photo
+            </button>
+            <?php endif; ?>
+        </div>
+        <div class="card-body">
+            <?php if(empty($member_id)): ?>
+                <div class="text-center py-5 text-muted">
+                    <i class="ti ti-camera-off fs-1 d-block mb-2"></i>
+                    <p>Select a member first to view their progress photos</p>
+                </div>
+            <?php else: ?>
+                <div id="progressImagesContainer">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Loading progress photos...</p>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Progress Image Modal -->
+<div class="modal fade" id="uploadProgressModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="ti ti-upload me-2"></i> Upload Progress Photo
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadProgressForm" enctype="multipart/form-data">
+                    <input type="hidden" name="member_id" value="<?= $member_id; ?>">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Quarter</label>
+                        <select name="quarter" id="quarter" class="form-select" required>
+                            <option value="">Select Quarter</option>
+                            <option value="Q1">Q1 (January - March)</option>
+                            <option value="Q2">Q2 (April - June)</option>
+                            <option value="Q3">Q3 (July - September)</option>
+                            <option value="Q4">Q4 (October - December)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Year</label>
+                        <select name="year" id="year" class="form-select" required>
+                            <option value="">Select Year</option>
+                            <?php 
+                            $currentYear = date('Y');
+                            for($y = $currentYear - 2; $y <= $currentYear + 1; $y++):
+                            ?>
+                            <option value="<?= $y; ?>" <?= $y == $currentYear ? 'selected' : ''; ?>><?= $y; ?></option>
+                            <?php endfor; ?>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Progress Photo</label>
+                        <input type="file" name="progress_image" id="progress_image" class="form-control" accept="image/*" required>
+                        <small class="text-muted">Max 5MB. Allowed: JPG, PNG, GIF, WEBP</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Notes (Optional)</label>
+                        <textarea name="notes" id="notes" class="form-control" rows="2" placeholder="e.g., Weight: 70kg, Body fat: 15%"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="uploadProgressImage()">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteProgressModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="ti ti-alert-triangle fs-1 text-danger mb-3 d-block"></i>
+                <p>Are you sure you want to delete this progress photo?</p>
+                <p class="text-muted small mb-0">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Image Modal -->
+<div class="modal fade" id="viewImageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="viewImageTitle">Progress Photo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="viewImageSrc" src="" class="img-fluid rounded" style="max-height: 70vh;">
+                <p id="viewImageNotes" class="mt-3 text-muted"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<?=base_url('assets/js/members-management/member-management.js?v=1');?>"></script>
 
@@ -948,6 +1174,11 @@ document.querySelectorAll('.custom-tabs .nav-link').forEach(function(tab) {
             document.getElementById('listTab').classList.add('active');
         } else if (tabName === 'form') {
             document.getElementById('formTab').classList.add('active');
+        } else if (tabName === 'progress') {
+            document.getElementById('progressTab').classList.add('active');
+            if (currentMemberId) {
+                loadProgressImages();
+            }
         }
         
         var url = new URL(window.location.href);
@@ -980,6 +1211,163 @@ if(dobField) {
             }
         }
     });
+}
+
+// ==============================
+// PROGRESS IMAGES FUNCTIONS
+// ==============================
+
+let currentMemberId = '<?= $member_id; ?>';
+let deleteProgressId = null;
+
+function showUploadModal() {
+    if (!currentMemberId) {
+        toastr.error('Please select a member first!');
+        return;
+    }
+    $('#uploadProgressForm')[0].reset();
+    $('#uploadProgressModal').modal('show');
+}
+
+function uploadProgressImage() {
+    var formData = new FormData($('#uploadProgressForm')[0]);
+    formData.append('meaction', 'UPLOAD-PROGRESS-IMAGE');
+    
+    $.ajax({
+        type: "POST",
+        url: '<?=site_url();?>membersmanagement',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+            if(response.status == 'success'){
+                toastr.success(response.message);
+                $('#uploadProgressModal').modal('hide');
+                loadProgressImages();
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            toastr.error("Error: " + error);
+        }
+    });
+}
+
+function loadProgressImages() {
+    if (!currentMemberId) return;
+    
+    $.ajax({
+        type: "POST",
+        url: '<?=site_url();?>membersmanagement',
+        data: {
+            member_id: currentMemberId,
+            meaction: 'GET-PROGRESS-IMAGES'
+        },
+        dataType: 'json',
+        success: function(response) {
+            if(response.status == 'success'){
+                renderProgressImages(response.data);
+            } else {
+                $('#progressImagesContainer').html('<div class="text-center py-5 text-muted"><i class="ti ti-camera-off fs-1 d-block mb-2"></i><p>No progress photos uploaded yet</p><button class="btn btn-danger btn-sm mt-2" onclick="showUploadModal()"><i class="ti ti-upload me-1"></i> Upload First Photo</button></div>');
+            }
+        },
+        error: function(xhr, status, error) {
+            $('#progressImagesContainer').html('<div class="text-center py-5 text-muted"><i class="ti ti-error fs-1 d-block mb-2"></i><p>Error loading images</p></div>');
+        }
+    });
+}
+
+function renderProgressImages(images) {
+    if (!images || images.length === 0) {
+        $('#progressImagesContainer').html('<div class="text-center py-5 text-muted"><i class="ti ti-camera-off fs-1 d-block mb-2"></i><p>No progress photos uploaded yet</p><button class="btn btn-danger btn-sm mt-2" onclick="showUploadModal()"><i class="ti ti-upload me-1"></i> Upload First Photo</button></div>');
+        return;
+    }
+    
+    // FIXED: 2 columns layout using CSS Grid with class "progress-grid-2cols"
+    let html = '<div class="progress-grid-2cols">';
+    
+    images.forEach(function(img) {
+        let imageUrl = '<?= base_url(); ?>/' + img.image_path;
+        
+        html += `
+            <div class="progress-card">
+                <div class="progress-img-container">
+                    <img src="${imageUrl}" class="progress-img" onclick="viewImage('${imageUrl}', '${escapeHtml(img.notes)}')" alt="Progress Photo">
+                    <button class="delete-img-btn" onclick="confirmDelete(${img.progress_id})" title="Delete Photo">
+                        <i class="ti ti-trash" style="font-size: 16px;"></i>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-2"><span class="badge bg-primary">${img.quarter} ${img.year}</span></h6>
+                    <small class="text-muted d-block"><i class="ti ti-calendar me-1"></i>Uploaded: ${img.uploaded_date}</small>
+                    ${img.notes ? `<p class="mt-2 mb-0 small text-muted"><i class="ti ti-notes me-1"></i>${escapeHtml(img.notes)}</p>` : ''}
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    $('#progressImagesContainer').html(html);
+}
+
+// Helper function to escape HTML special characters
+function escapeHtml(text) {
+    if (!text) return '';
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function confirmDelete(progressId) {
+    deleteProgressId = progressId;
+    $('#deleteProgressModal').modal('show');
+}
+
+function deleteProgressImage() {
+    if (!deleteProgressId) return;
+    
+    $.ajax({
+        type: "POST",
+        url: '<?=site_url();?>membersmanagement',
+        data: {
+            progress_id: deleteProgressId,
+            meaction: 'DELETE-PROGRESS-IMAGE'
+        },
+        dataType: 'json',
+        success: function(response) {
+            if(response.status == 'success'){
+                toastr.success(response.message);
+                $('#deleteProgressModal').modal('hide');
+                loadProgressImages();
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            toastr.error("Error: " + error);
+        }
+    });
+}
+
+function viewImage(imageUrl, notes) {
+    $('#viewImageSrc').attr('src', imageUrl);
+    $('#viewImageNotes').text(notes || 'No notes provided');
+    $('#viewImageModal').modal('show');
+}
+
+// Delete button handler
+$('#confirmDeleteBtn').off('click').on('click', function() {
+    deleteProgressImage();
+});
+
+// Load progress images if member is selected
+if (currentMemberId) {
+    loadProgressImages();
 }
 </script>
 

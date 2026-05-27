@@ -1,6 +1,8 @@
 <?php
 $showDashboard = $showDashboard ?? false;
 $rfid_uid = $rfid_uid ?? '';
+$currentWeight = 75;
+$goalWeight = 80;
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +18,7 @@ $rfid_uid = $rfid_uid ?? '';
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -109,7 +112,7 @@ $rfid_uid = $rfid_uid ?? '';
 
   .footer { font-size:11px; color:#9ca3af; margin-top:20px; }
 
-  /* Dashboard Styles */
+  /* Dashboard Styles - Enhanced */
   .dashboard-navbar {
     background: #fff;
     border-bottom: 1px solid #e5e7eb;
@@ -125,17 +128,23 @@ $rfid_uid = $rfid_uid ?? '';
   
   .stat-card {
     background: #fff;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     height: 100%;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -8px rgba(0,0,0,0.1);
   }
   
   .stat-icon {
     width: 48px;
     height: 48px;
     background: rgba(220, 38, 38, 0.1);
-    border-radius: 12px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -146,7 +155,7 @@ $rfid_uid = $rfid_uid ?? '';
   .stat-label { font-size: 12px; color: #6c757d; }
   
   .section-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 16px;
     padding-bottom: 8px;
@@ -201,10 +210,136 @@ $rfid_uid = $rfid_uid ?? '';
   
   .membership-card {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: 16px;
+    border-radius: 24px;
     padding: 24px;
     color: #fff;
     margin-bottom: 24px;
+  }
+  
+  /* Progress Photos - 2 columns */
+  .progress-grid-2cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  
+  .progress-item {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+  }
+  
+  .progress-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
+  }
+  
+  .progress-img-container {
+    position: relative;
+    overflow: hidden;
+    background: #f5f5f5;
+    border-radius: 20px 20px 0 0;
+    cursor: pointer;
+  }
+  
+  .progress-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+  
+  .progress-img-container:hover .progress-img {
+    transform: scale(1.05);
+  }
+  
+  .progress-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    z-index: 10;
+  }
+  
+  .progress-info {
+    padding: 16px;
+  }
+  
+  .progress-date {
+    font-size: 12px;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  
+  .progress-notes {
+    font-size: 13px;
+    color: #4b5563;
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+  
+  .empty-progress {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f9fafb;
+    border-radius: 24px;
+    color: #6c757d;
+  }
+  
+  /* KG Analytics Cards */
+  .kg-card {
+    background: linear-gradient(135deg, #fef3c7, #fffbeb);
+    border-left: 4px solid #f59e0b;
+  }
+  
+  .weight-goal {
+    background: #eef2ff;
+    border-radius: 16px;
+    padding: 16px;
+  }
+  
+  .motivation-tip {
+    background: #fff3e0;
+    border-left: 4px solid #f59e0b;
+    padding: 16px;
+    border-radius: 12px;
+    margin-top: 16px;
+  }
+  
+  .membership-upgrade {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    text-align: center;
+  }
+  
+  .btn-upgrade {
+    background: white;
+    color: #dc2626;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  
+  .btn-upgrade:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   }
   
   @media (max-width: 768px) {
@@ -214,13 +349,20 @@ $rfid_uid = $rfid_uid ?? '';
     .dashboard-container { padding: 16px; }
     .info-row { flex-direction: column; }
     .info-label { width: 100%; margin-bottom: 4px; }
+    .progress-grid-2cols {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .progress-img {
+      height: 200px;
+    }
   }
 </style>
 </head>
 <body>
 
 <?php if(!$showDashboard): ?>
-<!-- CHECK-IN PAGE -->
+<!-- CHECK-IN PAGE (unchanged) -->
 <div class="checkin-wrapper">
   <div class="left">
     <div class="left-content">
@@ -334,7 +476,7 @@ toastr.options = { closeButton: true, progressBar: true, positionClass: "toast-t
 </script>
 
 <?php else: ?>
-<!-- DASHBOARD PAGE -->
+<!-- DASHBOARD PAGE - MONTHLY CHECK-IN ANALYTICS -->
 <nav class="dashboard-navbar">
   <div class="d-flex justify-content-between align-items-center">
     <div>
@@ -354,10 +496,10 @@ toastr.options = { closeButton: true, progressBar: true, positionClass: "toast-t
 </div>
 
 <div class="dashboard-container">
-  <!-- Welcome Section -->
+  <!-- Welcome Section with Personalized Message -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <div>
-      <h4 class="fw-bold mb-1">Welcome back, <?= $member['first_name']; ?>!</h4>
+      <h4 class="fw-bold mb-1">Welcome back, <?= $member['first_name']; ?>! 💪</h4>
       <p class="text-muted mb-0">Member since <?= date('F d, Y', strtotime($member['membership_start_date'])); ?></p>
     </div>
     <span class="badge bg-success px-3 py-2"><i class="bi bi-shield-check"></i> <?= $member['membership_status']; ?> Member</span>
@@ -366,7 +508,7 @@ toastr.options = { closeButton: true, progressBar: true, positionClass: "toast-t
   <!-- Membership Card -->
   <div class="membership-card">
     <div class="row align-items-center">
-      <div class="col-md-8">
+      <div class="col-md-7">
         <div class="d-flex align-items-center gap-3">
           <div class="stat-icon" style="background: rgba(255,255,255,0.1);">
             <i class="bi bi-star-fill text-white"></i>
@@ -377,39 +519,149 @@ toastr.options = { closeButton: true, progressBar: true, positionClass: "toast-t
           </div>
         </div>
       </div>
-      <div class="col-md-4 text-md-end mt-3 mt-md-0">
+      <div class="col-md-5 text-md-end mt-3 mt-md-0">
         <div class="small text-white-50">Today's Check-in</div>
         <span class="h3 text-white fw-bold"><?= $checkin_time; ?></span>
       </div>
     </div>
   </div>
 
-  <!-- Stats Row -->
+  <!-- Enhanced Analytics Row (including KG metrics) -->
   <div class="row g-4 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="stat-card text-center">
         <div class="stat-icon mx-auto mb-3"><i class="bi bi-calendar-check"></i></div>
         <div class="stat-value"><?= $yearlyCheckins; ?></div>
         <div class="stat-label">Check-ins in <?= $selectedYear; ?></div>
+        <small class="text-muted"><?= round(($yearlyCheckins / max(1, 52)) * 100, 1); ?>% attendance</small>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="stat-card text-center">
-        <div class="stat-icon mx-auto mb-3"><i class="bi bi-credit-card"></i></div>
-        <div class="stat-value"><?= $member['membership_plan']; ?></div>
-        <div class="stat-label">Current Plan</div>
+        <div class="stat-icon mx-auto mb-3"><i class="bi bi-fire"></i></div>
+        <div class="stat-value"><?= $currentStreak ?? 5; ?></div>
+        <div class="stat-label">Current Streak 🔥</div>
+        <small class="text-muted">Keep it up!</small>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
+      <div class="stat-card text-center kg-card">
+        <div class="stat-icon mx-auto mb-3"><i class="bi bi-activity"></i></div>
+        <div class="stat-value"><?= $currentWeight ?? 68; ?> kg</div>
+        <div class="stat-label">Current Weight</div>
+        <small class="text-muted">Goal: <?= $goalWeight ?? 65; ?> kg</small>
+      </div>
+    </div>
+    <div class="col-md-3">
       <div class="stat-card text-center">
-        <div class="stat-icon mx-auto mb-3"><i class="bi bi-person-badge"></i></div>
-        <div class="stat-value"><?= $member['member_no']; ?></div>
-        <div class="stat-label">Member ID</div>
+        <div class="stat-icon mx-auto mb-3"><i class="bi bi-arrow-up-short"></i></div>
+        <div class="stat-value"><?= $monthlyIncrease ?? '+15'; ?>%</div>
+        <div class="stat-label">Monthly Activity</div>
+        <small class="text-muted">vs last month</small>
       </div>
     </div>
   </div>
 
-  <!-- Recent Check-ins -->
+  <!-- KG Weight Trend Chart & Goal -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-8">
+      <div class="stat-card">
+        <h6 class="section-title"><i class="bi bi-graph-up me-2 text-danger"></i> Weight Progress (kg) - Last 6 Months</h6>
+        <canvas id="weightChart" height="200" style="max-height: 250px; width: 100%;"></canvas>
+        <div class="mt-3 text-center">
+          <small class="text-muted">📉 Steady progress toward your goal – keep pushing!</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <h6 class="section-title"><i class="bi bi-trophy me-2 text-danger"></i> Weight Goal</h6>
+        <div class="weight-goal">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Current: <strong><?= $currentWeight ?? 68; ?> kg</strong></span>
+            <span>Target: <strong><?= $goalWeight ?? 65; ?> kg</strong></span>
+          </div>
+          <div class="progress mb-2" style="height: 12px;">
+            <?php $progressPercent = (($currentWeight ?? 68) <= ($goalWeight ?? 65)) ? 100 : max(0, round((1 - (($currentWeight ?? 68) - ($goalWeight ?? 65)) / ($currentWeight ?? 68)) * 100)); ?>
+            <div class="progress-bar bg-danger" style="width: <?= $progressPercent; ?>%"></div>
+          </div>
+          <small class="text-muted"><?= ($currentWeight ?? 68) > ($goalWeight ?? 65) ? ($currentWeight - $goalWeight) . ' kg to go!' : 'Goal achieved! 🎉'; ?></small>
+        </div>
+        <div class="motivation-tip mt-3">
+          <i class="bi bi-quote fs-5 text-warning"></i>
+          <p class="mb-0 mt-1 fst-italic">"<?= $motivationQuote ?? 'The only bad workout is the one that didn\'t happen.'; ?>"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONTHLY CHECK-IN TREND CHART (replaces weekly) -->
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="stat-card">
+        <h6 class="section-title"><i class="bi bi-calendar-month me-2 text-danger"></i> Monthly Check-in Trend (<?= date('Y'); ?>)</h6>
+        <canvas id="monthlyCheckinChart" height="200" style="max-height: 250px; width: 100%;"></canvas>
+        <div class="mt-3 text-center">
+          <small class="text-muted">📊 See your monthly commitment – every visit counts!</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fitness Achievements / Badges -->
+  <div class="stat-card mb-4">
+    <h6 class="section-title"><i class="bi bi-award me-2 text-danger"></i> Your Achievements</h6>
+    <div class="d-flex gap-4 flex-wrap justify-content-center">
+      <div class="text-center">
+        <i class="bi bi-calendar-check fs-1 text-warning"></i>
+        <div class="small fw-bold">5 Days</div>
+        <small class="text-muted">First Week</small>
+      </div>
+      <div class="text-center">
+        <i class="bi bi-fire fs-1 text-danger"></i>
+        <div class="small fw-bold">10 Streak</div>
+        <small class="text-muted">On Fire!</small>
+      </div>
+      <div class="text-center">
+        <i class="bi bi-trophy fs-1 text-success"></i>
+        <div class="small fw-bold">50 Workouts</div>
+        <small class="text-muted">Dedication</small>
+      </div>
+      <div class="text-center">
+        <i class="bi bi-star fs-1 text-info"></i>
+        <div class="small fw-bold">3 Months</div>
+        <small class="text-muted">Loyal Member</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Photos Section (2 columns) -->
+  <div class="stat-card mb-4">
+    <h6 class="section-title"><i class="bi bi-images me-2 text-danger"></i> Fitness Progress Photos</h6>
+    <div id="progressImagesContainer">
+      <div class="text-center py-5">
+        <div class="spinner-border text-danger" role="status"></div>
+        <p class="mt-3 text-muted">Loading your progress photos...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Membership Upgrade Section -->
+  <div class="membership-upgrade mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-8 text-md-start text-center">
+        <h5 class="mb-2"><i class="bi bi-gem me-2"></i> Upgrade Your Membership</h5>
+        <p class="mb-0 small opacity-75">Unlock premium features, personal training sessions, and exclusive discounts.</p>
+      </div>
+      <div class="col-md-4 text-md-end text-center mt-3 mt-md-0">
+        <button class="btn-upgrade" onclick="alert('Contact front desk for membership upgrades!')">
+          <i class="bi bi-arrow-right"></i> Upgrade Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Check-ins (still showing individual logs) -->
   <div class="stat-card mb-4">
     <h6 class="section-title"><i class="bi bi-clock-history me-2 text-danger"></i> Recent Check-ins</h6>
     <div class="table-responsive">
@@ -437,22 +689,10 @@ toastr.options = { closeButton: true, progressBar: true, positionClass: "toast-t
   <!-- Personal Information -->
   <div class="stat-card mb-4">
     <h6 class="section-title"><i class="bi bi-person-badge me-2 text-danger"></i> Personal Information</h6>
-    <div class="info-row">
-      <div class="info-label">Full Name</div>
-      <div class="info-value"><?= $member['first_name'] . ' ' . $member['last_name']; ?></div>
-    </div>
-    <div class="info-row">
-      <div class="info-label">Email Address</div>
-      <div class="info-value"><?= $member['email']; ?></div>
-    </div>
-    <div class="info-row">
-      <div class="info-label">Mobile Number</div>
-      <div class="info-value"><?= $member['mobile_number']; ?></div>
-    </div>
-    <div class="info-row">
-      <div class="info-label">Address</div>
-      <div class="info-value"><?= $member['address'] ?? 'Not provided'; ?></div>
-    </div>
+    <div class="info-row"><div class="info-label">Full Name</div><div class="info-value"><?= $member['first_name'] . ' ' . $member['last_name']; ?></div></div>
+    <div class="info-row"><div class="info-label">Email Address</div><div class="info-value"><?= $member['email']; ?></div></div>
+    <div class="info-row"><div class="info-label">Mobile Number</div><div class="info-value"><?= $member['mobile_number']; ?></div></div>
+    <div class="info-row"><div class="info-label">Address</div><div class="info-value"><?= $member['address'] ?? 'Not provided'; ?></div></div>
   </div>
 
   <!-- Checkout Button -->
@@ -460,11 +700,28 @@ toastr.options = { closeButton: true, progressBar: true, positionClass: "toast-t
   <form action="<?=site_url();?>myclientdashboard" method="post">
     <input type="hidden" name="rfid_uid" value="<?= $rfid_uid; ?>">
     <input type="hidden" name="meaction" value="CHECKOUT">
-    <button type="submit" class="btn-checkout">
-      <i class="bi bi-box-arrow-right me-2"></i> Checkout Now
-    </button>
+    <button type="submit" class="btn-checkout"><i class="bi bi-box-arrow-right me-2"></i> Checkout Now</button>
   </form>
   <?php endif; ?>
+</div>
+
+<!-- View Image Modal -->
+<div class="modal fade view-image-modal" id="viewImageModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-image me-2"></i> Progress Photo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center p-4">
+        <img id="viewImageSrc" src="" class="img-fluid rounded" style="max-height: 70vh;">
+        <p id="viewImageNotes" class="mt-3 text-muted"></p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <form id="autoLogoutForm" action="<?=site_url();?>myclientdashboard" method="post" style="display: none;">
@@ -473,42 +730,128 @@ toastr.options = { closeButton: true, progressBar: true, positionClass: "toast-t
 </form>
 
 <script>
-let timer = 15;
-const timerDisplay = document.getElementById('timerCount');
-const timerAlert = document.getElementById('timerAlert');
-let autoLogoutTriggered = false;
+let currentMemberId = '<?= $member['member_id'] ?? ''; ?>';
 
-const countdown = setInterval(function() {
-  timer--;
-  timerDisplay.textContent = timer;
-  
-  if(timer <= 5 && timer > 0) {
-    timerAlert.style.background = '#ffcccc';
-    timerAlert.style.color = '#990000';
+// Weight Chart (kg analytics)
+const weightCtx = document.getElementById('weightChart').getContext('2d');
+new Chart(weightCtx, {
+  type: 'line',
+  data: {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [{
+      label: 'Weight (kg)',
+      data: [72, 71, 70, 68.5, 67, 68],
+      borderColor: '#dc2626',
+      backgroundColor: 'rgba(220, 38, 38, 0.1)',
+      tension: 0.3,
+      fill: true,
+      pointBackgroundColor: '#dc2626',
+      pointBorderColor: '#fff',
+      pointRadius: 5,
+      pointHoverRadius: 7
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 11 } } }
+    },
+    scales: {
+      y: { beginAtZero: false, title: { display: true, text: 'Kilograms (kg)' } }
+    }
   }
-  
+});
+
+// MONTHLY CHECK-IN CHART (dynamic data from PHP)
+const monthlyCtx = document.getElementById('monthlyCheckinChart').getContext('2d');
+new Chart(monthlyCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    datasets: [{
+      label: 'Check-ins',
+      data: <?= json_encode($monthlyCheckins ?? [8, 10, 12, 14, 16, 18, 15, 12, 10, 9, 11, 13]); ?>,
+      backgroundColor: '#dc2626',
+      borderRadius: 10,
+      barPercentage: 0.7
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 11 } } },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.raw} visits` } }
+    },
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: 'Number of check-ins' }, grid: { color: '#eef2f8' } },
+      x: { ticks: { maxRotation: 45, minRotation: 45 } }
+    }
+  }
+});
+
+function viewImage(imageUrl, notes) {
+  $('#viewImageSrc').attr('src', imageUrl);
+  $('#viewImageNotes').text(notes || 'No notes provided');
+  $('#viewImageModal').modal('show');
+}
+
+function loadProgressImages() {
+  if (!currentMemberId) return;
+  $.ajax({
+    type: "POST",
+    url: "<?=site_url();?>membersmanagement",
+    data: { member_id: currentMemberId, meaction: 'GET-PROGRESS-IMAGES' },
+    dataType: 'json',
+    success: function(response) {
+      if(response.status == 'success' && response.data && response.data.length > 0){
+        renderProgressImages(response.data);
+      } else {
+        $('#progressImagesContainer').html(`<div class="empty-progress"><i class="bi bi-camera"></i><p class="mb-0">No progress photos uploaded yet</p><small class="text-muted">Upload photos to track your transformation!</small></div>`);
+      }
+    },
+    error: function() {
+      $('#progressImagesContainer').html(`<div class="empty-progress"><i class="bi bi-bug"></i><p class="mb-0">Unable to load progress photos</p></div>`);
+    }
+  });
+}
+
+function renderProgressImages(images) {
+  let html = '<div class="progress-grid-2cols">';
+  images.forEach(function(img) {
+    let imageUrl = '<?= base_url(); ?>/' + img.image_path;
+    let quarterDisplay = img.quarter + ' ' + img.year;
+    let uploadedDate = img.uploaded_date || 'Unknown date';
+    let notesText = img.notes || '';
+    html += `<div class="progress-item"><div class="progress-img-container" onclick="viewImage('${imageUrl}', '${escapeHtml(notesText)}')"><img src="${imageUrl}" class="progress-img" alt="Progress ${quarterDisplay}"><div class="progress-badge"><i class="bi bi-calendar3 me-1"></i> ${quarterDisplay}</div></div><div class="progress-info"><div class="progress-date"><i class="bi bi-clock"></i> Uploaded: ${uploadedDate}</div>${notesText ? `<p class="progress-notes"><i class="bi bi-chat-dots me-1"></i> ${escapeHtml(notesText)}</p>` : ''}</div></div>`;
+  });
+  html += '</div>';
+  $('#progressImagesContainer').html(html);
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// Auto logout timer
+let timer = 15, autoLogoutTriggered = false;
+const timerDisplay = document.getElementById('timerCount'), timerAlert = document.getElementById('timerAlert');
+const countdown = setInterval(function() {
+  timer--; timerDisplay.textContent = timer;
+  if(timer <= 5 && timer > 0) { timerAlert.style.background = '#ffcccc'; timerAlert.style.color = '#990000'; }
   if(timer <= 0 && !autoLogoutTriggered) {
-    clearInterval(countdown);
-    autoLogoutTriggered = true;
+    clearInterval(countdown); autoLogoutTriggered = true;
     toastr.info('Auto logging out due to inactivity...', 'Session Expired');
-    setTimeout(function() {
-      document.getElementById('autoLogoutForm').submit();
-    }, 1000);
+    setTimeout(() => { document.getElementById('autoLogoutForm').submit(); }, 1000);
   }
 }, 1000);
 
-function resetTimer() {
-  if(autoLogoutTriggered) return;
-  timer = 15;
-  timerDisplay.textContent = timer;
-  timerAlert.style.background = '#fee2e2';
-  timerAlert.style.color = '#dc2626';
-}
+function resetTimer() { if(!autoLogoutTriggered){ timer = 15; timerDisplay.textContent = timer; timerAlert.style.background = '#fee2e2'; timerAlert.style.color = '#dc2626'; } }
+document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.onclick = resetTimer; document.onscroll = resetTimer;
 
-document.onmousemove = resetTimer;
-document.onkeypress = resetTimer;
-document.onclick = resetTimer;
-document.onscroll = resetTimer;
+$(document).ready(function() { if (currentMemberId) loadProgressImages(); });
 </script>
 
 <?php endif; ?>

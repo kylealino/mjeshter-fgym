@@ -71,11 +71,24 @@ class MembersManagementController extends BaseController
                 echo $this->getCheckinHistory();
                 exit;
                 break;
+            case 'UPLOAD-PROGRESS-IMAGE': 
+                $result = $this->memberModel->uploadProgressImage();
+                return $this->response->setJSON($result);
+                break;
+
+            case 'GET-PROGRESS-IMAGES': 
+                $result = $this->memberModel->getProgressImages();
+                return $this->response->setJSON($result);
+                break;
+
+            case 'DELETE-PROGRESS-IMAGE': 
+                $result = $this->memberModel->deleteProgressImage();
+                return $this->response->setJSON($result);
+                break;
         }
     }
 
-    private function checkRFID()
-    {
+    private function checkRFID(){
         $rfid_uid = $this->request->getPost('rfid_uid');
 
         $query = $this->db->query("

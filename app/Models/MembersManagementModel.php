@@ -127,4 +127,145 @@ class MembersManagementModel extends Model
             }
         }
     }
+
+    public function uploadProgressImage() {
+        $member_id = $this->request->getPost('member_id');
+        $quarter = $this->request->getPost('quarter');
+        $year = $this->request->getPost('year');
+        $notes = $this->request->getPost('notes');
+        
+        // Validation
+        if (empty($member_id)) {
+            return ['status' => 'error', 'message' => 'Member ID is required!'];
+        }
+        if (empty($quarter)) {
+            return ['status' => 'error', 'message' => 'Please select a quarter!'];
+        }
+        if (empty($year)) {
+            return ['status' => 'error', 'message' => 'Please select a year!'];
+        }
+        
+        // Check if file was uploaded
+        $file = $this->request->getFile('progress_image');
+        if (!$file || !$file->isValid()) {
+            return ['status' => 'error', 'message' => 'Please select an image to upload!'];
+        }
+        
+        // Validate file type
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+        if (!in_array($file->getMimeType(), $allowedTypes)) {
+            return ['status' => 'error', 'message' => 'Only JPG, PNG, GIF, and WEBP images are allowed!'];
+        }
+        
+        // Validate file size (max 5MB)
+        if ($file->getSize() > 5 * 1024 * 1024) {
+            return ['status' => 'error', 'message' => 'Image size must be less than 5MB!'];
+        }
+        
+        // Check if image already exists for this quarter and year
+        $check = $this->db->query("
+            SELECT progress_id FROM tbl_member_progress_images 
+            WHERE member_id = ? AND quarter = ? AND year = ?
+        ", [$member_id, $quarter, $year])->getRow();
+        
+        if ($check) {
+            return ['status' => 'error', 'message' => 'Progress image already exists for this quarter! Delete existing image first.'];
+        }
+        
+        // Create upload directory if not exists
+        $uploadPath = FCPATH . 'uploads/progress_images/';
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+        
+        // Generate unique filename
+        $filename = 'member_' . $member_id . '_' . $quarter . '_' . $year . '_' . time() . '.' . $file->getExtension();
+        
+        // Move file to upload directory
+        if ($file->move($uploadPath, $filename)) {
+            $imagePath = 'uploads/progress_images/' . $filename;
+            
+            $query = $this->db->query("
+                INSERT INTO `tbl_member_progress_images` (
+                    `member_id`,
+                    `quarter`,
+                    `year`,
+                    `image_path`,
+                    `notes`,
+                    `uploaded_by`
+                ) VALUES (?, ?, ?, ?, ?, ?)
+            ", [
+                $member_id,
+                $quarter,
+                $year,
+                $imagePath,
+                $notes,
+                $this->cuser
+            ]);
+            
+            if ($query) {
+                return ['status' => 'success', 'message' => 'Progress image uploaded successfully!'];
+            } else {
+                // Delete file if database insert fails
+                unlink($uploadPath . $filename);
+                return ['status' => 'error', 'message' => 'Failed to save to database!'];
+            }
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to upload image!'];
+        }
+    }
+
+    public function getProgressImages() {
+        $member_id = $this->request->getPost('member_id');
+        
+        if (empty($member_id)) {
+            return ['status' => 'error', 'message' => 'Member ID is required!'];
+        }
+        
+        $query = $this->db->query("
+            SELECT 
+                progress_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_at, '%M %d, %Y') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, 
+                FIELD(quarter, 'Q1', 'Q2', 'Q3', 'Q4') DESC
+        ", [$member_id]);
+        
+        $images = $query->getResultArray();
+        
+        return ['status' => 'success', 'data' => $images];
+    }
+
+    public function deleteProgressImage() {
+        $progress_id = $this->request->getPost('progress_id');
+        
+        if (empty($progress_id)) {
+            return ['status' => 'error', 'message' => 'Progress ID is required!'];
+        }
+        
+        // Get image path first
+        $image = $this->db->query("SELECT image_path FROM tbl_member_progress_images WHERE progress_id = ?", [$progress_id])->getRow();
+        
+        if ($image) {
+            // Delete physical file
+            $filePath = FCPATH . $image->image_path;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+        
+        $query = $this->db->query("DELETE FROM tbl_member_progress_images WHERE progress_id = ?", [$progress_id]);
+        
+        if ($query) {
+            return ['status' => 'success', 'message' => 'Progress image deleted successfully!'];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to delete image!'];
+        }
+    }
 }
