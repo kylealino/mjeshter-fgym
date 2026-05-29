@@ -236,7 +236,7 @@ $(document).ready(function() {
         if(response.status === 'checkout'){
 
           toastr.clear();
-          toastr.success(response.message, 'Checked Out');
+          toastr.info(response.message, 'Checked Out');
 
           textEl.innerText = "Checked Out";
           statusEl.innerText = response.message;
